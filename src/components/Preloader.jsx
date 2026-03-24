@@ -19,39 +19,43 @@ const Preloader = () => {
                         animate={{ x: ["-10%", "10%"], y: ["-10%", "10%"] }}
                         transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
                     />
-                    {[...Array(40)].map((_, i) => (
-                        <motion.div
-                            key={i}
-                            className="absolute bg-white rounded-full"
-                            style={{
-                                width: Math.random() * 2 + 'px',
-                                height: Math.random() * 2 + 'px',
-                                top: Math.random() * 100 + '%',
-                                left: Math.random() * 100 + '%',
-                            }}
-                            animate={{ opacity: [0, 0.8, 0] }}
-                            transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
-                        />
-                    ))}
+                    <div className="hidden md:block">
+                        {[...Array(40)].map((_, i) => (
+                            <motion.div
+                                key={i}
+                                className="absolute bg-white rounded-full"
+                                style={{
+                                    width: Math.random() * 2 + 'px',
+                                    height: Math.random() * 2 + 'px',
+                                    top: Math.random() * 100 + '%',
+                                    left: Math.random() * 100 + '%',
+                                }}
+                                animate={{ opacity: [0, 0.8, 0] }}
+                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
+                            />
+                        ))}
+                    </div>
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center justify-center">
 
                     <div className="relative w-[600px] h-[600px] flex items-center justify-center">
 
-                        {[...Array(12)].map((_, i) => (
-                            <motion.div
-                                key={i}
-                                className="absolute top-1/2 left-1/2 w-[300px] h-[2px] bg-gradient-to-r from-transparent via-cyan-100 to-transparent origin-left opacity-30 blur-[1px]"
-                                style={{ rotate: i * 30 }}
-                                animate={{
-                                    rotate: i * 30 + 360,
-                                    scaleX: [1, 1.5, 1],
-                                    opacity: [0.1, 0.4, 0.1]
-                                }}
-                                transition={{ duration: 20, ease: "linear", repeat: Infinity }}
-                            />
-                        ))}
+                        <div className="hidden md:block">
+                            {[...Array(12)].map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="absolute top-1/2 left-1/2 w-[300px] h-[2px] bg-gradient-to-r from-transparent via-cyan-100 to-transparent origin-left opacity-30 blur-[1px]"
+                                    style={{ rotate: i * 30 }}
+                                    animate={{
+                                        rotate: i * 30 + 360,
+                                        scaleX: [1, 1.5, 1],
+                                        opacity: [0.1, 0.4, 0.1]
+                                    }}
+                                    transition={{ duration: 20, ease: "linear", repeat: Infinity }}
+                                />
+                            ))}
+                        </div>
 
                         <motion.div
                             className="absolute w-40 h-40 rounded-full shadow-[0_0_100px_rgba(255,255,255,0.5)] z-10"
@@ -78,16 +82,18 @@ const Preloader = () => {
                             <div className="absolute top-0 left-1/2 w-1 h-1 bg-white rounded-full shadow-[0_0_10px_white]"></div>
                         </motion.div>
 
-                        <motion.div
-                            className="absolute w-44 h-44 rounded-full border border-cyan-500/30 blur-sm z-0"
-                            animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        />
-                        <motion.div
-                            className="absolute w-44 h-44 rounded-full border border-purple-500/30 blur-sm z-0"
-                            animate={{ scale: [1.1, 1, 1.1], opacity: [0.3, 0.6, 0.3] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        />
+                        <div className="hidden md:block">
+                            <motion.div
+                                className="absolute w-44 h-44 rounded-full border border-cyan-500/30 blur-sm z-0"
+                                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            />
+                            <motion.div
+                                className="absolute w-44 h-44 rounded-full border border-purple-500/30 blur-sm z-0"
+                                animate={{ scale: [1.1, 1, 1.1], opacity: [0.3, 0.6, 0.3] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            />
+                        </div>
 
                         <div className="absolute w-36 h-36 bg-black rounded-full z-20 flex items-center justify-center">
                             <div className="absolute inset-0 rounded-full shadow-[inset_0_0_40px_rgba(0,0,0,1)]"></div>

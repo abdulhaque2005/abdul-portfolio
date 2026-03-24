@@ -46,12 +46,18 @@ const certificates = [
 const TiltCard = ({ children, onClick }) => {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
+    const mouseXPos = useMotionValue(0);
+    const mouseYPos = useMotionValue(0);
 
     const mouseX = useSpring(x, { stiffness: 150, damping: 15 });
     const mouseY = useSpring(y, { stiffness: 150, damping: 15 });
 
     const rotateX = useTransform(mouseY, [-0.5, 0.5], ["15deg", "-15deg"]);
     const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-15deg", "15deg"]);
+
+    // For Glint effect
+    const glintX = useSpring(mouseXPos, { stiffness: 300, damping: 30 });
+    const glintY = useSpring(mouseYPos, { stiffness: 300, damping: 30 });
 
     const handleMouseMove = (e) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -61,6 +67,10 @@ const TiltCard = ({ children, onClick }) => {
         const yPct = (e.clientY - rect.top) / height - 0.5;
         x.set(xPct);
         y.set(yPct);
+        
+        // Update pixel values for glint
+        mouseXPos.set(e.clientX - rect.left);
+        mouseYPos.set(e.clientY - rect.top);
     };
 
     const handleMouseLeave = () => {
@@ -79,9 +89,20 @@ const TiltCard = ({ children, onClick }) => {
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             onClick={onClick}
-            className="relative h-full transition-all duration-200 ease-out cursor-pointer hover:z-50"
-            whileHover={{ scale: 1.02 }}
+            className="relative h-full transition-all duration-300 ease-out cursor-pointer hover:z-50 transform-gpu"
+            whileHover={{ scale: 1.03 }}
         >
+            {/* Dynamic Glint Shimmer */}
+            <motion.div 
+                className="absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                style={{
+                    background: useTransform(
+                        [glintX, glintY],
+                        ([latestX, latestY]) => 
+                            `radial-gradient(circle at ${latestX}px ${latestY}px, rgba(255,255,255,0.15) 0%, transparent 60%)`
+                    )
+                }}
+            />
             {children}
         </motion.div>
     );
@@ -94,8 +115,8 @@ const Certificates = () => {
         <section id="certificates" className="py-24 relative overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
 
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[10%] right-[5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-500/5 rounded-full blur-[60px] md:blur-[100px] animate-pulse" />
-                <div className="absolute bottom-[10%] left-[5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-purple-500/5 rounded-full blur-[60px] md:blur-[100px] animate-pulse" />
+                <div className="absolute top-[10%] right-[5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-blue-500/5 rounded-full blur-[60px] md:blur-[100px] animate-pulse hidden md:block" />
+                <div className="absolute bottom-[10%] left-[5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-purple-500/5 rounded-full blur-[60px] md:blur-[100px] animate-pulse hidden md:block" />
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
@@ -140,14 +161,14 @@ const Certificates = () => {
                                         />
 
                                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-10">
-                                            <span className="px-6 py-3 rounded-full bg-white text-black font-bold flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 shadow-xl">
+                                            <span className="px-8 py-3 rounded-full bg-blue-600/90 text-white font-black flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border border-blue-400/30">
                                                 <Eye size={20} /> VIEW DETAILS
                                             </span>
                                         </div>
 
                                         <div className="absolute top-4 right-4 z-20">
-                                            <span className="px-3 py-1.5 rounded-full text-xs font-bold bg-white/90 text-black shadow-lg flex items-center gap-1.5 backdrop-blur-md">
-                                                {cert.issuer}
+                                            <span className="px-3 py-1.5 rounded-full text-[10px] font-black tracking-tighter bg-white/90 text-black shadow-lg flex items-center gap-1.5 backdrop-blur-md">
+                                                <CheckCircle size={12} className="text-emerald-500 animate-pulse" /> {cert.issuer}
                                             </span>
                                         </div>
                                     </div>
@@ -175,7 +196,7 @@ const Certificates = () => {
                                                 <Calendar size={16} />
                                                 {cert.date}
                                             </div>
-
+                                            <CheckCircle size={18} className="text-emerald-500/40 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300" />
                                         </div>
                                     </div>
                                 </div>

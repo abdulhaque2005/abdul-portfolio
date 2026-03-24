@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-
-
-const styles = {
-    ring: "fixed top-0 left-0 z-[9998] pointer-events-none rounded-full border border-white/50 mix-blend-difference",
-    dot: "fixed top-0 left-0 z-[9999] pointer-events-none rounded-full bg-white mix-blend-difference"
-};
+import React, { useEffect, useRef, useState } from 'react';
 
 const CustomCursor = () => {
+    const dotRef = useRef(null);
+    const ringRef = useRef(null);
     const [isHovering, setIsHovering] = useState(false);
 
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-
-    const ringX = useSpring(mouseX, { stiffness: 100, damping: 20 });
-    const ringY = useSpring(mouseY, { stiffness: 100, damping: 20 });
-
-    const dotX = useSpring(mouseX, { stiffness: 1000, damping: 50 });
-    const dotY = useSpring(mouseY, { stiffness: 1000, damping: 50 });
+    // Track mouse position
+    const mouse = useRef({ x: 0, y: 0 });
+    // Track ring position for smooth follow
+    const ring = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
-        const mouseMove = (e) => {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
+        // Only run on desktop
+        if (window.matchMedia("(max-width: 768px)").matches) return;
+
+        const handleMouseMove = (e) => {
+            mouse.current = { x: e.clientX, y: e.clientY };
+
+            // Update dot instantly
+            if (dotRef.current) {
+                dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+            }
         };
 
         const handleMouseOver = (e) => {
@@ -40,49 +38,60 @@ const CustomCursor = () => {
             }
         };
 
-        window.addEventListener("mousemove", mouseMove);
-        window.addEventListener("mouseover", handleMouseOver);
+        // Animation loop for the smooth ring
+        let animationFrameId;
+        const render = () => {
+            // Lerp (Linear Interpolation) for smooth trailing effect
+            ring.current.x += (mouse.current.x - ring.current.x) * 0.15;
+            ring.current.y += (mouse.current.y - ring.current.y) * 0.15;
+
+            if (ringRef.current) {
+                ringRef.current.style.transform = `translate3d(${ring.current.x}px, ${ring.current.y}px, 0) translate(-50%, -50%)`;
+            }
+
+            animationFrameId = requestAnimationFrame(render);
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseover', handleMouseOver);
+        
+        // Start animation loop
+        render();
 
         return () => {
-            window.removeEventListener("mousemove", mouseMove);
-            window.removeEventListener("mouseover", handleMouseOver);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseover', handleMouseOver);
+            cancelAnimationFrame(animationFrameId);
         };
-    }, [mouseX, mouseY]);
+    }, []);
 
     return (
         <div className="hidden md:block">
-            <motion.div
-                className={styles.ring}
+            {/* Ring */}
+            <div
+                ref={ringRef}
+                className="fixed top-0 left-0 z-[9998] pointer-events-none rounded-full border-2 transition-all duration-200 ease-out"
                 style={{
-                    x: ringX,
-                    y: ringY,
-                    translateX: "-50%",
-                    translateY: "-50%"
-                }}
-                animate={{
-                    width: isHovering ? 64 : 32,
-                    height: isHovering ? 64 : 32,
-                    backgroundColor: isHovering ? "rgba(255, 255, 255, 0.1)" : "transparent",
-                    borderColor: isHovering ? "rgba(255, 255, 255, 0.8)" : "rgba(255, 255, 255, 0.4)",
-                }}
-                transition={{
-                    type: "tween",
-                    duration: 0.3
+                    width: isHovering ? '55px' : '36px',
+                    height: isHovering ? '55px' : '36px',
+                    backgroundColor: isHovering ? "rgba(0, 255, 204, 0.15)" : "transparent",
+                    borderColor: isHovering ? "rgba(0, 255, 204, 0.9)" : "rgba(124, 58, 237, 0.6)",
+                    boxShadow: isHovering ? "0 0 20px rgba(0, 255, 204, 0.4)" : "0 0 10px rgba(124, 58, 237, 0.2)",
+                    willChange: 'transform, width, height',
                 }}
             />
 
-            <motion.div
-                className={styles.dot}
+            {/* Dot */}
+            <div
+                ref={dotRef}
+                className="fixed top-0 left-0 z-[9999] pointer-events-none rounded-full transition-all duration-200 ease-out"
                 style={{
-                    x: dotX,
-                    y: dotY,
-                    translateX: "-50%",
-                    translateY: "-50%"
-                }}
-                animate={{
-                    width: isHovering ? 8 : 8,
-                    height: isHovering ? 8 : 8,
-                    scale: isHovering ? 0 : 1
+                    width: '10px',
+                    height: '10px',
+                    backgroundColor: isHovering ? "#7c3aed" : "#00ffcc",
+                    transform: isHovering ? 'scale(1.5)' : 'scale(1)',
+                    boxShadow: isHovering ? "0 0 10px #7c3aed" : "0 0 10px #00ffcc",
+                    willChange: 'transform, background-color',
                 }}
             />
         </div>

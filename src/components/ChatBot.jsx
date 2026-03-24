@@ -1,171 +1,222 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, ChevronDown } from 'lucide-react';
+import { X, Send, ChevronDown, Sparkles, RotateCcw } from 'lucide-react';
 
-// ─── Language Detection ───────────────────────────────────────────────────────
-const hindiWords = ['kya', 'hai', 'hota', 'karo', 'batao', 'mujhe', 'mera', 'tera', 'aap', 'tum', 'hum', 'yaar', 'dost', 'bhai', 'kaise', 'kaisa', 'samjhao', 'batao', 'chahiye', 'nahi', 'nhi', 'accha', 'theek', 'bol', 'puch', 'kuch', 'sab', 'sirf', 'matlab', 'kyun', 'kab', 'kahan', 'dekho', 'lao', 'do', 'ho', 'ka', 'ki', 'ke', 'se', 'mein', 'par', 'aur'];
-function isHindi(text) {
-    const lower = text.toLowerCase();
-    return hindiWords.some(w => lower.split(/\s+/).includes(w)) || /[\u0900-\u097F]/.test(text);
-}
+// ─── System Prompt with Abdul's Full Portfolio Context ──────────────────────────
+const SYSTEM_PROMPT = `You are **AH Assistant** — the personal AI assistant embedded in Abdul Haque's portfolio website.
 
-// ─── Knowledge Base ───────────────────────────────────────────────────────────
-const KB = [
-    // ── About ──
-    {
-        keys: ['name', 'kaun', 'who', 'tum', 'aap', 'you', 'abdul', 'about', 'bio', 'introduce', 'introduction', 'tell me', 'batao', 'kon ho'],
-        en: `👋 I'm **Abdul Haque** — a passionate **Full Stack Developer** & Computer Science student!\n\nI specialize in the **MERN Stack** and modern UI/UX design. I build scalable, high-performance web apps by blending robust engineering with clean aesthetics. 🚀`,
-        hi: `👋 Main **Abdul Haque** hoon — ek passionate **Full Stack Developer** aur Computer Science ka student!\n\nMain **MERN Stack** aur modern UI/UX design mein specialise karta hoon. Clean aur scalable web apps banata hoon! 🚀`,
-    },
-    // ── Skills ──
-    {
-        keys: ['skill', 'technology', 'tech', 'stack', 'language', 'kya aata', 'seekha', 'framework', 'tools'],
-        en: `⚡ Abdul's Tech Stack:\n\n💻 **Languages:** JavaScript (ES6+), C, C++\n⚛️ **Frontend:** React.js, HTML5, CSS3, Tailwind CSS\n🟢 **Backend:** Node.js, Express.js\n🍃 **Database:** MongoDB\n🔧 **Tools:** Git, GitHub, Postman, Vercel, Render\n🎨 **Design:** Responsive UI/UX, REST APIs`,
-        hi: `⚡ Abdul ke Skills:\n\n💻 **Languages:** JavaScript (ES6+), C, C++\n⚛️ **Frontend:** React.js, HTML5, CSS3, Tailwind CSS\n🟢 **Backend:** Node.js, Express.js\n🍃 **Database:** MongoDB\n🔧 **Tools:** Git, GitHub, Postman, Vercel, Render\n🎨 **Design:** Responsive UI/UX, REST APIs`,
-    },
-    // ── Projects ──
-    {
-        keys: ['project', 'work', 'kaam', 'banaya', 'built', 'portfolio work', 'banaaya'],
-        en: `🚀 Abdul's Projects:\n\n1. **Razer Clone** — Pixel-perfect HTML/CSS clone\n   🔗 [Live](https://razer-website-1avbtm69x-abdul7.vercel.app/)\n\n2. **Mealawe App UI** — Food delivery frontend\n   🔗 [Live](https://mealawe-9b7udy2ko-abdul7.vercel.app/)\n\n3. **Speed Typing Test** — Real-time WPM tracker\n   🔗 [Live](https://typing-test-abdul7.vercel.app/)\n\n4. **Global Currency Tool** — Live exchange rates\n   🔗 [Live](https://convertrate23.netlify.app/convert_currn/currency/)`,
-        hi: `🚀 Abdul ke Projects:\n\n1. **Razer Clone** — HTML/CSS se bana pixel-perfect clone\n   🔗 [Live dekho](https://razer-website-1avbtm69x-abdul7.vercel.app/)\n\n2. **Mealawe App UI** — Food delivery ka frontend\n   🔗 [Live dekho](https://mealawe-9b7udy2ko-abdul7.vercel.app/)\n\n3. **Speed Typing Test** — Real-time WPM tracker\n   🔗 [Live dekho](https://typing-test-abdul7.vercel.app/)\n\n4. **Global Currency Tool** — Live exchange rates\n   🔗 [Live dekho](https://convertrate23.netlify.app/convert_currn/currency/)`,
-    },
-    // ── Education ──
-    {
-        keys: ['education', 'study', 'padhai', 'college', 'university', 'degree', '10th', '12th', 'school', 'qualification'],
-        en: `🎓 Abdul's Education:\n\n🏫 **B.E. Computer Science & Engineering**\n   Swaminarayan University — 1st Year (Enrolled)\n\n📘 **12th Grade** — 84% (Physics & Maths)\n📗 **10th Grade** — 71% (State Board)`,
-        hi: `🎓 Abdul ki Padhai:\n\n🏫 **B.E. Computer Science & Engineering**\n   Swaminarayan University — 1st Year (Enrolled)\n\n📘 **12th Class** — 84% (Physics & Maths)\n📗 **10th Class** — 71% (State Board)`,
-    },
-    // ── Contact ──
-    {
-        keys: ['contact', 'reach', 'email', 'phone', 'number', 'call', 'message', 'connect',
-            'location', 'address', 'milna', 'baat', 'whatsapp', 'touch', 'milao',
-            'bata do', 'dena', 'chahiye', 'kaha milenge', 'kaise milun', 'gmail',
-            'mobile', 'no.', 'no ', 'num', 'mob', 'contact kare', 'kaise baat'],
-        en: `📬 Contact Abdul:\n\n📧 **Email:** abdulhaque4171@gmail.com\n📞 **Phone:** +91 7870929584\n📍 **Location:** Kalol, Gujarat, India\n💼 **LinkedIn:** [linkedin.com/in/abdul-haque-a08150398](https://www.linkedin.com/in/abdul-haque-a08150398)\n🐙 **GitHub:** [github.com/abdulhaque2005](https://github.com/abdulhaque2005)`,
-        hi: `📬 Abdul se contact karo:\n\n📧 **Email:** abdulhaque4171@gmail.com\n📞 **Phone:** +91 7870929584\n📍 **Location:** Kalol, Gujarat, India\n💼 **LinkedIn:** [Profile link](https://www.linkedin.com/in/abdul-haque-a08150398)\n🐙 **GitHub:** [github.com/abdulhaque2005](https://github.com/abdulhaque2005)`,
-    },
-    // ── Resume ──
-    {
-        keys: ['resume', 'cv', 'download', 'pdf'],
-        en: `📄 Download Abdul's Resume!\n\n➡️ Click the **"Download Resume"** button on the Hero section — a perfect PDF will be downloaded instantly! ✅`,
-        hi: `📄 Abdul ka Resume download karo!\n\n➡️ Hero section pe **"Download Resume"** button click karo — ek dum sahi PDF download ho jayega! ✅`,
-    },
-    // ── GitHub ──
-    {
-        keys: ['github', 'repository', 'repo', 'open source', 'source code'],
-        en: `🐙 Abdul's GitHub:\n👉 [github.com/abdulhaque2005](https://github.com/abdulhaque2005)\n\nAll projects & code available here!`,
-        hi: `🐙 Abdul ka GitHub:\n👉 [github.com/abdulhaque2005](https://github.com/abdulhaque2005)\n\nSab projects ka code yahan milega!`,
-    },
+## WHO IS ABDUL HAQUE
+- **Full Name:** Abdul Haque
+- **Title:** Full Stack Architect & Computer Science Engineer
+- **Philosophy:** "I don't just build apps. I architect immersive digital experiences that define the future."
+- **Motto:** "Every line of code is a conscious step towards digital perfection."
+- **Foundation:** Built on C/C++ logic — approaches development with a computational mind, optimizing algorithms and solving complex problems with high-precision logic.
+- **Stack Mastery:** Combines competitive programming intuition with the MERN Stack (MongoDB, Express.js, React.js, Node.js) to build scalable, high-performance systems.
 
-    // ════════ TECH KNOWLEDGE ════════
-    // ── HTML ──
-    {
-        keys: ['html', 'html5', 'hypertext', 'markup'],
-        en: `🌐 **HTML (HyperText Markup Language)**\n\nHTML is the **skeleton of every website**. It defines the structure using tags.\n\n\`\`\`html\n<h1>Hello World</h1>\n<p>This is a paragraph</p>\n<img src="pic.jpg" alt="image">\n\`\`\`\n\n📌 Key tags: \`<div>\`, \`<p>\`, \`<h1-h6>\`, \`<a>\`, \`<img>\`, \`<form>\`, \`<input>\`\n\n💡 HTML gives **structure** — CSS makes it beautiful!`,
-        hi: `🌐 **HTML (HyperText Markup Language)**\n\nHTML har website ka **skeleton** (dhaancha) hota hai. Isme tags se structure banate hain.\n\n\`\`\`html\n<h1>Hello World</h1>\n<p>Yeh ek paragraph hai</p>\n<img src="pic.jpg" alt="image">\n\`\`\`\n\n📌 Main tags: \`<div>\`, \`<p>\`, \`<h1-h6>\`, \`<a>\`, \`<img>\`, \`<form>\`\n\n💡 HTML **structure** deta hai — CSS se sundar banta hai!`,
-    },
-    // ── CSS ──
-    {
-        keys: ['css', 'css3', 'style', 'styling', 'design', 'flexbox', 'grid'],
-        en: `🎨 **CSS (Cascading Style Sheets)**\n\nCSS makes websites **beautiful**! It controls colors, fonts, layout & animations.\n\n\`\`\`css\nbody {\n  background: #000;\n  color: #fff;\n  font-family: Arial;\n}\n\n.card {\n  display: flex;\n  border-radius: 12px;\n  padding: 20px;\n}\n\`\`\`\n\n📌 Key concepts: Flexbox, Grid, Animations, Media Queries, Variables\n\n💡 Tailwind CSS is a utility-first CSS framework that Abdul uses!`,
-        hi: `🎨 **CSS (Cascading Style Sheets)**\n\nCSS website ko **sundar** banata hai! Colors, fonts, layout aur animations control karta hai.\n\n\`\`\`css\nbody {\n  background: #000;\n  color: #fff;\n}\n\n.card {\n  display: flex;\n  border-radius: 12px;\n}\n\`\`\`\n\n📌 Main concepts: Flexbox, Grid, Animations, Media Queries\n\n💡 Abdul **Tailwind CSS** use karta hai — jo ek super fast CSS framework hai!`,
-    },
-    // ── JavaScript ──
-    {
-        keys: ['javascript', 'js', 'es6', 'ecmascript', 'vanilla js', 'script'],
-        en: `⚡ **JavaScript (JS)**\n\nJavaScript makes websites **interactive & dynamic**! It's the programming language of the web.\n\n\`\`\`js\n// Variables\nconst name = "Abdul";\nlet age = 19;\n\n// Function\nfunction greet(name) {\n  return "Hello " + name;\n}\n\n// Arrow function\nconst add = (a, b) => a + b;\n\`\`\`\n\n📌 Key: Variables, Functions, DOM, Events, Promises, Async/Await, Fetch API`,
-        hi: `⚡ **JavaScript (JS)**\n\nJavaScript website ko **interactive** banata hai! Web ka programming language hai.\n\n\`\`\`js\n// Variables\nconst name = "Abdul";\nlet age = 19;\n\n// Function\nfunction greet(name) {\n  return "Hello " + name;\n}\n\n// Arrow function\nconst add = (a, b) => a + b;\n\`\`\`\n\n📌 Main concepts: Variables, Functions, DOM, Events, Async/Await, Fetch API`,
-    },
-    // ── React basics ──
-    {
-        keys: ['react', 'reactjs', 'react.js', 'component', 'jsx', 'props', 'state'],
-        en: `⚛️ **React.js**\n\nReact is a **JavaScript library** by Meta for building fast UIs using reusable components.\n\n\`\`\`jsx\nfunction Card({ name }) {\n  return <h2>Hello, {name}!</h2>;\n}\n// Usage\n<Card name="Abdul" />\n\`\`\`\n\n📌 Core concepts: **Components, JSX, Props, State, Hooks**\n\n💡 Type **hooks** to learn all React Hooks in detail!`,
-        hi: `⚛️ **React.js**\n\nReact Meta ka **JavaScript library** hai — reusable components se fast UI banate hain.\n\n\`\`\`jsx\nfunction Card({ name }) {\n  return <h2>Hello, {name}!</h2>;\n}\n// Use karo aise\n<Card name="Abdul" />\n\`\`\`\n\n📌 Main concepts: **Components, JSX, Props, State, Hooks**\n\n💡 **hooks** type karo — saare React Hooks detail mein jaano!`,
-    },
-    // ── React Hooks ──
-    {
-        keys: ['hook', 'hooks', 'usestate', 'useeffect', 'useref', 'usecontext', 'usememo',
-            'usecallback', 'usereducer', 'uselayouteffect', 'useid', 'kitne hook',
-            'hook types', 'hook kitne', 'types of hook', 'hook kya hota'],
-        en: `🪝 **React Hooks — All Types**\n\nHooks let you use state & lifecycle in **function components**.\n\n1. **useState** — Store & update state\n\`useState(initialValue)\` → \`[value, setValue]\`\n\n2. **useEffect** — Side effects (API calls, timers)\n\`\`\`js\nuseEffect(() => { fetchData(); }, []);\n\`\`\`\n\n3. **useRef** — Access DOM element / persist value\n\`\`\`js\nconst inputRef = useRef(null);\n\`\`\`\n\n4. **useContext** — Access global context (no prop drilling)\n\n5. **useMemo** — Cache expensive calculations\n\n6. **useCallback** — Cache functions to avoid re-renders\n\n7. **useReducer** — Complex state with actions (like Redux)\n\`\`\`js\nconst [state, dispatch] = useReducer(reducer, initial);\n\`\`\`\n\n8. **useLayoutEffect** — Like useEffect but fires before paint\n\n9. **useId** — Generate unique IDs for accessibility\n\n📌 **Total: 9 built-in React Hooks!**`,
-        hi: `🪝 **React Hooks — Saare Types**\n\nHooks se **function components** mein state aur lifecycle use kar sakte ho.\n\n1. **useState** — State store aur update karo\n\`useState(value)\` → \`[value, setValue]\`\n\n2. **useEffect** — Side effects (API calls, timers)\n\`\`\`js\nuseEffect(() => { data fetch karo; }, []);\n\`\`\`\n\n3. **useRef** — DOM element access karo / value persist karo\n\`\`\`js\nconst ref = useRef(null);\n\`\`\`\n\n4. **useContext** — Global data access (prop drilling nahi)\n\n5. **useMemo** — Heavy calculations cache karo\n\n6. **useCallback** — Functions cache karo (re-render rokne ke liye)\n\n7. **useReducer** — Complex state actions ke saath\n\`\`\`js\nconst [state, dispatch] = useReducer(reducer, init);\n\`\`\`\n\n8. **useLayoutEffect** — useEffect jaisa, paint se pehle fire hota hai\n\n9. **useId** — Unique ID generate karo (accessibility ke liye)\n\n📌 **Total: React mein 9 built-in Hooks hain!**`,
-    },
-    // ── Node.js ──
-    {
-        keys: ['node', 'nodejs', 'node.js', 'backend', 'server', 'express'],
-        en: `🟢 **Node.js & Express.js**\n\nNode.js lets you run **JavaScript on the server**. Express is a minimal web framework on top of Node.\n\n\`\`\`js\nconst express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n  res.send('Hello from server!');\n});\n\napp.listen(3000);\n\`\`\`\n\n📌 Used for: REST APIs, Authentication, Database connections\n\n💡 Abdul uses Node + Express for all his backend work!`,
-        hi: `🟢 **Node.js & Express.js**\n\nNode.js se **JavaScript server pe** chalta hai. Express ek simple web framework hai.\n\n\`\`\`js\nconst express = require('express');\nconst app = express();\n\napp.get('/', (req, res) => {\n  res.send('Server se Hello!');\n});\n\napp.listen(3000);\n\`\`\`\n\n📌 Use hota hai: REST APIs, Authentication, Database connections\n\n💡 Abdul backend ke liye Node + Express use karta hai!`,
-    },
-    // ── MongoDB ──
-    {
-        keys: ['mongodb', 'mongo', 'database', 'db', 'nosql', 'mongoose'],
-        en: `🍃 **MongoDB**\n\nMongoDB is a **NoSQL database** that stores data in flexible JSON-like documents.\n\n\`\`\`js\n// Example document\n{\n  name: "Abdul Haque",\n  skills: ["React", "Node", "MongoDB"],\n  age: 19\n}\n\`\`\`\n\n📌 Key: Collections, Documents, CRUD operations, Mongoose ODM\n\n💡 MongoDB + Express + React + Node = **MERN Stack** (Abdul's specialty!)`,
-        hi: `🍃 **MongoDB**\n\nMongoDB ek **NoSQL database** hai jo data ko JSON jaisi documents mein store karta hai.\n\n\`\`\`js\n// Example document\n{\n  name: "Abdul Haque",\n  skills: ["React", "Node", "MongoDB"],\n  age: 19\n}\n\`\`\`\n\n📌 Main concepts: Collections, Documents, CRUD, Mongoose\n\n💡 MongoDB + Express + React + Node = **MERN Stack** — yahi Abdul ki specialty hai!`,
-    },
-    // ── Git ──
-    {
-        keys: ['git', 'github', 'version control', 'commit', 'push', 'pull', 'branch'],
-        en: `🐙 **Git & GitHub**\n\nGit is a **version control system** — track changes in your code. GitHub is cloud hosting for Git repos.\n\n\`\`\`bash\ngit init          # Start a repo\ngit add .         # Stage changes\ngit commit -m "message"  # Save snapshot\ngit push origin main     # Upload to GitHub\n\`\`\`\n\n📌 Key: init, add, commit, push, pull, branch, merge\n\n🔗 Abdul's GitHub: [github.com/abdulhaque2005](https://github.com/abdulhaque2005)`,
-        hi: `🐙 **Git & GitHub**\n\nGit ek **version control system** hai — code ke changes track karta hai. GitHub pe code cloud mein store hota hai.\n\n\`\`\`bash\ngit init          # Repo shuru karo\ngit add .         # Changes stage karo\ngit commit -m "message"  # Snapshot save karo\ngit push origin main     # GitHub pe upload karo\n\`\`\`\n\n📌 Main commands: init, add, commit, push, pull, branch\n\n🔗 Abdul ka GitHub: [github.com/abdulhaque2005](https://github.com/abdulhaque2005)`,
-    },
-    // ── API ──
-    {
-        keys: ['api', 'rest', 'restapi', 'fetch', 'axios', 'endpoint', 'http', 'request', 'response'],
-        en: `📡 **REST API**\n\nREST API allows **communication between frontend and backend** using HTTP methods.\n\n\`\`\`js\n// Fetching data from API\nfetch('https://api.example.com/users')\n  .then(res => res.json())\n  .then(data => console.log(data));\n\n// HTTP Methods:\n// GET    → Read data\n// POST   → Create data\n// PUT    → Update data\n// DELETE → Delete data\n\`\`\`\n\n💡 Abdul uses REST APIs in his projects like the Currency Tool!`,
-        hi: `📡 **REST API**\n\nREST API se **frontend aur backend ke beech communication** hoti hai HTTP methods se.\n\n\`\`\`js\n// API se data fetch karo\nfetch('https://api.example.com/users')\n  .then(res => res.json())\n  .then(data => console.log(data));\n\n// HTTP Methods:\n// GET    → Data padhna\n// POST   → Data banana\n// PUT    → Data update karna\n// DELETE → Data delete karna\n\`\`\`\n\n💡 Abdul ne Currency Tool project mein REST API use ki hai!`,
-    },
-    // ── Tailwind ──
-    {
-        keys: ['tailwind', 'tailwindcss', 'utility', 'class'],
-        en: `🎨 **Tailwind CSS**\n\nTailwind is a **utility-first CSS framework** — design directly in HTML/JSX with classes!\n\n\`\`\`jsx\n<div className="flex items-center justify-center\n               bg-blue-500 text-white\n               rounded-xl p-6 shadow-lg\n               hover:bg-blue-600 transition">\n  Hello Tailwind!\n</div>\n\`\`\`\n\n💡 No custom CSS needed! Super fast development. Abdul uses it in his portfolio!`,
-        hi: `🎨 **Tailwind CSS**\n\nTailwind ek **utility-first CSS framework** hai — seedha HTML/JSX mein classes se design karo!\n\n\`\`\`jsx\n<div className="flex items-center bg-blue-500\n               text-white rounded-xl p-6">\n  Hello Tailwind!\n</div>\n\`\`\`\n\n💡 Alag se CSS likhne ki zaroorat nahi! Super fast development. Abdul apne portfolio mein use karta hai!`,
-    },
-    // ── MERN ──
-    {
-        keys: ['mern', 'full stack', 'fullstack', 'mean', 'stack kya'],
-        en: `🚀 **MERN Stack**\n\nMERN is a **Full Stack JavaScript framework** for building complete web apps!\n\n- **M** → MongoDB (Database)\n- **E** → Express.js (Backend Framework)\n- **R** → React.js (Frontend)\n- **N** → Node.js (Server Runtime)\n\n🔄 Flow: User → React → Express API → Node → MongoDB → back to React\n\n💡 Abdul specializes in the **MERN Stack**!`,
-        hi: `🚀 **MERN Stack**\n\nMERN ek **Full Stack JavaScript framework** hai poori web app banane ke liye!\n\n- **M** → MongoDB (Database)\n- **E** → Express.js (Backend)\n- **R** → React.js (Frontend)\n- **N** → Node.js (Server)\n\n🔄 Flow: User → React → Express API → Node → MongoDB → wapas React\n\n💡 Abdul **MERN Stack** mein specialist hai!`,
-    },
-    // ── C / C++ ──
-    {
-        keys: ['c language', 'c++', 'cpp', 'c programming', 'pointer'],
-        en: `💻 **C & C++**\n\nC is a **foundational programming language** — fast, low-level, great for systems.\nC++ adds **Object Oriented Programming (OOP)** on top of C.\n\n\`\`\`c\n#include <stdio.h>\nint main() {\n  printf("Hello World!\\n");\n  return 0;\n}\n\`\`\`\n\n📌 OOP concepts in C++: Classes, Objects, Inheritance, Polymorphism\n\n💡 Abdul knows both C and C++!`,
-        hi: `💻 **C & C++**\n\nC ek **foundational programming language** hai — fast aur low-level.\nC++ mein C ke upar **OOP (Object Oriented Programming)** add hoti hai.\n\n\`\`\`c\n#include <stdio.h>\nint main() {\n  printf("Hello World!\\n");\n  return 0;\n}\n\`\`\`\n\n📌 C++ ke OOP concepts: Classes, Objects, Inheritance, Polymorphism\n\n💡 Abdul C aur C++ dono jaanta hai!`,
-    },
-    // ── Hello ──
-    {
-        keys: ['hello', 'hi', 'hey', 'hii', 'helo', 'namaste', 'salam', 'assalam', 'hola', 'good morning', 'good evening', 'sup'],
-        en: `👋 Hey there! I'm **AH Assistant** — Abdul Haque's personal portfolio bot!\n\nAsk me anything:\n- 💻 Skills & Tech Stack\n- 🚀 Projects & Work\n- 🎓 Education\n- 📬 Contact Info\n- 📄 Resume Download\n- 🌐 HTML, CSS, JS, React & more tech!`,
-        hi: `👋 Kya haal hai! Main **AH Assistant** hoon — Abdul Haque ka personal portfolio bot!\n\nMujhse kuch bhi poocho:\n- 💻 Skills aur Tech Stack\n- 🚀 Projects\n- 🎓 Education\n- 📬 Contact Info\n- 📄 Resume Download\n- 🌐 HTML, CSS, JS, React aur aur bhi tech!`,
-    },
-    // ── Help ──
-    {
-        keys: ['help', 'kya puch', 'option', 'menu', 'topic', 'what can'],
-        en: `🤖 I can help you with:\n\n1. 👤 **About Abdul** — Who he is\n2. 💻 **Skills** — Full tech stack\n3. 🚀 **Projects** — What he built\n4. 🎓 **Education** — Study details\n5. 📬 **Contact** — Reach him\n6. 📄 **Resume** — Download PDF\n---\n🌐 **Tech Topics:**\n7. HTML, CSS, JavaScript\n8. React, Node.js, Express\n9. MongoDB, REST API\n10. Git, Tailwind, MERN Stack, C/C++\n\nJust type any topic! 👆`,
-        hi: `🤖 Main in topics pe help kar sakta hoon:\n\n1. 👤 **Abdul ke baare mein** — kaun hain\n2. 💻 **Skills** — Full tech stack\n3. 🚀 **Projects** — Kya banaya\n4. 🎓 **Education** — Padhai\n5. 📬 **Contact** — Kaise mile\n6. 📄 **Resume** — PDF download\n---\n🌐 **Tech Topics:**\n7. HTML, CSS, JavaScript\n8. React, Node.js, Express\n9. MongoDB, REST API\n10. Git, Tailwind, MERN Stack, C/C++\n\nKoi bhi topic type karo! 👆`,
-    },
-];
+## EDUCATION
+1. **Bachelor of Engineering (CSE)** — Swaminarayan University | 2025 - Present | CGPA: 9.00 (Specializing in System Architecture)
+2. **Intermediate (+2 Science)** — +2 LBBS High School Palasi | 2023 - 2025 | Score: 85% (Physics, Chemistry, Maths)
+3. **Matriculation (10th)** — +2 LBBS High School Palasi | 2022 - 2023 | Score: 73%
 
-const QUICK_REPLIES = ['About', 'Skills', 'Projects', 'Contact', 'HTML', 'CSS', 'React', 'Hooks', 'MERN'];
+## TECHNICAL SKILLS
+- **Logic Core:** C, C++ (Algorithms & Optimization, OOP, Data Structures)
+- **Frontend:** React.js, HTML5, CSS3, Tailwind CSS, Framer Motion, Responsive Design
+- **Backend:** Node.js, Express.js (REST APIs)
+- **Database:** MongoDB
+- **DevOps/Tools:** Git, GitHub, Postman, Vercel, Render
+- **Design:** UI/UX Architecture, Modern Responsive Design
+- **Other:** JavaScript (ES6+), TypeScript basics
 
-function getReply(input) {
-    const lower = input.toLowerCase();
-    const hindi = isHindi(input);
-    for (const item of KB) {
-        if (item.keys.some(k => lower.includes(k))) {
-            return hindi ? item.hi : item.en;
+## PROJECTS (with live links)
+1. **StockPilot** — Full-stack MERN trading dashboard inspired by Zerodha with real-time watchlists, portfolio management, and secure authentication. [TypeScript, React, Node.js, MongoDB] → https://stockpilot-abdul7.vercel.app/login
+2. **VectorMinds** — AI-powered currency arbitration platform for freelancers with real-time exchange rates, analytics, AI forecasts, and a financial simulator. [React, Vite, AI, API] → https://vector-minds.vercel.app/
+3. **Mealawe Clone** — Functional clone of the Mealawe food platform with user-friendly navigation and responsive design. [HTML, CSS] → https://mealawe-9b7udy2ko-abdul7.vercel.app/
+4. **Razer Website Clone** — High-fidelity clone of the Razer gaming website with dark mode aesthetics. [HTML, CSS] → https://razer-website-1avbtm69x-abdul7.vercel.app/
+5. **Ethena Clone** — Pixel-perfect recreation of Ethena platform with modern UI/UX and smooth transitions. [HTML, CSS, Animation] → https://ethena-clone1-cmxl224lm-abdul7.vercel.app/
+6. **Calculator App** — Sleek functional calculator. [React, CSS, JS] → https://calculator-abdul7.vercel.app/
+7. **Todo Master** — Efficient task management application. [React, CSS, JS] → https://todoapp-project-p85bq6j4n-abdul7.vercel.app/
+8. **Currency Converter** — Real-time currency exchange rate calculator. [HTML, CSS, JS, API] → https://convertrate23.netlify.app/convert_currn/currency/
+
+## GAMES (with live links)
+1. **Typing Master** — Speed typing test game → https://typing-test-abdul7.vercel.app/
+2. **Counter Game** — Interactive 3D counter app → https://counter-game-pfcffxc2q-abdul7.vercel.app/
+3. **Color Pick Game** — Hex code color guessing game → https://colour-game-one.vercel.app/
+
+## CERTIFICATES
+1. **HTML, CSS & JavaScript** — Issued by HRCalcy (29 Dec 2025)
+2. **ReactJS for Beginners** — Issued by Simplilearn (3 Feb 2026)
+3. **Python Interview Ready** — Issued by Simplilearn (3 Feb 2026)
+
+## CONTACT INFO
+- **Email:** abdulhaque4171@gmail.com
+- **Phone:** +91 7870929584
+- **Location:** Kalol, Gujarat (Originally from Bihar, India)
+- **LinkedIn:** https://www.linkedin.com/in/abdul-haque-a08150398
+- **GitHub:** https://github.com/abdulhaque2005
+- **LeetCode:** https://leetcode.com/u/pDjnXUuCp8/
+
+## YOUR BEHAVIOR RULES
+1. You are AH Assistant — Abdul Haque's portfolio bot. Always answer as if you're representing Abdul.
+2. If the user asks in Hindi/Hinglish, respond in Hindi/Hinglish. If in English, respond in English.
+3. Be friendly, professional, and conversational. Use emojis sparingly but effectively.
+4. For questions about Abdul, answer from the context above. Be specific with numbers, links, and details.
+5. For general programming/tech questions, or completely unrelated questions (like cooking, politics, general knowledge, math, science, life advice, etc.), you MUST answer it accurately and fully to the best of your ability. 
+6. After answering unrelated questions, you can optionally, gently steer the conversation back to Abdul's work if it feels natural, but the priority is ALWAYS to provide a helpful and complete answer to whatever the user actually asked. DO NOT refuse to answer just because it's not about Abdul.
+7. Keep responses concise but informative. Use markdown formatting (**bold**, bullet points) for readability.
+8. When sharing project links, always include them as clickable links.
+9. If someone asks "who made you" or "who built you" — say Abdul Haque built this entire portfolio and the AI assistant within it.
+10. Be enthusiastic about Abdul's achievements — he's a talented developer!
+11. NEVER make up information about Abdul that isn't in the context above.
+12. For resume/CV download — tell them to click the "Download Resume" button on the Hero section of the portfolio.`;
+
+async function callGemini(messages) {
+    const apiKeysString = import.meta.env.VITE_GEMINI_API_KEY;
+
+    if (!apiKeysString || apiKeysString === 'YOUR_GEMINI_API_KEY_HERE') {
+        return '⚠️ AI is not configured yet. The portfolio owner needs to add a Gemini API key. In the meantime, try asking about **skills**, **projects**, **education**, or **contact**!';
+    }
+
+    // Support multiple keys separated by commas to avoid rate limits
+    const apiKeys = apiKeysString.split(',').map(k => k.trim()).filter(k => k);
+    if (apiKeys.length === 0) {
+        return '⚠️ Invalid API Key configuration.';
+    }
+
+    const contents = [];
+
+    // Add conversation history
+    for (const msg of messages) {
+        contents.push({
+            role: msg.role === 'user' ? 'user' : 'model',
+            parts: [{ text: msg.text }]
+        });
+    }
+
+    const models = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+    let lastError = null;
+    let authFail = false;
+
+    // Try each key
+    for (const apiKey of apiKeys) {
+        // Try each model with the current key
+        for (const model of models) {
+            try {
+                const res = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            system_instruction: {
+                                parts: [{ text: SYSTEM_PROMPT }]
+                            },
+                            contents,
+                            generationConfig: {
+                                temperature: 0.7,
+                                topP: 0.9,
+                                topK: 40,
+                                maxOutputTokens: 800,
+                            },
+                            safetySettings: [
+                                { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+                                { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+                                { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                                { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+                            ]
+                        }),
+                    }
+                );
+
+                if (res.status === 429) {
+                    lastError = 'rate_limit';
+                    continue; // Try next model, or if models exhausted, next key
+                }
+                
+                if (res.status === 400 || res.status === 403) {
+                    authFail = true;
+                    lastError = 'auth';
+                    // Don't break completely, maybe just this key is bad. Try next key.
+                    break; 
+                }
+
+                if (!res.ok) {
+                    const errData = await res.json().catch(() => ({}));
+                    console.error(`Gemini API Error (${model} with key ${apiKey.substring(0, 5)}...):`, errData);
+                    lastError = 'api_error';
+                    continue; 
+                }
+
+                const data = await res.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+                if (!text) {
+                    return "🤔 I couldn't generate a response. Please try rephrasing your question!";
+                }
+
+                return text;
+            } catch (fetchErr) {
+                console.error(`Error with model ${model}:`, fetchErr);
+                lastError = 'network';
+                continue;
+            }
         }
     }
-    return hindi
-        ? `🤔 Yeh mere knowledge mein nahi hai abhi!\n\nTry karo: **skills**, **projects**, **react**, **html**, **contact** — main zaroor bataunga! 😊`
-        : `🤔 I don't have info on that yet!\n\nTry: **skills**, **projects**, **react**, **html**, **contact** and I'll answer right away! 😊`;
+
+    if (lastError === 'rate_limit') {
+        return getLocalFallbackResponse(messages[messages.length - 1].text);
+    }
+    if (authFail) return '⚠️ API Key is invalid or restricted. Please check your Gemini API key.';
+    
+    return '😅 Oops, something went wrong with the AI API. Please try again in a moment!';
 }
 
+// ─── Local Fallback Logic (When API is rate-limited) ─────────────────────────
+function getLocalFallbackResponse(userText) {
+    const text = userText.toLowerCase();
+    
+    if (text.includes('hi') || text.includes('hello') || text.includes('hey') || text.includes('namaste') || text.includes('haal')) {
+        return "👋 Hey! I'm AH Assistant. The AI servers are slightly busy right now due to high traffic, but I can still tell you about Abdul's **Skills**, **Projects**, **Education**, or **Contact info**! What would you like to know?";
+    }
+    
+    if (text.includes('skill') || text.includes('tech') || text.includes('stack')) {
+        return "💻 **Abdul's Core Skills:**\n- **Logic Core:** C, C++ (Algorithms & Optimization)\n- **Frontend:** React.js, HTML5, CSS3, Tailwind CSS, Framer Motion\n- **Backend:** Node.js, Express.js\n- **Database:** MongoDB\n- **Tools:** Git, GitHub, Vercel, Postman\n\nHe is a MERN Stack Enthusiast built on strong C/C++ logic! 🚀";
+    }
+    
+    if (text.includes('project') || text.includes('work') || text.includes('build')) {
+        return "🚀 **Key Projects:**\n1. **StockPilot**: Full-stack MERN trading dashboard inspired by Zerodha.\n2. **VectorMinds**: AI-powered currency arbitration platform for freelancers.\n3. **Clones**: High-fidelity clones of Razer, Ethena, and Mealawe.\n\nYou can see them live in the Projects section above!";
+    }
+    
+    if (text.includes('education') || text.includes('study') || text.includes('college') || text.includes('degree')) {
+        return "📚 **Education:**\n- **B.E. (Computer Science)** — Swaminarayan University (2025 - Present) | CGPA: 9.00\n- **Intermediate (+2 Science)** — Score: 85%\n- **Matriculation (10th)** — Score: 73%\n\nCurrently specializing in System Architecture.";
+    }
+    
+    if (text.includes('contact') || text.includes('email') || text.includes('phone') || text.includes('hire') || text.includes('reach')) {
+        return "📬 **Contact Info:**\n- **Email:** abdulhaque4171@gmail.com\n- **Phone:** +91 7870929584\n- **LinkedIn:** [Abdul Haque](https://www.linkedin.com/in/abdul-haque-a08150398)\n- **GitHub:** [abdulhaque2005](https://github.com/abdulhaque2005)\n\nFeel free to reach out for collaborations! ⚡";
+    }
+    
+    if (text.includes('resume') || text.includes('cv')) {
+        return "📄 You can download Abdul's Resume by clicking the **Download Resume** button in the Hero section at the top of the page!";
+    }
+
+    return "🤖 **Notice:** The AI servers are currently hitting free-tier rate limits (too many requests!).\n\nWhile we wait for the servers to cool down, I can still tell you about Abdul's:\n- **Skills**\n- **Projects**\n- **Education**\n- **Contact Info**\n\nJust tap a quick reply or ask about these topics!";
+}
+
+// ─── Format Message (Markdown → HTML) ─────────────────────────────────────────
 function formatMessage(text) {
-    let f = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    f = f.replace(/`([^`]+)`/g, '<code style="background:rgba(0,255,204,0.1);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:0.9em;color:#00ffcc;">$1</code>');
+    let f = text;
+    // Code blocks
     f = f.replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.4);border:1px solid rgba(0,255,204,0.15);border-radius:8px;padding:10px;font-family:monospace;font-size:0.78rem;overflow-x:auto;color:#a5f3fc;margin:6px 0;line-height:1.5;">$1</pre>');
+    // Inline code
+    f = f.replace(/`([^`]+)`/g, '<code style="background:rgba(0,255,204,0.1);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:0.9em;color:#00ffcc;">$1</code>');
+    // Bold
+    f = f.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Italic
+    f = f.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    // Links
     f = f.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#00ffcc;text-decoration:underline;">$1</a>');
+    // Bare URLs
+    f = f.replace(/(?<!\"|>)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#00ffcc;text-decoration:underline;">$1</a>');
+    // Line breaks
     f = f.replace(/\n/g, '<br/>');
     return f;
 }
@@ -174,13 +225,27 @@ function formatMessage(text) {
 const AHLogo = ({ size = 28, style = {} }) => (
     <div style={{
         width: size, height: size, borderRadius: '50%',
-        background: 'linear-gradient(135deg,#00ffcc,#7c3aed)',
+        background: 'linear-gradient(135deg, #06b6d4, #7c3aed)', /* Cyan to Purple */
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        flexShrink: 0, ...style
+        flexShrink: 0,
+        boxShadow: '0 0 10px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.4)',
+        position: 'relative',
+        ...style
     }}>
-        <span style={{ fontSize: size * 0.38, fontWeight: 900, color: '#000', fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.5px', lineHeight: 1 }}>AH</span>
+        <span style={{ 
+            fontSize: size * 0.4, 
+            fontWeight: 900, 
+            color: '#fff', 
+            fontFamily: 'Space Grotesk, sans-serif', 
+            letterSpacing: '-0.5px', 
+            lineHeight: 1,
+            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+        }}>AH</span>
     </div>
 );
+
+// ─── Quick Replies ────────────────────────────────────────────────────────────
+const QUICK_REPLIES = ['About Abdul', 'Skills', 'Projects', 'Contact', 'Education'];
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const ChatBot = ({ theme = 'dark' }) => {
@@ -188,29 +253,60 @@ const ChatBot = ({ theme = 'dark' }) => {
     const [open, setOpen] = useState(false);
     const [messages, setMessages] = useState([{
         from: 'bot',
-        text: isHindi('namaste')
-            ? `👋 Hello! Main **AH Assistant** hoon — Abdul Haque ka personal bot!\n\nPoocho mujhse kuch bhi — skills, projects, HTML, CSS, React... sab bataunga! 😊`
-            : `👋 Hey! I'm **AH Assistant** — Abdul Haque's personal portfolio bot!\n\nAsk me anything — skills, projects, HTML, CSS, React & more! 🚀`,
+        text: `👋 Hey! I'm **AH Assistant** — Abdul Haque's AI-powered portfolio bot!\n\nI know everything about Abdul's skills, projects, education, and more. Ask me anything in **Hindi** or **English**! 🚀`,
         id: 0,
     }]);
     const [input, setInput] = useState('');
     const [typing, setTyping] = useState(false);
+    const [conversationHistory, setConversationHistory] = useState([]);
     const bottomRef = useRef(null);
     const inputRef = useRef(null);
 
     useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, typing]);
     useEffect(() => { if (open) setTimeout(() => inputRef.current?.focus(), 300); }, [open]);
 
-    const sendMessage = (text) => {
+    const sendMessage = async (text) => {
         const userText = (text || input).trim();
-        if (!userText) return;
+        if (!userText || typing) return;
         setInput('');
+
+        // Add user message to UI
         setMessages(prev => [...prev, { from: 'user', text: userText, id: Date.now() }]);
         setTyping(true);
-        setTimeout(() => {
+
+        // Build conversation history for context
+        const newHistory = [...conversationHistory, { role: 'user', text: userText }];
+
+        try {
+            const reply = await callGemini(newHistory);
+
+            // Update conversation history (keep last 20 messages for context window)
+            const updatedHistory = [...newHistory, { role: 'model', text: reply }];
+            if (updatedHistory.length > 20) {
+                setConversationHistory(updatedHistory.slice(-20));
+            } else {
+                setConversationHistory(updatedHistory);
+            }
+
             setTyping(false);
-            setMessages(prev => [...prev, { from: 'bot', text: getReply(userText), id: Date.now() + 1 }]);
-        }, 750);
+            setMessages(prev => [...prev, { from: 'bot', text: reply, id: Date.now() + 1 }]);
+        } catch (err) {
+            setTyping(false);
+            setMessages(prev => [...prev, {
+                from: 'bot',
+                text: '😅 Something went wrong. Please try again!',
+                id: Date.now() + 1
+            }]);
+        }
+    };
+
+    const resetChat = () => {
+        setMessages([{
+            from: 'bot',
+            text: `👋 Chat reset! Ask me anything about Abdul — skills, projects, education, contact info — I'm here to help! 🚀`,
+            id: Date.now(),
+        }]);
+        setConversationHistory([]);
     };
 
     return (
@@ -219,8 +315,8 @@ const ChatBot = ({ theme = 'dark' }) => {
             <motion.button
                 onClick={() => setOpen(o => !o)}
                 style={{
-                    position: 'fixed', bottom: 28, right: 28, zIndex: 9999,
-                    width: 62, height: 62, borderRadius: '50%',
+                    position: 'fixed', bottom: 'clamp(20px, 4vh, 28px)', right: 'clamp(16px, 4vw, 28px)', zIndex: 9999,
+                    width: 'clamp(50px, 12vw, 62px)', height: 'clamp(50px, 12vw, 62px)', borderRadius: '50%',
                     border: isDark ? '2px solid rgba(0,255,204,0.4)' : '2px solid rgba(20,184,166,0.5)',
                     cursor: 'pointer',
                     background: isDark ? 'linear-gradient(135deg, #06080d, #0f1a2e)' : 'linear-gradient(135deg, #f0fdfa, #ccfbf1)',
@@ -237,7 +333,7 @@ const ChatBot = ({ theme = 'dark' }) => {
                             <ChevronDown size={26} color="#00ffcc" strokeWidth={2.5} />
                         </motion.span>
                         : <motion.span key="logo" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }} transition={{ duration: 0.2 }}>
-                            <span style={{ fontSize: '1rem', fontWeight: 900, color: '#00ffcc', fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '-0.5px' }}>AH</span>
+                            <Sparkles size={22} color="#00ffcc" />
                         </motion.span>
                     }
                 </AnimatePresence>
@@ -253,8 +349,8 @@ const ChatBot = ({ theme = 'dark' }) => {
                         exit={{ opacity: 0, y: 30, scale: 0.95 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 28 }}
                         style={{
-                            position: 'fixed', bottom: 104, right: 28, zIndex: 9998,
-                            width: 360, maxHeight: 580,
+                            position: 'fixed', bottom: 'clamp(85px, 14vh, 104px)', right: 'clamp(16px, 4vw, 28px)', zIndex: 9998,
+                            width: 'min(380px, calc(100vw - 32px))', maxHeight: 'min(600px, calc(100vh - 120px))',
                             borderRadius: 20, overflow: 'hidden',
                             display: 'flex', flexDirection: 'column',
                             background: isDark ? 'rgba(6,8,13,0.97)' : 'rgba(255,255,255,0.97)',
@@ -267,12 +363,18 @@ const ChatBot = ({ theme = 'dark' }) => {
                         <div style={{ padding: '14px 16px', background: isDark ? 'linear-gradient(135deg,rgba(0,255,204,0.1),rgba(124,58,237,0.1))' : 'linear-gradient(135deg,rgba(0,255,204,0.3),rgba(124,58,237,0.15))', borderBottom: isDark ? '1px solid rgba(0,255,204,0.12)' : '1px solid rgba(0,255,204,0.3)', display: 'flex', alignItems: 'center', gap: 12 }}>
                             <AHLogo size={40} />
                             <div style={{ flex: 1 }}>
-                                <div style={{ fontWeight: 700, color: isDark ? '#fff' : '#111', fontSize: '0.95rem', fontFamily: 'Space Grotesk,sans-serif' }}>AH Assistant</div>
+                                <div style={{ fontWeight: 700, color: isDark ? '#fff' : '#111', fontSize: '0.95rem', fontFamily: 'Space Grotesk,sans-serif', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    AH Assistant
+                                    <span style={{ fontSize: '0.55rem', padding: '1px 6px', borderRadius: 20, background: 'linear-gradient(135deg,#00ffcc,#7c3aed)', color: '#000', fontWeight: 800, letterSpacing: '0.5px' }}>AI</span>
+                                </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                     <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80', display: 'inline-block' }} />
-                                    <span style={{ fontSize: '0.71rem', color: '#6b7f96' }}>Always online · Knows everything!</span>
+                                    <span style={{ fontSize: '0.71rem', color: '#6b7f96' }}>Powered by Gemini AI</span>
                                 </div>
                             </div>
+                            <button onClick={resetChat} title="Reset chat" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7f96', padding: 4, marginRight: 4 }}>
+                                <RotateCcw size={16} />
+                            </button>
                             <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7f96', padding: 4 }}>
                                 <X size={18} />
                             </button>
@@ -300,7 +402,7 @@ const ChatBot = ({ theme = 'dark' }) => {
                                 {typing && (
                                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                         <AHLogo size={26} />
-                                        <div style={{ padding: '10px 14px', borderRadius: '18px 18px 18px 4px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.07)', display: 'flex', gap: 5, alignItems: 'center' }}>
+                                        <div style={{ padding: '10px 14px', borderRadius: '18px 18px 18px 4px', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)', border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.08)', display: 'flex', gap: 5, alignItems: 'center' }}>
                                             {[0, 1, 2].map(i => (
                                                 <motion.span key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: '#00ffcc', display: 'block' }}
                                                     animate={{ y: [0, -5, 0] }} transition={{ duration: 0.7, repeat: Infinity, delay: i * 0.15 }} />
@@ -313,7 +415,7 @@ const ChatBot = ({ theme = 'dark' }) => {
                         </div>
 
                         {/* Quick Replies */}
-                        <div style={{ padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, borderTop: '1px solid rgba(255,255,255,0.04)' }}>
+                        <div style={{ padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, borderTop: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.06)' }}>
                             {QUICK_REPLIES.map(qr => (
                                 <button key={qr} onClick={() => sendMessage(qr)}
                                     style={{ padding: '4px 11px', borderRadius: 20, border: '1px solid rgba(0,255,204,0.28)', background: 'rgba(0,255,204,0.06)', color: '#00ffcc', fontSize: '0.71rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.18s' }}
@@ -326,12 +428,14 @@ const ChatBot = ({ theme = 'dark' }) => {
                         {/* Input */}
                         <div style={{ padding: '10px 12px', borderTop: isDark ? '1px solid rgba(0,255,204,0.1)' : '1px solid rgba(0,255,204,0.3)', display: 'flex', gap: 10, alignItems: 'center' }}>
                             <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-                                placeholder="Ask in Hindi or English..."
-                                style={{ flex: 1, padding: '10px 14px', borderRadius: 12, background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)', border: isDark ? '1px solid rgba(0,255,204,0.18)' : '1px solid rgba(0,255,204,0.4)', color: isDark ? '#eef2f7' : '#111', fontSize: '0.83rem', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s', fontWeight: isDark ? 400 : 500 }}
+                                placeholder="Ask anything in Hindi or English..."
+                                disabled={typing}
+                                style={{ flex: 1, padding: '10px 14px', borderRadius: 12, background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)', border: isDark ? '1px solid rgba(0,255,204,0.18)' : '1px solid rgba(0,255,204,0.4)', color: isDark ? '#eef2f7' : '#111', fontSize: '1rem', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s', fontWeight: isDark ? 400 : 500, opacity: typing ? 0.5 : 1 }}
                                 onFocus={e => e.target.style.borderColor = 'rgba(0,255,204,0.8)'}
                                 onBlur={e => e.target.style.borderColor = isDark ? 'rgba(0,255,204,0.18)' : 'rgba(0,255,204,0.4)'} />
                             <motion.button onClick={() => sendMessage()} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.93 }}
-                                style={{ width: 40, height: 40, borderRadius: 12, border: 'none', background: 'linear-gradient(135deg,#00ffcc,#7c3aed)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flexShrink: 0 }}>
+                                disabled={typing}
+                                style={{ width: 40, height: 40, borderRadius: 12, border: 'none', background: typing ? 'rgba(0,255,204,0.3)' : 'linear-gradient(135deg,#00ffcc,#7c3aed)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: typing ? 'not-allowed' : 'pointer', flexShrink: 0 }}>
                                 <Send size={16} color="#000" strokeWidth={2.5} />
                             </motion.button>
                         </div>

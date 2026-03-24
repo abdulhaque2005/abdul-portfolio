@@ -140,12 +140,14 @@ const Skills = () => {
     const itemsRef = useRef([]);
     const requestRef = useRef();
     const rotationRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
-    const mouseRef = useRef({ x: 0, y: 0, isActive: false });
+    const mouseRef = useRef({ x: 0, y: 0, lastX: 0, lastY: 0, dx: 0, dy: 0, isActive: false, isDragging: false });
     const [radius, setRadius] = useState(250);
 
     useEffect(() => {
         const updateRadius = () => {
-            setRadius(window.innerWidth < 768 ? 160 : 250);
+            if (window.innerWidth < 480) setRadius(120);
+            else if (window.innerWidth < 768) setRadius(160);
+            else setRadius(250);
         };
         updateRadius();
         window.addEventListener('resize', updateRadius);
@@ -176,18 +178,27 @@ const Skills = () => {
                 return;
             }
 
-            if (mouseRef.current.isActive) {
-                const targetSpeedY = mouseRef.current.x * 0.03;
-                const targetSpeedX = -mouseRef.current.y * 0.03;
-                rotationRef.current.targetY += (targetSpeedY - rotationRef.current.targetY) * 0.05;
-                rotationRef.current.targetX += (targetSpeedX - rotationRef.current.targetX) * 0.05;
+            if (mouseRef.current.isDragging) {
+                const targetSpeedY = mouseRef.current.dx * 0.005;
+                const targetSpeedX = -mouseRef.current.dy * 0.005;
+                rotationRef.current.targetY += (targetSpeedY - rotationRef.current.targetY) * 0.2;
+                rotationRef.current.targetX += (targetSpeedX - rotationRef.current.targetX) * 0.2;
+                
+                // Reset dx/dy after applying to prevent continuous acceleration if mouse stops but button is still down
+                mouseRef.current.dx *= 0.8;
+                mouseRef.current.dy *= 0.8;
             } else {
-                rotationRef.current.targetY += (0.002 - rotationRef.current.targetY) * 0.02;
-                rotationRef.current.targetX += (0.002 - rotationRef.current.targetX) * 0.02;
+                // Apply friction/inertia
+                rotationRef.current.targetY *= 0.95;
+                rotationRef.current.targetX *= 0.95;
+                
+                // Add a very slight base rotation if speed is too low
+                if (Math.abs(rotationRef.current.targetY) < 0.001) rotationRef.current.targetY += 0.001;
+                if (Math.abs(rotationRef.current.targetX) < 0.001) rotationRef.current.targetX += 0.001;
             }
 
-            rotationRef.current.x += rotationRef.current.targetX;
             rotationRef.current.y += rotationRef.current.targetY;
+            rotationRef.current.x += rotationRef.current.targetX;
 
             const rx = rotationRef.current.x;
             const ry = rotationRef.current.y;
@@ -227,43 +238,62 @@ const Skills = () => {
         };
     }, [radius]);
 
+    const handleMouseDown = (e) => {
+        mouseRef.current.isDragging = true;
+        mouseRef.current.lastX = e.clientX;
+        mouseRef.current.lastY = e.clientY;
+    };
+
     const handleMouseMove = (e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-        mouseRef.current = { x, y, isActive: true };
+        if (mouseRef.current.isDragging) {
+            mouseRef.current.dx = e.clientX - mouseRef.current.lastX;
+            mouseRef.current.dy = e.clientY - mouseRef.current.lastY;
+            mouseRef.current.lastX = e.clientX;
+            mouseRef.current.lastY = e.clientY;
+        }
+        mouseRef.current.isActive = true;
+    };
+
+    const handleMouseUp = () => {
+        mouseRef.current.isDragging = false;
     };
 
     const handleMouseLeave = () => {
-        mouseRef.current = { x: 0, y: 0, isActive: false };
+        mouseRef.current.isDragging = false;
+        mouseRef.current.isActive = false;
     };
 
     const handleTouchStart = (e) => {
         const touch = e.touches[0];
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
-        mouseRef.current = { x, y, isActive: true };
+        mouseRef.current.isDragging = true;
+        mouseRef.current.lastX = touch.clientX;
+        mouseRef.current.lastY = touch.clientY;
+        mouseRef.current.isActive = true;
     };
 
     const handleTouchMove = (e) => {
-        const touch = e.touches[0];
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
-        const y = ((touch.clientY - rect.top) / rect.height) * 2 - 1;
-        mouseRef.current = { x, y, isActive: true };
+        if (mouseRef.current.isDragging) {
+            const touch = e.touches[0];
+            mouseRef.current.dx = touch.clientX - mouseRef.current.lastX;
+            mouseRef.current.dy = touch.clientY - mouseRef.current.lastY;
+            mouseRef.current.lastX = touch.clientX;
+            mouseRef.current.lastY = touch.clientY;
+        }
     };
 
     const handleTouchEnd = () => {
-        mouseRef.current = { ...mouseRef.current, isActive: false };
+        mouseRef.current.isDragging = false;
+        mouseRef.current.isActive = false;
     };
 
     return (
         <section
             id="skills"
-            className="section-padding relative flex flex-col items-center justify-center min-h-[400px] sm:min-h-[800px] overflow-hidden"
+            className="py-24 relative flex flex-col items-center justify-center min-h-screen overflow-hidden"
             style={{ backgroundColor: 'var(--bg-color)' }}
+            onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseLeave}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -275,7 +305,7 @@ const Skills = () => {
                 <div className="absolute bottom-[20%] left-[10%] w-64 h-64 md:w-96 md:h-96 bg-blue-900/10 rounded-full blur-[60px] md:blur-[100px] animate-pulse delay-[2000ms]"></div>
             </div>
 
-            <div className="container mx-auto px-4 relative z-10 flex flex-col items-center">
+            <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
                 <motion.div
                     className="text-center mb-16"
                     initial={{ opacity: 0, y: 30 }}
@@ -289,35 +319,49 @@ const Skills = () => {
                     <div className="mx-auto h-1.5 w-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-lg shadow-purple-500/20"></div>
                 </motion.div>
 
-                <div className="relative w-full max-w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:max-w-none md:w-[600px] md:h-[600px] flex items-center justify-center mt-8 touch-none">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
+                {/* ── Desktop View (3D Sphere) ── */}
+                <div className="hidden md:flex relative w-full max-w-[600px] h-[600px] items-center justify-center mt-8 touch-none">
+                    {/* Dynamic Interactive Glow Sphere */}
+                    <motion.div 
+                        className="absolute inset-20 rounded-full blur-[100px] opacity-40 -z-10 transition-colors duration-1000 transform-gpu"
+                        animate={{ 
+                            backgroundColor: rotationRef.current.targetY > 0.01 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(139, 92, 246, 0.4)',
+                            scale: [1, 1.05, 1] 
+                        }}
+                        transition={{ 
+                            backgroundColor: { duration: 1.5 },
+                            scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                        }}
+                    ></motion.div>
+                    
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
                     {skillsData.map((skill, index) => (
                         <div
                             key={index}
                             ref={el => itemsRef.current[index] = el}
-                            className="absolute top-1/2 left-1/2 flex flex-col items-center justify-center pointer-events-none"
+                            className="absolute top-1/2 left-1/2 flex flex-col items-center justify-center pointer-events-none transform-gpu"
                             style={{
                                 transform: 'translate3d(0,0,0) scale(0)',
-                                transition: 'background-color 0.3s'
+                                transition: 'background-color 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)'
                             }}
                         >
                             <div
                                 className={`
-                                    w-12 h-12 md:w-20 md:h-20 rounded-full 
+                                    w-24 h-24 rounded-full 
                                     backdrop-blur-xl border
                                     flex items-center justify-center
-                                    shadow-lg ${skill.color} transition-colors duration-300
+                                    shadow-lg ${skill.color} transition-all duration-500 transform-gpu
                                 `}
-                                style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}
+                                style={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: 'rgba(56, 189, 248, 0.3)' }}
                             >
                                 <img
                                     src={skill.img}
                                     alt={skill.name}
-                                    className={`w-6 h-6 md:w-10 md:h-10 object-contain ${skill.invert ? 'invert-on-dark' : ''}`}
+                                    className={`w-12 h-12 object-contain ${skill.invert ? 'invert-on-dark' : ''} group-hover:scale-110 transition-transform duration-500`}
                                 />
                             </div>
                             <span
-                                className="mt-2 text-[10px] md:text-xs font-semibold px-2 py-0.5 rounded-full backdrop-blur-sm transition-colors duration-300"
+                                className="mt-2 text-xs font-semibold px-2 py-0.5 rounded-full backdrop-blur-sm transition-colors duration-300"
                                 style={{ color: 'var(--text-primary)', backgroundColor: 'var(--card-bg)' }}
                             >
                                 {skill.name}
@@ -325,6 +369,95 @@ const Skills = () => {
                         </div>
                     ))}
                 </div>
+
+                {/* ── Mobile View (High-Level Premium Grid) ── */}
+                <motion.div 
+                    className="flex md:hidden grid grid-cols-2 sm:grid-cols-3 gap-6 w-full max-w-lg mt-4 px-2"
+                    style={{ perspective: "1000px" }}
+                    initial="hidden"
+                    whileInView="show"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={{
+                        hidden: { opacity: 0 },
+                        show: {
+                            opacity: 1,
+                            transition: {
+                                staggerChildren: 0.12,
+                                delayChildren: 0.2
+                            }
+                        }
+                    }}
+                >
+                    {skillsData.map((skill, index) => (
+                        <motion.div
+                            key={index}
+                            variants={{
+                                hidden: { 
+                                    opacity: 0, 
+                                    rotateX: -45, 
+                                    rotateY: 20, 
+                                    y: 50,
+                                    scale: 0.8
+                                },
+                                show: { 
+                                    opacity: 1, 
+                                    rotateX: 0, 
+                                    rotateY: 0, 
+                                    y: 0,
+                                    scale: 1,
+                                    transition: {
+                                        type: "spring",
+                                        damping: 15,
+                                        stiffness: 100
+                                    }
+                                }
+                            }}
+                            whileTap={{ 
+                                scale: 0.92,
+                                rotateX: 10,
+                                transition: { type: "spring", stiffness: 400, damping: 10 }
+                            }}
+                            className="relative group p-5 rounded-[2rem] border flex flex-col items-center justify-center gap-4 overflow-hidden"
+                            style={{ 
+                                backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+                                borderColor: 'rgba(255, 255, 255, 0.08)',
+                                backdropFilter: 'blur(12px)',
+                            }}
+                        >
+                            {/* Dynamic Ambient Glow */}
+                            <div 
+                                className={`absolute -inset-2 opacity-20 blur-2xl transition-opacity duration-500 group-hover:opacity-40 animate-pulse-slow ${skill.color.split(' ')[0].replace('shadow-', 'bg-')}`}
+                                style={{ zIndex: -1 }}
+                            ></div>
+
+                            {/* Glass Shimmer Effect */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                                <div className="absolute inset-[-100%] bg-gradient-to-tr from-transparent via-white/10 to-transparent rotate-45 animate-shimmer"></div>
+                            </div>
+
+                            <div className={`
+                                relative p-4 rounded-2xl 
+                                bg-gradient-to-br from-white/10 to-transparent 
+                                border border-white/20 shadow-2xl 
+                                transition-all duration-300
+                                ${skill.color}
+                            `}>
+                                <img
+                                    src={skill.img}
+                                    alt={skill.name}
+                                    className={`w-12 h-12 object-contain ${skill.invert ? 'invert-on-dark' : ''}`}
+                                />
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1">
+                                <span className="text-[13px] font-black tracking-widest uppercase opacity-90" style={{ color: 'var(--text-primary)' }}>
+                                    {skill.name}
+                                </span>
+                                <div className="h-1 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-50"></div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
 
             </div>
         </section>

@@ -1,8 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
 
 const projects = [
+    {
+        title: "StockPilot",
+        desc: "A full-stack MERN trading dashboard inspired by Zerodha, featuring real-time watchlists, portfolio management, and secure authentication.",
+        tags: ["TypeScript", "React", "Node.js", "MongoDB"],
+        link: "https://stockpilot-abdul7.vercel.app/login",
+        github: "https://github.com/abdulhaque2005/CoreInventory-oddo-x-indus",
+        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=1000"
+    },
+    {
+        title: "VectorMinds",
+        desc: "AI-powered currency arbitration platform for freelancers with real-time exchange rates, analytics, AI forecasts, and a financial simulator.",
+        tags: ["React", "Vite", "AI", "API"],
+        link: "https://vector-minds.vercel.app/",
+        github: "https://github.com/abdulhaque2005/vector-minds",
+        image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=1000"
+    },
     {
         title: "Mealawe Clone",
         desc: "Functional clone of the Mealawe food platform with a focus on user-friendly navigation and responsive design.",
@@ -116,11 +132,14 @@ const SpotlightCard = ({ children, className = "", onClick }) => {
 const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [currAngle, setCurrAngle] = useState(0);
+    const [showAll, setShowAll] = useState(false);
+
+    const visibleProjects = showAll ? projects : projects.slice(0, 6);
 
 
     return (
         <section id="projects" className="py-24 relative overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}>
-            <div className="container mx-auto px-6 relative z-10">
+            <div className="w-full max-w-7xl mx-auto px-4 min-[400px]:px-6 relative z-10">
 
                 <div className="mb-20 text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-blue-500/5 border-blue-500/20 text-blue-500 text-xs font-bold tracking-widest uppercase">
@@ -131,52 +150,94 @@ const Projects = () => {
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-32 max-w-7xl mx-auto">
-                    {projects.map((project, index) => (
-                        <div key={index} onClick={() => setSelectedProject(project)} className="group relative h-[400px] w-full cursor-pointer perspective-1000 overflow-hidden rounded-2xl z-10 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10">
-                            <div className="absolute inset-0 z-20 hidden md:flex transition-all duration-700 ease-out group-hover:opacity-0 group-hover:pointer-events-none transform-style-3d">
-                                <div className="h-full w-1/2 bg-black/40 backdrop-blur-xl border-r border-white/10 rounded-l-2xl flex items-center justify-end overflow-hidden transition-transform duration-700 group-hover:-translate-x-full relative">
+                <motion.div
+                    layout
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 max-w-7xl mx-auto"
+                >
+                    <AnimatePresence mode="popLayout">
+                        {visibleProjects.map((project, index) => (
+                            <motion.div
+                                layout
+                                initial={{ opacity: 0, y: 40, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
+                                transition={{ 
+                                    duration: 0.7, 
+                                    delay: index * 0.08, 
+                                    type: "spring", 
+                                    stiffness: 70, 
+                                    damping: 22,
+                                    mass: 0.8
+                                }}
+                                key={project.title}
+                                whileTap={{ scale: 0.97 }}
+                                onClick={() => setSelectedProject(project)}
+                                className="group relative h-[420px] md:h-[400px] w-full cursor-pointer perspective-1000 rounded-3xl z-10 transition-all duration-700 hover:-translate-y-3 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.3)] transform-gpu"
+                            >
+                                {/* Animated Gradient Border on Hover */}
+                                <div className="absolute -inset-[2px] rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500 opacity-0 group-hover:opacity-40 blur-sm transition-opacity duration-700 -z-20"></div>
+                                <div className="absolute inset-0 rounded-3xl bg-[var(--card-bg)] z-[-15] shadow-inner"></div>
+
+                                {/* Inner Card Container for clipping */}
+                                <div className="h-full w-full rounded-3xl overflow-hidden border relative flex flex-col backdrop-blur-xl" style={{ borderColor: 'var(--subtle-border)', backgroundColor: 'var(--card-inner-bg)' }}>
+                            {/* ── Desktop/Tablet Interactive Door ── */}
+                            <div className="absolute inset-0 z-20 hidden sm:flex transition-all duration-700 ease-out group-hover:opacity-0 group-hover:pointer-events-none transform-style-3d">
+                                <div className="h-full w-1/2 backdrop-blur-2xl rounded-l-3xl flex items-center justify-end overflow-hidden transition-transform duration-700 group-hover:-translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderRight: '1px solid var(--subtle-border)' }}>
                                     <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-                                    <span className="mr-2 text-4xl font-black text-white/10 uppercase tracking-tighter" style={{ textShadow: "0 0 10px rgba(255,255,255,0.1)" }}>View</span>
+                                    <span className="mr-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>View</span>
                                 </div>
-                                <div className="h-full w-1/2 bg-black/40 backdrop-blur-xl border-l border-white/10 rounded-r-2xl flex items-center justify-start overflow-hidden transition-transform duration-700 group-hover:translate-x-full relative">
+                                <div className="h-full w-1/2 backdrop-blur-2xl rounded-r-3xl flex items-center justify-start overflow-hidden transition-transform duration-700 group-hover:translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderLeft: '1px solid var(--subtle-border)' }}>
                                     <div className="absolute inset-0 bg-gradient-to-bl from-white/10 to-transparent"></div>
-                                    <span className="ml-2 text-4xl font-black text-white/10 uppercase tracking-tighter" style={{ textShadow: "0 0 10px rgba(255,255,255,0.1)" }}>Project</span>
+                                    <span className="ml-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>Detail</span>
                                 </div>
 
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-4 border-emerald-500/30 bg-black/80 backdrop-blur-md flex items-center justify-center z-30 transition-all duration-300 group-hover:scale-110 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-16 md:h-16 rounded-full border-4 border-emerald-500/30 bg-black/80 backdrop-blur-md flex items-center justify-center z-30 transition-all duration-300 group-hover:scale-110 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
                                     <div className="absolute inset-0 rounded-full animate-ping bg-emerald-500/20"></div>
-                                    <ArrowUpRight className="text-emerald-400 group-hover:rotate-45 transition-transform duration-500" size={32} strokeWidth={3} />
+                                    <ArrowUpRight className="text-emerald-400 group-hover:rotate-45 transition-transform duration-500" size={28} md:size={32} strokeWidth={3} />
                                 </div>
                             </div>
 
-                            <div className="h-full w-full rounded-2xl overflow-hidden border border-white/10 bg-[var(--card-bg)] shadow-2xl relative">
-                                <div className="h-48 overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
+                            {/* ── Main Card Content ── */}
+                            <div className="h-full w-full rounded-3xl overflow-hidden border bg-[var(--card-bg)] shadow-2xl relative flex flex-col" style={{ borderColor: 'var(--subtle-border)' }}>
+                                <div className="h-52 md:h-48 overflow-hidden relative">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
                                     <img
                                         src={project.image}
                                         alt={project.title}
                                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                     />
+                                    {/* Mobile Indicator */}
+                                    <div className="absolute bottom-4 left-4 z-20 sm:hidden">
+                                        <div className="flex gap-2">
+                                            {project.tags.slice(0, 2).map(tag => (
+                                                <span key={tag} className="text-[10px] font-bold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 backdrop-blur-md">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div className="p-6 flex flex-col h-[calc(100%-12rem)] relative z-10 group-hover:translate-y-[-10px] transition-transform duration-500">
-                                    <h3 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-base opacity-80 mb-4 line-clamp-3 leading-relaxed">
+                                <div className="p-6 flex flex-col flex-1 relative z-10 group-hover:-translate-y-2 transition-transform duration-500">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <h3 className="text-2xl font-bold transition-colors duration-500" style={{ color: 'var(--text-primary)' }}>
+                                            {project.title}
+                                        </h3>
+                                    </div>
+                                    <p className="text-[14px] opacity-70 mb-5 line-clamp-3 leading-relaxed transition-opacity duration-500 group-hover:opacity-100" style={{ color: 'var(--text-secondary)' }}>
                                         {project.desc}
                                     </p>
 
-                                    <div className="mt-auto grid grid-cols-2 gap-4">
+                                    <div className="mt-auto grid grid-cols-2 gap-3 relative z-30">
                                         <a
                                             href={project.link}
                                             target="_blank"
                                             rel="noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-base shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 transition-all transform hover:-translate-y-1"
+                                            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:text-white font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+                                            style={{ color: 'var(--accent-primary)' }}
                                         >
-                                            <Monitor size={16} /> Live Demo
+                                            <Monitor size={14} className="group-hover:animate-pulse" /> LIVE
                                         </a>
                                         {project.github ? (
                                             <a
@@ -184,39 +245,72 @@ const Projects = () => {
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 onClick={(e) => e.stopPropagation()}
-                                                className="flex items-center justify-center gap-2 py-2.5 rounded-xl font-bold text-base transition-all transform hover:-translate-y-1 block border"
-                                                style={{
-                                                    backgroundColor: 'var(--card-bg)',
-                                                    color: 'var(--text-primary)',
-                                                    borderColor: 'var(--border-color)'
-                                                }}
+                                                className="flex items-center justify-center gap-2 py-3 rounded-xl border hover:bg-white hover:text-black font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                                            style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}
                                             >
-                                                <Github size={16} /> Source
+                                                <Github size={14} /> CODE
                                             </a>
                                         ) : (
-                                            <button
-                                                disabled
-                                                className="flex items-center justify-center gap-2 py-2.5 rounded-xl border font-bold text-base cursor-not-allowed"
-                                                style={{
-                                                    backgroundColor: 'var(--card-bg)',
-                                                    color: 'var(--text-secondary)',
-                                                    borderColor: 'var(--border-color)',
-                                                    opacity: 0.5
-                                                }}
-                                            >
-                                                <Github size={16} /> Private
-                                            </button>
+                                            <div className="flex items-center justify-center gap-2 py-3 rounded-xl border opacity-40 text-xs font-bold cursor-not-allowed" style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
+                                                PRIVATE
+                                            </div>
                                         )}
                                     </div>
+                                    </div>
                                 </div>
-
-                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 -z-10 group-hover:animate-pulse"></div>
                             </div>
-                        </div>
-                    ))}
-                </div>
 
-                <div className="mb-10 text-center border-t border-white/10 pt-20">
+                            {/* Ambient Glow Aura */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500 -z-10"></div>
+                        </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </motion.div>
+
+                {projects.length > 6 && (
+                    <div className="flex justify-center mb-32 mt-6">
+                        <motion.button
+                            onClick={() => setShowAll(!showAll)}
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="group relative flex items-center gap-4 px-12 py-5 rounded-full font-bold text-base tracking-wider transition-all duration-500 overflow-hidden cursor-pointer"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
+                                border: '1.5px solid rgba(99,102,241,0.3)',
+                                color: 'var(--text-primary)',
+                                boxShadow: '0 0 40px -10px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.05)'
+                            }}
+                        >
+                            {/* Animated glow ring */}
+                            <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" style={{ boxShadow: '0 0 50px 5px rgba(99,102,241,0.25), inset 0 0 30px rgba(59,130,246,0.1)' }} />
+                            {/* Sweep effect on hover */}
+                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+
+                            <span className="relative z-10 flex items-center gap-3">
+                                {showAll ? (
+                                    <>
+                                        <span className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center group-hover:bg-indigo-500/30 transition-colors duration-300">
+                                            <ChevronUp size={20} className="text-indigo-400 group-hover:text-white transition-colors" />
+                                        </span>
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Show Less</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="w-10 h-10 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center group-hover:bg-indigo-500/30 transition-colors duration-300 relative">
+                                            <ChevronDown size={20} className="text-indigo-400 group-hover:text-white transition-colors animate-bounce" />
+                                            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-blue-500 rounded-full animate-ping opacity-75" />
+                                            <span className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-blue-400 rounded-full" />
+                                        </span>
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">View More Projects</span>
+                                        <span className="text-xs px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold">{projects.length - 6}+</span>
+                                    </>
+                                )}
+                            </span>
+                        </motion.button>
+                    </div>
+                )}
+
+                <div className="mb-10 text-center border-t pt-20" style={{ borderColor: 'var(--border-color)' }}>
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-green-500/5 border-green-500/20 text-green-500 text-xs font-bold tracking-widest uppercase">
                         <Gamepad2 size={14} /> Entertainment
                     </div>
@@ -230,8 +324,8 @@ const Projects = () => {
                         whileHover={{ scale: 1.2, rotate: -10, boxShadow: "0 0 25px rgba(168, 85, 247, 0.6)" }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setCurrAngle(prev => prev - 1)}
-                        className="absolute left-0 md:-left-16 z-30 w-14 h-14 rounded-full border-2 border-purple-500/50 flex items-center justify-center bg-black/40 backdrop-blur-xl text-white shadow-[0_0_15px_rgba(168,85,247,0.3)] group"
-                        style={{ zIndex: 50 }}
+                        className="absolute left-2 min-[400px]:left-4 md:-left-16 z-30 w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-purple-500/50 flex items-center justify-center backdrop-blur-xl shadow-[0_0_15px_rgba(168,85,247,0.3)] group"
+                        style={{ zIndex: 50, backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}
                     >
                         <ChevronLeft size={32} className="group-hover:-translate-x-1 transition-transform text-purple-400 group-hover:text-white" />
                     </motion.button>
@@ -240,8 +334,8 @@ const Projects = () => {
                         whileHover={{ scale: 1.2, rotate: 10, boxShadow: "0 0 25px rgba(59, 130, 246, 0.6)" }}
                         whileTap={{ scale: 0.9 }}
                         onClick={() => setCurrAngle(prev => prev + 1)}
-                        className="absolute right-0 md:-right-16 z-30 w-14 h-14 rounded-full border-2 border-blue-500/50 flex items-center justify-center bg-black/40 backdrop-blur-xl text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] group"
-                        style={{ zIndex: 50 }}
+                        className="absolute right-2 min-[400px]:right-4 md:-right-16 z-30 w-12 h-12 md:w-14 md:h-14 rounded-full border-2 border-blue-500/50 flex items-center justify-center backdrop-blur-xl shadow-[0_0_15px_rgba(59,130,246,0.3)] group"
+                        style={{ zIndex: 50, backgroundColor: 'var(--card-bg)', color: 'var(--text-primary)' }}
                     >
                         <ChevronRight size={32} className="group-hover:translate-x-1 transition-transform text-blue-400 group-hover:text-white" />
                     </motion.button>
@@ -269,7 +363,7 @@ const Projects = () => {
                                 return (
                                     <motion.div
                                         key={index}
-                                        className={`absolute w-[280px] md:w-[360px] h-[420px] md:h-[480px] rounded-3xl overflow-hidden border shadow-2xl transition-all duration-500 ${effectiveIdx === 0 ? 'gajab-card cursor-grab active:cursor-grabbing' : 'pointer-events-none'}`}
+                                        className={`absolute w-[290px] min-[400px]:w-[320px] md:w-[360px] h-[420px] md:h-[480px] rounded-3xl overflow-hidden border shadow-2xl transition-all duration-500 ${effectiveIdx === 0 ? 'gajab-card cursor-grab active:cursor-grabbing' : 'pointer-events-none'}`}
                                         style={{
                                             backgroundColor: 'var(--card-bg)',
                                             borderColor: effectiveIdx === 0 ? '#4ade80' : 'var(--border-color)',
@@ -344,7 +438,7 @@ const Projects = () => {
                             })}
                         </AnimatePresence>
 
-                        <div className="absolute bottom-[-60px] w-[80%] h-[40px] bg-[radial-gradient(ellipse_at_center,_rgba(34,197,94,0.3)_0%,_transparent_70%)] blur-xl opacity-60 animate-pulse pointer-events-none" />
+                        <div className="absolute bottom-[-60px] w-[80%] h-[40px] bg-[radial-gradient(ellipse_at_center,_rgba(34,197,94,0.3)_0%,_transparent_70%)] blur-xl opacity-60 animate-pulse pointer-events-none hidden md:block" />
                     </div>
                 </div>
 

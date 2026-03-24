@@ -39,9 +39,9 @@
 .content-wrapper {
   position: relative;
   z-index: 10;
-  background: rgba(3, 7, 18, 0.95);
-  border-top: 1px solid var(--glass-border);
-  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.5);
+  background: var(--content-bg);
+  border-top: 1px solid var(--border-color);
+  box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.1);
 }
 
 .navbar {
@@ -55,11 +55,11 @@
 }
 
 .navbar.scrolled {
-  background: rgba(3, 7, 18, 0.85);
+  background: var(--nav-bg-scrolled);
   backdrop-filter: blur(12px);
   padding: 1rem 0;
-  border-bottom: 1px solid var(--glass-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .nav-content {
@@ -115,7 +115,7 @@
 }
 
 .nav-link:hover {
-  color: #fff;
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
@@ -148,7 +148,7 @@
 .menu-toggle {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-primary);
   cursor: pointer;
 }
 
@@ -157,18 +157,18 @@
   top: 100%;
   left: 0;
   width: 100%;
-  background: rgba(3, 7, 18, 0.98);
+  background: var(--mobile-menu-bg);
   backdrop-filter: blur(12px);
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .mobile-link {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-primary);
   padding: 1.25rem;
   text-align: left;
   font-size: 1.1rem;
@@ -194,7 +194,7 @@
   font-size: 3rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .section-subtitle {
@@ -216,8 +216,8 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
-  background: linear-gradient(145deg, rgba(17, 24, 39, 0.7), rgba(17, 24, 39, 0.3));
-  border: 1px solid var(--glass-border);
+  background: var(--project-card-bg);
+  border: 1px solid var(--border-color);
 }
 
 .project-card:hover {
@@ -238,7 +238,7 @@
 .card-title {
   font-size: 1.75rem;
   margin-bottom: 1rem;
-  color: #fff;
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -260,9 +260,9 @@
   font-size: 0.8rem;
   padding: 0.35rem 1rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--subtle-bg);
   color: var(--accent-primary);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--subtle-border);
   font-weight: 500;
 }
 
@@ -278,14 +278,14 @@
   padding: 2rem;
   border-radius: 20px;
   align-items: flex-start;
-  background: rgba(17, 24, 39, 0.4);
-  border: 1px solid var(--glass-border);
+  background: var(--cert-card-bg);
+  border: 1px solid var(--border-color);
   transition: transform 0.3s ease;
 }
 
 .certificate-card:hover {
   transform: translateY(-5px);
-  background: rgba(17, 24, 39, 0.6);
+  background: var(--cert-card-hover-bg);
 }
 
 .cert-icon {
@@ -300,7 +300,7 @@
 
 .cert-title {
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   margin-bottom: 0.25rem;
   font-size: 1.2rem;
 }
@@ -374,8 +374,8 @@
 }
 
 .glass-panel {
-  background: rgba(17, 24, 39, 0.6);
-  border: 1px solid var(--glass-border);
+  background: var(--glass-panel-bg);
+  border: 1px solid var(--border-color);
   backdrop-filter: blur(20px);
 }
 

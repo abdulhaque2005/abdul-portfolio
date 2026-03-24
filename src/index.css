@@ -12,6 +12,18 @@
   --accent-secondary: #818cf8;
   --card-bg: rgba(15, 23, 42, 0.6);
   --border-color: rgba(148, 163, 184, 0.1);
+  --content-bg: rgba(3, 7, 18, 0.95);
+  --subtle-bg: rgba(255, 255, 255, 0.03);
+  --subtle-border: rgba(255, 255, 255, 0.05);
+  --nav-bg-scrolled: rgba(3, 7, 18, 0.85);
+  --mobile-menu-bg: rgba(3, 7, 18, 0.98);
+  --glass-panel-bg: rgba(17, 24, 39, 0.6);
+  --project-card-bg: linear-gradient(145deg, rgba(17, 24, 39, 0.7), rgba(17, 24, 39, 0.3));
+  --cert-card-bg: rgba(17, 24, 39, 0.4);
+  --cert-card-hover-bg: rgba(17, 24, 39, 0.6);
+  --door-bg: rgba(0, 0, 0, 0.6);
+  --door-text: rgba(255, 255, 255, 0.2);
+  --card-inner-bg: rgba(0, 0, 0, 0.4);
 }
 
 [data-theme='light'] {
@@ -21,9 +33,22 @@
   --accent-primary: #0284c7;
   --accent-secondary: #4f46e5;
   --card-bg: rgba(255, 255, 255, 0.8);
-  --border-color: rgba(148, 163, 184, 0.2);
+  --border-color: rgba(148, 163, 184, 0.25);
+  --content-bg: rgba(248, 250, 252, 0.97);
+  --subtle-bg: rgba(15, 23, 42, 0.04);
+  --subtle-border: rgba(15, 23, 42, 0.08);
+  --nav-bg-scrolled: rgba(248, 250, 252, 0.85);
+  --mobile-menu-bg: rgba(248, 250, 252, 0.98);
+  --glass-panel-bg: rgba(255, 255, 255, 0.7);
+  --project-card-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.8), rgba(241, 245, 249, 0.6));
+  --cert-card-bg: rgba(255, 255, 255, 0.6);
+  --cert-card-hover-bg: rgba(255, 255, 255, 0.8);
+  --door-bg: rgba(255, 255, 255, 0.85);
+  --door-text: rgba(15, 23, 42, 0.15);
+  --card-inner-bg: rgba(255, 255, 255, 0.6);
 }
 
+html,
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
@@ -32,6 +57,12 @@ body {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
   transition: background-color 0.3s ease, color 0.3s ease;
+  cursor: none;
+}
+
+/* Custom Cursor for interactive elements */
+a, button, input, textarea, select, [role="button"] {
+  cursor: none !important;
 }
 
 h1,

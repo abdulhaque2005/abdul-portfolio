@@ -110,7 +110,7 @@ const Contact = () => {
     return (
         <section id="contact" className="py-20 relative overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
 
-            <div className="absolute inset-0 opacity-40 pointer-events-none">
+            <div className="absolute inset-0 opacity-40 pointer-events-none hidden md:block">
                 <div className="absolute -top-[30%] -left-[10%] w-[70vw] h-[70vw] bg-purple-500/20 rounded-full blur-[60px] md:blur-[120px] animate-pulse" />
                 <div className="absolute top-[20%] -right-[10%] w-[60vw] h-[60vw] bg-blue-500/20 rounded-full blur-[60px] md:blur-[120px] animate-pulse delay-1000" />
                 <div className="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] bg-pink-500/10 rounded-full blur-[60px] md:blur-[120px] animate-pulse delay-2000" />

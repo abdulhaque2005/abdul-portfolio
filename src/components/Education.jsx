@@ -80,29 +80,32 @@ const TiltCard = ({ children, className }) => {
     const ref = useRef(null);
     const x = useMotionValue(0);
     const y = useMotionValue(0);
+    const mouseXPos = useMotionValue(0);
+    const mouseYPos = useMotionValue(0);
 
-    const xSpring = useSpring(x, { stiffness: 300, damping: 30 });
-    const ySpring = useSpring(y, { stiffness: 300, damping: 30 });
+    const xSpring = useSpring(x, { stiffness: 150, damping: 20 });
+    const ySpring = useSpring(y, { stiffness: 150, damping: 20 });
 
-    const rotateX = useTransform(ySpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-    const rotateY = useTransform(xSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+    const rotateX = useTransform(ySpring, [-0.5, 0.5], ["12deg", "-12deg"]);
+    const rotateY = useTransform(xSpring, [-0.5, 0.5], ["-12deg", "12deg"]);
+
+    // For Glint effect
+    const glintX = useSpring(mouseXPos, { stiffness: 300, damping: 30 });
+    const glintY = useSpring(mouseYPos, { stiffness: 300, damping: 30 });
 
     const handleMouseMove = (e) => {
         if (!ref.current) return;
-
         const rect = ref.current.getBoundingClientRect();
-
         const width = rect.width;
         const height = rect.height;
-
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-
         const xPct = mouseX / width - 0.5;
         const yPct = mouseY / height - 0.5;
-
         x.set(xPct);
         y.set(yPct);
+        mouseXPos.set(mouseX);
+        mouseYPos.set(mouseY);
     };
 
     const handleMouseLeave = () => {
@@ -119,10 +122,22 @@ const TiltCard = ({ children, className }) => {
                 rotateX,
                 rotateY,
                 transformStyle: "preserve-3d",
+                perspective: 1000
             }}
-            className={className}
+            className={`${className} group cursor-pointer transform-gpu`}
         >
-            <div style={{ transform: "translateZ(50px)" }}>
+            <div style={{ transform: "translateZ(50px)" }} className="relative h-full">
+                {/* Dynamic Glint Shimmer */}
+                <motion.div 
+                    className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[inherit]"
+                    style={{
+                        background: useTransform(
+                            [glintX, glintY],
+                            ([latestX, latestY]) => 
+                                `radial-gradient(circle at ${latestX}px ${latestY}px, rgba(255,255,255,0.1) 0%, transparent 60%)`
+                        )
+                    }}
+                />
                 {children}
             </div>
         </motion.div>
@@ -188,7 +203,7 @@ const Education = () => {
     return (
         <section id="education" ref={containerRef} className="py-24 relative overflow-hidden min-h-screen flex flex-col justify-center transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
 
-            <div className="absolute inset-0 z-0 h-full w-full">
+            <div className="absolute inset-0 z-0 h-full w-full hidden md:block">
                 <Canvas dpr={[1, 2]}>
                     <AnimatedBackground />
                 </Canvas>
@@ -242,66 +257,92 @@ const Education = () => {
                             key={item.id}
                             className={`flex flex-col md:${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} items-center justify-center gap-8 md:gap-24 relative w-full`}
                         >
-                            <div className="absolute left-[20px] sm:left-[30px] md:left-1/2 top-0 md:top-1/2 -translate-x-1/2 md:-translate-y-1/2 w-8 h-8 rounded-full border-2 border-blue-500/50 flex items-center justify-center z-10 shadow-[0_0_20px_rgba(59,130,246,0.5)] backdrop-blur-md" style={{ backgroundColor: 'var(--bg-color)' }}>
-                                <div className={`w-3 h-3 rounded-full bg-${item.color}-500`} />
-                            </div>
+                            {/* Animated Timeline Point */}
+                            <motion.div 
+                                initial={{ scale: 0, opacity: 0 }}
+                                whileInView={{ scale: 1, opacity: 1 }}
+                                viewport={{ once: true, margin: "-100px" }}
+                                className="absolute left-[20px] sm:left-[30px] md:left-1/2 top-0 md:top-1/2 -translate-x-1/2 md:-translate-y-1/2 z-20"
+                            >
+                                <div className="relative">
+                                    <div className={`w-10 h-10 rounded-full border-2 border-${item.color}-500/50 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] backdrop-blur-md`} style={{ backgroundColor: 'var(--bg-color)' }}>
+                                        <div className={`w-3.5 h-3.5 rounded-full bg-${item.color}-500 shadow-[0_0_15px_${item.themeHex}]`} />
+                                    </div>
+                                    {/* Pulsing Outer Glow */}
+                                    <div className={`absolute -inset-2 rounded-full bg-${item.color}-500/20 blur-md animate-ping`} />
+                                </div>
+                            </motion.div>
 
                             <div className={`w-full md:w-1/2 md:pl-0 md:pr-0 pl-12 sm:pl-16 pr-2 sm:pr-4 md:${index % 2 === 0 ? 'pr-12' : 'pl-12'}`}>
                                 <TiltCard className="group relative w-full perspective-1000">
                                     <motion.div
-                                        initial={{ opacity: 0, rotateX: 20, y: 50 }}
-                                        whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                                        initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50, rotateY: index % 2 === 0 ? 15 : -15 }}
+                                        whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
                                         viewport={{ once: true, margin: "-100px" }}
-                                        transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-                                        className="relative backdrop-blur-xl border p-8 md:p-10 rounded-3xl shadow-2xl hover:border-white/20 transition-all duration-300"
+                                        transition={{ duration: 1, type: "spring", stiffness: 60, damping: 20 }}
+                                        className="relative backdrop-blur-xl border p-8 md:p-10 rounded-[2rem] shadow-2xl transition-all duration-500 hover:border-blue-500/30 overflow-hidden transform-gpu"
                                         style={{
                                             backgroundColor: 'var(--card-bg)',
                                             borderColor: 'var(--border-color)'
                                         }}
                                     >
-                                        <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${item.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
+                                        <div className={`absolute inset-0 rounded-[2rem] bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-[0.08] transition-opacity duration-700`} />
+                                        
+                                        {/* Premium Badge for 'Current' status */}
+                                        {item.current && (
+                                            <div className="absolute top-6 right-8">
+                                                <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-500/30 text-[10px] font-black uppercase tracking-widest text-blue-400 animate-pulse">
+                                                    <Zap size={10} fill="currentColor" /> Ongoing
+                                                </span>
+                                            </div>
+                                        )}
 
-                                        <div className="flex justify-between items-start mb-6">
-                                            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center text-${item.color}-400 shadow-inner`}>
-                                                {item.icon}
+                                        <div className="flex justify-between items-start mb-8">
+                                            <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br border flex items-center justify-center text-${item.color}-400 shadow-2xl relative overflow-hidden group-hover:scale-110 transition-transform duration-500`} style={{ borderColor: 'var(--subtle-border)', background: 'var(--subtle-bg)' }}>
+                                                <div className={`absolute inset-0 bg-${item.color}-500/10 blur-xl`} />
+                                                <div className="relative z-10">{item.icon}</div>
                                             </div>
                                             <div className="flex flex-col items-end">
-                                                <span className={`text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-500/20 to-transparent select-none`}>
+                                                <span className={`text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-500/15 to-transparent select-none leading-none`}>
                                                     0{item.id}
                                                 </span>
                                             </div>
                                         </div>
 
-                                        <h3 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight" style={{ color: 'var(--text-primary)' }}>
+                                        <h3 className="text-2xl sm:text-[2rem] font-bold mb-3 tracking-tight leading-tight group-hover:text-blue-400 transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
                                             {item.degree}
                                         </h3>
-                                        <div className={`text-${item.color}-400 font-medium mb-6 flex items-center gap-2`}>
-                                            <School size={16} />
+                                        <div className={`text-${item.color}-400/80 font-semibold mb-6 flex items-center gap-2.5 text-sm md:text-base`}>
+                                            <div className={`w-2 h-2 rounded-full bg-${item.color}-500`} />
                                             {item.institution}
                                         </div>
 
-                                        <p className="leading-relaxed mb-6 text-sm md:text-base font-medium" style={{ color: 'var(--text-secondary)' }}>
+                                        <p className="leading-relaxed mb-8 text-sm md:text-[15px] font-medium opacity-80" style={{ color: 'var(--text-secondary)' }}>
                                             {item.details}
                                         </p>
 
                                         {item.tags && (
-                                            <div className="flex flex-wrap gap-2 mb-6">
+                                            <div className="flex flex-wrap gap-2.5 mb-8">
                                                 {item.tags.map((tag, idx) => (
-                                                    <span key={idx} className={`px-3 py-1 text-xs font-bold rounded-full bg-${item.color}-500/10 text-${item.color}-400 border border-${item.color}-500/30 shadow-[0_0_10px_rgba(0,0,0,0.2)] backdrop-blur-md`}>
+                                                    <span key={idx} className={`px-3.5 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg border hover:text-blue-400 hover:border-blue-500/30 hover:bg-blue-500/5 transition-all duration-300`} style={{ backgroundColor: 'var(--subtle-bg)', borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
                                                         {tag}
                                                     </span>
                                                 ))}
                                             </div>
                                         )}
 
-                                        <div className="grid grid-cols-2 gap-4 border-t pt-6" style={{ borderColor: 'var(--border-color)' }}>
+                                        <div className="grid grid-cols-2 gap-6 border-t pt-8" style={{ borderColor: 'var(--border-color)' }}>
                                             <div>
-                                                <div className="text-xs uppercase tracking-widest mb-1" style={{ color: 'var(--text-secondary)' }}>Period</div>
-                                                <div className="font-mono text-sm" style={{ color: 'var(--text-primary)' }}>{item.period}</div>
+                                                <div className="text-[10px] uppercase font-black tracking-[0.2em] mb-2 opacity-50" style={{ color: 'var(--text-secondary)' }}>Academic Period</div>
+                                                <div className="font-mono text-sm font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                                                    <Calendar size={14} className="text-blue-500/50" /> {item.period}
+                                                </div>
                                             </div>
                                             <div className="text-right">
-                                                <div className="text-xs uppercase tracking-widest mb-1" style={{ color: 'var(--text-secondary)' }}>Grade</div>
-                                                <div className={`text-${item.color}-400 font-bold text-lg`}>{item.score}</div>
+                                                <div className="text-[10px] uppercase font-black tracking-[0.2em] mb-2 opacity-50" style={{ color: 'var(--text-secondary)' }}>Performance</div>
+                                                <div className={`text-${item.color}-400 font-black text-xl flex items-center justify-end gap-2`}>
+                                                    <Award size={18} /> {item.score}
+                                                </div>
                                             </div>
                                         </div>
 
@@ -309,22 +350,28 @@ const Education = () => {
                                 </TiltCard>
                             </div>
 
-                            <div className="hidden md:flex flex-col w-1/2 items-center justify-center opacity-40">
-                                {index % 2 === 0 ? (
-                                    <div className="text-right w-full pr-12">
-                                        <span className="text-sm font-mono text-blue-500/50 block mb-2">LOCATION</span>
-                                        <div className="text-2xl font-light flex items-center justify-end gap-3" style={{ color: 'var(--text-primary)' }}>
-                                            {item.location} <MapPin size={20} className="text-blue-500" />
-                                        </div>
+                            <div className="hidden md:flex flex-col w-1/2 items-center justify-center pointer-events-none">
+                                <motion.div 
+                                    initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
+                                    whileInView={{ opacity: 0.6, x: 0 }}
+                                    viewport={{ once: true }}
+                                    className={`w-full ${index % 2 === 0 ? 'pl-24' : 'pr-24 text-right'}`}
+                                >
+                                    <span className={`text-[11px] font-black tracking-[0.3em] text-${item.color}-500/60 block mb-3 uppercase`}>Institutional Hub</span>
+                                    <div className="text-2xl font-light py-4 px-6 rounded-2xl border inline-flex items-center gap-4 backdrop-blur-sm" style={{ color: 'var(--text-primary)', borderColor: 'var(--subtle-border)', backgroundColor: 'var(--subtle-bg)' }}>
+                                        {index % 2 === 0 ? (
+                                            <>
+                                                <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 flex items-center justify-center text-${item.color}-400`}><MapPin size={22} /></div>
+                                                {item.location}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {item.location}
+                                                <div className={`w-10 h-10 rounded-xl bg-${item.color}-500/10 flex items-center justify-center text-${item.color}-400`}><MapPin size={22} /></div>
+                                            </>
+                                        )}
                                     </div>
-                                ) : (
-                                    <div className="text-left w-full pl-12">
-                                        <span className="text-sm font-mono text-purple-500/50 block mb-2">LOCATION</span>
-                                        <div className="text-2xl font-light flex items-center gap-3" style={{ color: 'var(--text-primary)' }}>
-                                            <MapPin size={20} className="text-purple-500" /> {item.location}
-                                        </div>
-                                    </div>
-                                )}
+                                </motion.div>
                             </div>
 
                         </div>
