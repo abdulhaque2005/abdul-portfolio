@@ -117,8 +117,8 @@ const About = () => {
                 className="absolute bottom-1/4 -left-20 w-64 h-64 rounded-full border-2 border-purple-500/10 -z-10 blur-[2px]"
             />
 
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] rounded-full blur-[80px] md:blur-[150px] pointer-events-none opacity-15 animate-pulse-slow" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 75%)' }} />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] rounded-full blur-[80px] md:blur-[150px] pointer-events-none opacity-15 animate-pulse-slow delay-1000" style={{ background: 'radial-gradient(circle, var(--accent-secondary) 0%, transparent 75%)' }} />
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] rounded-full blur-[80px] md:blur-[150px] pointer-events-none opacity-15" style={{ background: 'radial-gradient(circle, var(--accent-primary) 0%, transparent 75%)' }} />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] md:w-[800px] md:h-[800px] rounded-full blur-[80px] md:blur-[150px] pointer-events-none opacity-15" style={{ background: 'radial-gradient(circle, var(--accent-secondary) 0%, transparent 75%)' }} />
 
             <div className="w-full max-w-5xl mx-auto text-center px-4 sm:px-8">
 

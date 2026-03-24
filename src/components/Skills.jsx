@@ -139,9 +139,11 @@ const skillsData = [
 const Skills = () => {
     const itemsRef = useRef([]);
     const requestRef = useRef();
-    const rotationRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
+    const rotationRef = useRef({ x: 0, y: 0, targetX: 0.004, targetY: 0.006 });
     const mouseRef = useRef({ x: 0, y: 0, lastX: 0, lastY: 0, dx: 0, dy: 0, isActive: false, isDragging: false });
     const [radius, setRadius] = useState(250);
+    const sectionRef = useRef(null);
+    const isVisibleRef = useRef(false);
 
     useEffect(() => {
         const updateRadius = () => {
@@ -152,6 +154,18 @@ const Skills = () => {
         updateRadius();
         window.addEventListener('resize', updateRadius);
         return () => window.removeEventListener('resize', updateRadius);
+    }, []);
+
+    // IntersectionObserver to only animate when visible
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => { isVisibleRef.current = entry.isIntersecting; },
+            { threshold: 0.1 }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
     }, []);
 
     useEffect(() => {
@@ -173,28 +187,22 @@ const Skills = () => {
         }
 
         const animate = () => {
-            if (!itemsRef.current.length) {
-                requestRef.current = requestAnimationFrame(animate);
-                return;
-            }
+            requestRef.current = requestAnimationFrame(animate);
+
+            // Skip computation when not visible
+            if (!isVisibleRef.current || !itemsRef.current.length) return;
 
             if (mouseRef.current.isDragging) {
                 const targetSpeedY = mouseRef.current.dx * 0.005;
                 const targetSpeedX = -mouseRef.current.dy * 0.005;
                 rotationRef.current.targetY += (targetSpeedY - rotationRef.current.targetY) * 0.2;
                 rotationRef.current.targetX += (targetSpeedX - rotationRef.current.targetX) * 0.2;
-                
-                // Reset dx/dy after applying to prevent continuous acceleration if mouse stops but button is still down
                 mouseRef.current.dx *= 0.8;
                 mouseRef.current.dy *= 0.8;
             } else {
-                // Apply friction/inertia
-                rotationRef.current.targetY *= 0.95;
-                rotationRef.current.targetX *= 0.95;
-                
-                // Add a very slight base rotation if speed is too low
-                if (Math.abs(rotationRef.current.targetY) < 0.001) rotationRef.current.targetY += 0.001;
-                if (Math.abs(rotationRef.current.targetX) < 0.001) rotationRef.current.targetX += 0.001;
+                // Smooth auto-rotation - always spin
+                rotationRef.current.targetY += (0.006 - rotationRef.current.targetY) * 0.02;
+                rotationRef.current.targetX += (0.004 - rotationRef.current.targetX) * 0.02;
             }
 
             rotationRef.current.y += rotationRef.current.targetY;
@@ -227,8 +235,6 @@ const Skills = () => {
                 item.style.zIndex = zIndex;
                 item.style.opacity = opacity;
             });
-
-            requestRef.current = requestAnimationFrame(animate);
         };
 
         requestRef.current = requestAnimationFrame(animate);
@@ -288,6 +294,7 @@ const Skills = () => {
 
     return (
         <section
+            ref={sectionRef}
             id="skills"
             className="py-24 relative flex flex-col items-center justify-center min-h-screen overflow-hidden"
             style={{ backgroundColor: 'var(--bg-color)' }}
@@ -301,8 +308,8 @@ const Skills = () => {
             onTouchCancel={handleTouchEnd}
         >
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-[20%] right-[10%] w-64 h-64 md:w-96 md:h-96 bg-purple-900/10 rounded-full blur-[60px] md:blur-[100px] animate-pulse"></div>
-                <div className="absolute bottom-[20%] left-[10%] w-64 h-64 md:w-96 md:h-96 bg-blue-900/10 rounded-full blur-[60px] md:blur-[100px] animate-pulse delay-[2000ms]"></div>
+                <div className="absolute top-[20%] right-[10%] w-64 h-64 md:w-96 md:h-96 bg-purple-900/10 rounded-full blur-[60px] md:blur-[100px]"></div>
+                <div className="absolute bottom-[20%] left-[10%] w-64 h-64 md:w-96 md:h-96 bg-blue-900/10 rounded-full blur-[60px] md:blur-[100px]"></div>
             </div>
 
             <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
