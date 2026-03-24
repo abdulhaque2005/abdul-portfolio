@@ -1,4 +1,4 @@
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect, lazy } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Preload } from '@react-three/drei';
 import { Github, Linkedin, Mail, Youtube } from 'lucide-react';
@@ -6,7 +6,7 @@ import { AnimatePresence, motion, useScroll } from 'framer-motion';
 
 
 
-import Stars from './components/canvas/Stars';
+const Stars = lazy(() => import('./components/canvas/Stars'));
 import NavBar from './components/NavBar';
 import HeroNew from './components/HeroNew';
 import About from './components/About';
@@ -51,12 +51,14 @@ function App() {
       />
 
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <Canvas camera={{ position: [0, 0, 1] }}>
-          <Suspense fallback={null}>
-            <Stars />
-            <Preload all />
-          </Suspense>
-        </Canvas>
+        {!loading && (
+          <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 1.5]} performance={{ min: 0.5 }}>
+            <Suspense fallback={null}>
+              <Stars />
+              <Preload all />
+            </Suspense>
+          </Canvas>
+        )}
       </div>
 
       {
