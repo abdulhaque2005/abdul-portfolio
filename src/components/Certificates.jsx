@@ -60,6 +60,9 @@ const TiltCard = ({ children, onClick }) => {
     const glintY = useSpring(mouseYPos, { stiffness: 300, damping: 30 });
 
     const handleMouseMove = (e) => {
+        // Disable on touch devices/mobile to save heavy 3D calculations
+        if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+
         const rect = e.currentTarget.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;

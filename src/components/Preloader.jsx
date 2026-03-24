@@ -20,7 +20,7 @@ const Preloader = () => {
                         transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
                     />
                     <div className="hidden md:block">
-                        {[...Array(40)].map((_, i) => (
+                        {[...Array(15)].map((_, i) => (
                             <motion.div
                                 key={i}
                                 className="absolute bg-white rounded-full"
@@ -42,13 +42,13 @@ const Preloader = () => {
                     <div className="relative w-[600px] h-[600px] flex items-center justify-center">
 
                         <div className="hidden md:block">
-                            {[...Array(12)].map((_, i) => (
+                            {[...Array(6)].map((_, i) => (
                                 <motion.div
                                     key={i}
-                                    className="absolute top-1/2 left-1/2 w-[300px] h-[2px] bg-gradient-to-r from-transparent via-cyan-100 to-transparent origin-left opacity-30 blur-[1px]"
-                                    style={{ rotate: i * 30 }}
+                                    className="absolute top-1/2 left-1/2 w-[300px] h-[2px] bg-gradient-to-r from-transparent via-cyan-100 to-transparent origin-left opacity-30"
+                                    style={{ rotate: i * 60 }}
                                     animate={{
-                                        rotate: i * 30 + 360,
+                                        rotate: i * 60 + 360,
                                         scaleX: [1, 1.5, 1],
                                         opacity: [0.1, 0.4, 0.1]
                                     }}

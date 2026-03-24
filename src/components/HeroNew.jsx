@@ -269,13 +269,12 @@ const HeroNew = ({ theme = 'dark' }) => {
                     className="relative mb-12 lg:mb-0 lg:mt-0 mt-8 group flex-1 flex justify-center lg:justify-end w-full transform-gpu"
                 >
                     {/* Animated Background Blob */}
-                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 via-purple-600 to-emerald-500 rounded-full blur-[70px] opacity-30 group-hover:opacity-60 transition-opacity duration-700 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 via-purple-600 to-emerald-500 rounded-full blur-[40px] opacity-20 group-hover:opacity-40 transition-opacity duration-700"></div>
 
-                    {/* Profile Image Container */}
                     <motion.div
-                        animate={{ y: [0, -15, 0] }}
+                        animate={{ y: [0, -10, 0] }}
                         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                        className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mx-auto lg:mx-0 z-10 filter drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]"
+                        className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mx-auto lg:mx-0 z-10"
                     >
                         {/* Spinning Conic Border Rings */}
                         <div className="absolute inset-0 rounded-full animate-[spin_6s_linear_infinite]" style={{ background: 'conic-gradient(from 0deg, transparent 0 280deg, #3b82f6 360deg)' }}></div>

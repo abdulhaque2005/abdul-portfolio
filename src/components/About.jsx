@@ -22,6 +22,9 @@ const TiltCard = ({ children, className = "", variants }) => {
 
     function handleMouseMove(e) {
         if (!ref.current) return;
+        // Disable on touch devices/mobile to save heavy 3D calculations
+        if (typeof window !== 'undefined' && window.innerWidth < 768) return;
+        
         const rect = ref.current.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
