@@ -329,18 +329,18 @@ const Skills = () => {
                 {/* ── Desktop View (3D Sphere) ── */}
                 <div className="hidden md:flex relative w-full max-w-[600px] h-[600px] items-center justify-center mt-8 touch-none">
                     {/* Dynamic Interactive Glow Sphere */}
-                    <motion.div 
+                    <motion.div
                         className="absolute inset-20 rounded-full blur-[100px] opacity-40 -z-10 transition-colors duration-1000 transform-gpu"
-                        animate={{ 
+                        animate={{
                             backgroundColor: rotationRef.current.targetY > 0.01 ? 'rgba(59, 130, 246, 0.4)' : 'rgba(139, 92, 246, 0.4)',
-                            scale: [1, 1.05, 1] 
+                            scale: [1, 1.05, 1]
                         }}
-                        transition={{ 
+                        transition={{
                             backgroundColor: { duration: 1.5 },
                             scale: { duration: 6, repeat: Infinity, ease: "easeInOut" }
                         }}
                     ></motion.div>
-                    
+
                     <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-full blur-3xl -z-10 animate-pulse-slow"></div>
                     {skillsData.map((skill, index) => (
                         <div
@@ -378,7 +378,7 @@ const Skills = () => {
                 </div>
 
                 {/* ── Mobile View (High-Level Premium Grid) ── */}
-                <motion.div 
+                <motion.div
                     className="flex md:hidden grid grid-cols-2 sm:grid-cols-3 gap-6 w-full max-w-lg mt-4 px-2"
                     style={{ perspective: "1000px" }}
                     initial="hidden"
@@ -399,17 +399,17 @@ const Skills = () => {
                         <motion.div
                             key={index}
                             variants={{
-                                hidden: { 
-                                    opacity: 0, 
-                                    rotateX: -45, 
-                                    rotateY: 20, 
+                                hidden: {
+                                    opacity: 0,
+                                    rotateX: -45,
+                                    rotateY: 20,
                                     y: 50,
                                     scale: 0.8
                                 },
-                                show: { 
-                                    opacity: 1, 
-                                    rotateX: 0, 
-                                    rotateY: 0, 
+                                show: {
+                                    opacity: 1,
+                                    rotateX: 0,
+                                    rotateY: 0,
                                     y: 0,
                                     scale: 1,
                                     transition: {
@@ -419,20 +419,20 @@ const Skills = () => {
                                     }
                                 }
                             }}
-                            whileTap={{ 
+                            whileTap={{
                                 scale: 0.92,
                                 rotateX: 10,
                                 transition: { type: "spring", stiffness: 400, damping: 10 }
                             }}
                             className="relative group p-5 rounded-[2rem] border flex flex-col items-center justify-center gap-4 overflow-hidden"
-                            style={{ 
-                                backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+                            style={{
+                                backgroundColor: 'rgba(255, 255, 255, 0.02)',
                                 borderColor: 'rgba(255, 255, 255, 0.08)',
                                 backdropFilter: 'blur(12px)',
                             }}
                         >
                             {/* Dynamic Ambient Glow */}
-                            <div 
+                            <div
                                 className={`absolute -inset-2 opacity-20 blur-2xl transition-opacity duration-500 group-hover:opacity-40 animate-pulse-slow ${skill.color.split(' ')[0].replace('shadow-', 'bg-')}`}
                                 style={{ zIndex: -1 }}
                             ></div>

@@ -61,7 +61,12 @@ body {
 }
 
 /* Custom Cursor for interactive elements */
-a, button, input, textarea, select, [role="button"] {
+a,
+button,
+input,
+textarea,
+select,
+[role="button"] {
   cursor: none !important;
 }
 

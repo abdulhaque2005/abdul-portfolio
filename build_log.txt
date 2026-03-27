@@ -1,0 +1,139 @@
+﻿[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mΓ£ô[39m 20 modules transformed.
+node.exe : 
+[31mΓ£ù[39m Build 
+failed in 983ms
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: ([31mΓ£ù[39m   
+  Build failed in 9    
+83ms:String) [], R    
+emoteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+[31merror during 
+build:
+[31m[vite:esbuild] 
+Transform failed with 
+2 errors:
+C:/Users/Abdul haque/On
+eDrive/Desktop/Portfoli
+o/src/components/Projec
+ts.jsx:256:34: ERROR: 
+Unexpected closing 
+"div" tag does not 
+match opening 
+"motion.div" tag
+C:/Users/Abdul haque/On
+eDrive/Desktop/Portfoli
+o/src/components/Projec
+ts.jsx:258:37: ERROR: 
+Expected ")" but found 
+"className"[31m
+file: 
+[36mC:/Users/Abdul haq
+ue/OneDrive/Desktop/Por
+tfolio/src/components/P
+rojects.jsx:256:34[31m
+[33m
+[33mUnexpected 
+closing "div" tag does 
+not match opening 
+"motion.div" tag[33m
+254 |                  
+                       
+ </div>
+255 |                  
+                    
+</div>
+256 |                  
+                </div>
+    |                  
+                  ^
+257 |  
+258 |                  
+                <div 
+className="absolute 
+-inset-1 
+bg-gradient-to-r 
+from-blue-600 
+to-purple-600 rounde...
+
+[33mExpected ")" but 
+found "className"[33m
+256 |                  
+                </div>
+257 |  
+258 |                  
+                <div 
+className="absolute 
+-inset-1 
+bg-gradient-to-r 
+from-blue-600 
+to-purple-600 rounde...
+    |                  
+                     ^
+259 |                  
+            
+</motion.div>
+260 |                  
+        ))}
+[31m
+    at 
+failureErrorWithLog 
+(C:\Users\Abdul haque\O
+neDrive\Desktop\Portfol
+io\node_modules\esbuild
+\lib\main.js:1467:15)
+    at C:\Users\Abdul h
+aque\OneDrive\Desktop\P
+ortfolio\node_modules\e
+sbuild\lib\main.js:736:
+50
+    at responseCallback
+s.<computed> 
+(C:\Users\Abdul haque\O
+neDrive\Desktop\Portfol
+io\node_modules\esbuild
+\lib\main.js:603:9)
+    at 
+handleIncomingPacket 
+(C:\Users\Abdul haque\O
+neDrive\Desktop\Portfol
+io\node_modules\esbuild
+\lib\main.js:658:12)
+    at 
+Socket.readFromStdout 
+(C:\Users\Abdul haque\O
+neDrive\Desktop\Portfol
+io\node_modules\esbuild
+\lib\main.js:581:7)
+    at Socket.emit 
+(node:events:519:28)
+    at addChunk (node:i
+nternal/streams/readabl
+e:561:12)
+    at readableAddChunk
+PushByteMode (node:inte
+rnal/streams/readable:5
+12:3)
+    at Readable.push (n
+ode:internal/streams/re
+adable:392:5)
+    at 
+Pipe.onStreamRead (node
+:internal/stream_base_c
+ommons:189:23)[39m

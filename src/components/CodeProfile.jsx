@@ -107,16 +107,16 @@ const CodeProfile = () => {
                                 <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-[0_0_8px_rgba(255,189,46,0.3)]"></div>
                                 <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-[0_0_8px_rgba(39,201,63,0.3)]"></div>
                             </div>
-                            
+
                             {/* Tabs */}
                             <div className="flex-1 flex px-4 ml-4">
-                                <button 
+                                <button
                                     onClick={() => setActiveTab('profile.tsx')}
                                     className={`px-4 py-1.5 text-[10px] uppercase tracking-widest font-bold border-b-2 transition-colors duration-300 ${activeTab === 'profile.tsx' ? 'border-blue-500 text-blue-400 bg-[#1d242e]' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
                                 >
                                     profile.tsx
                                 </button>
-                                <button 
+                                <button
                                     onClick={() => setActiveTab('skills.json')}
                                     className={`px-4 py-1.5 text-[10px] uppercase tracking-widest font-bold border-b-2 transition-colors duration-300 ${activeTab === 'skills.json' ? 'border-blue-500 text-blue-400 bg-[#1d242e]' : 'border-transparent text-gray-500 hover:text-gray-300'}`}
                                 >
@@ -124,7 +124,7 @@ const CodeProfile = () => {
                                 </button>
                             </div>
 
-                            <button 
+                            <button
                                 onClick={handleCopy}
                                 className="text-gray-500 hover:text-blue-400 transition-colors p-1 rounded-md hover:bg-white/5 active:scale-90"
                                 title="Copy code"

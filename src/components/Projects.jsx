@@ -161,11 +161,11 @@ const Projects = () => {
                                 initial={{ opacity: 0, y: 40, scale: 0.9 }}
                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.9, filter: "blur(12px)" }}
-                                transition={{ 
-                                    duration: 0.7, 
-                                    delay: index * 0.08, 
-                                    type: "spring", 
-                                    stiffness: 70, 
+                                transition={{
+                                    duration: 0.7,
+                                    delay: index * 0.08,
+                                    type: "spring",
+                                    stiffness: 70,
                                     damping: 22,
                                     mass: 0.8
                                 }}
@@ -180,89 +180,89 @@ const Projects = () => {
 
                                 {/* Inner Card Container for clipping */}
                                 <div className="h-full w-full rounded-3xl overflow-hidden border relative flex flex-col backdrop-blur-xl" style={{ borderColor: 'var(--subtle-border)', backgroundColor: 'var(--card-inner-bg)' }}>
-                            {/* ── Desktop/Tablet Interactive Door ── */}
-                            <div className="absolute inset-0 z-20 hidden sm:flex transition-all duration-700 ease-out group-hover:opacity-0 group-hover:pointer-events-none transform-style-3d">
-                                <div className="h-full w-1/2 backdrop-blur-2xl rounded-l-3xl flex items-center justify-end overflow-hidden transition-transform duration-700 group-hover:-translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderRight: '1px solid var(--subtle-border)' }}>
-                                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-                                    <span className="mr-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>View</span>
-                                </div>
-                                <div className="h-full w-1/2 backdrop-blur-2xl rounded-r-3xl flex items-center justify-start overflow-hidden transition-transform duration-700 group-hover:translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderLeft: '1px solid var(--subtle-border)' }}>
-                                    <div className="absolute inset-0 bg-gradient-to-bl from-white/10 to-transparent"></div>
-                                    <span className="ml-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>Detail</span>
-                                </div>
+                                    {/* ── Desktop/Tablet Interactive Door ── */}
+                                    <div className="absolute inset-0 z-20 hidden sm:flex transition-all duration-700 ease-out group-hover:opacity-0 group-hover:pointer-events-none transform-style-3d">
+                                        <div className="h-full w-1/2 backdrop-blur-2xl rounded-l-3xl flex items-center justify-end overflow-hidden transition-transform duration-700 group-hover:-translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderRight: '1px solid var(--subtle-border)' }}>
+                                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                                            <span className="mr-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>View</span>
+                                        </div>
+                                        <div className="h-full w-1/2 backdrop-blur-2xl rounded-r-3xl flex items-center justify-start overflow-hidden transition-transform duration-700 group-hover:translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderLeft: '1px solid var(--subtle-border)' }}>
+                                            <div className="absolute inset-0 bg-gradient-to-bl from-white/10 to-transparent"></div>
+                                            <span className="ml-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>Detail</span>
+                                        </div>
 
-                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-16 md:h-16 rounded-full border-4 border-emerald-500/30 bg-black/80 backdrop-blur-md flex items-center justify-center z-30 transition-all duration-300 group-hover:scale-110 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
-                                    <div className="absolute inset-0 rounded-full animate-ping bg-emerald-500/20"></div>
-                                    <ArrowUpRight className="text-emerald-400 group-hover:rotate-45 transition-transform duration-500" size={28} md:size={32} strokeWidth={3} />
-                                </div>
-                            </div>
+                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-16 md:h-16 rounded-full border-4 border-emerald-500/30 bg-black/80 backdrop-blur-md flex items-center justify-center z-30 transition-all duration-300 group-hover:scale-110 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                                            <div className="absolute inset-0 rounded-full animate-ping bg-emerald-500/20"></div>
+                                            <ArrowUpRight className="text-emerald-400 group-hover:rotate-45 transition-transform duration-500" size={28} md:size={32} strokeWidth={3} />
+                                        </div>
+                                    </div>
 
-                            {/* ── Main Card Content ── */}
-                            <div className="h-full w-full rounded-3xl overflow-hidden border bg-[var(--card-bg)] shadow-2xl relative flex flex-col" style={{ borderColor: 'var(--subtle-border)' }}>
-                                <div className="h-52 md:h-48 overflow-hidden relative">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-                                    <img
-                                        src={project.image}
-                                        alt={project.title}
-                                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                    />
-                                    {/* Mobile Indicator */}
-                                    <div className="absolute bottom-4 left-4 z-20 sm:hidden">
-                                        <div className="flex gap-2">
-                                            {project.tags.slice(0, 2).map(tag => (
-                                                <span key={tag} className="text-[10px] font-bold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 backdrop-blur-md">
-                                                    {tag}
-                                                </span>
-                                            ))}
+                                    {/* ── Main Card Content ── */}
+                                    <div className="h-full w-full rounded-3xl overflow-hidden border bg-[var(--card-bg)] shadow-2xl relative flex flex-col" style={{ borderColor: 'var(--subtle-border)' }}>
+                                        <div className="h-52 md:h-48 overflow-hidden relative">
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
+                                            <img
+                                                src={project.image}
+                                                alt={project.title}
+                                                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                            />
+                                            {/* Mobile Indicator */}
+                                            <div className="absolute bottom-4 left-4 z-20 sm:hidden">
+                                                <div className="flex gap-2">
+                                                    {project.tags.slice(0, 2).map(tag => (
+                                                        <span key={tag} className="text-[10px] font-bold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 backdrop-blur-md">
+                                                            {tag}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="p-6 flex flex-col flex-1 relative z-10 group-hover:-translate-y-2 transition-transform duration-500">
+                                            <div className="flex justify-between items-start mb-3">
+                                                <h3 className="text-2xl font-bold transition-colors duration-500" style={{ color: 'var(--text-primary)' }}>
+                                                    {project.title}
+                                                </h3>
+                                            </div>
+                                            <p className="text-[14px] opacity-70 mb-5 line-clamp-3 leading-relaxed transition-opacity duration-500 group-hover:opacity-100" style={{ color: 'var(--text-secondary)' }}>
+                                                {project.desc}
+                                            </p>
+
+                                            <div className="mt-auto grid grid-cols-2 gap-3 relative z-30">
+                                                <a
+                                                    href={project.link}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:text-white font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+                                                    style={{ color: 'var(--accent-primary)' }}
+                                                >
+                                                    <Monitor size={14} className="group-hover:animate-pulse" /> LIVE
+                                                </a>
+                                                {project.github ? (
+                                                    <a
+                                                        href={project.github}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="flex items-center justify-center gap-2 py-3 rounded-xl border hover:bg-white hover:text-black font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                                                        style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}
+                                                    >
+                                                        <Github size={14} /> CODE
+                                                    </a>
+                                                ) : (
+                                                    <div className="flex items-center justify-center gap-2 py-3 rounded-xl border opacity-40 text-xs font-bold cursor-not-allowed" style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
+                                                        PRIVATE
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="p-6 flex flex-col flex-1 relative z-10 group-hover:-translate-y-2 transition-transform duration-500">
-                                    <div className="flex justify-between items-start mb-3">
-                                        <h3 className="text-2xl font-bold transition-colors duration-500" style={{ color: 'var(--text-primary)' }}>
-                                            {project.title}
-                                        </h3>
-                                    </div>
-                                    <p className="text-[14px] opacity-70 mb-5 line-clamp-3 leading-relaxed transition-opacity duration-500 group-hover:opacity-100" style={{ color: 'var(--text-secondary)' }}>
-                                        {project.desc}
-                                    </p>
-
-                                    <div className="mt-auto grid grid-cols-2 gap-3 relative z-30">
-                                        <a
-                                            href={project.link}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            onClick={(e) => e.stopPropagation()}
-                                            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:text-white font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
-                                            style={{ color: 'var(--accent-primary)' }}
-                                        >
-                                            <Monitor size={14} className="group-hover:animate-pulse" /> LIVE
-                                        </a>
-                                        {project.github ? (
-                                            <a
-                                                href={project.github}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                onClick={(e) => e.stopPropagation()}
-                                                className="flex items-center justify-center gap-2 py-3 rounded-xl border hover:bg-white hover:text-black font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
-                                            style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}
-                                            >
-                                                <Github size={14} /> CODE
-                                            </a>
-                                        ) : (
-                                            <div className="flex items-center justify-center gap-2 py-3 rounded-xl border opacity-40 text-xs font-bold cursor-not-allowed" style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
-                                                PRIVATE
-                                            </div>
-                                        )}
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Ambient Glow Aura */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500 -z-10"></div>
-                        </motion.div>
+                                {/* Ambient Glow Aura */}
+                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500 -z-10"></div>
+                            </motion.div>
                         ))}
                     </AnimatePresence>
                 </motion.div>

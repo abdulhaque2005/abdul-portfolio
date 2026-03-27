@@ -24,7 +24,7 @@ const TiltCard = ({ children, className = "", variants }) => {
         if (!ref.current) return;
         // Disable on touch devices/mobile to save heavy 3D calculations
         if (typeof window !== 'undefined' && window.innerWidth < 768) return;
-        
+
         const rect = ref.current.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
@@ -61,12 +61,12 @@ const TiltCard = ({ children, className = "", variants }) => {
         >
             <div style={{ transform: "translateZ(30px)" }} className="h-full relative overflow-hidden">
                 {/* Dynamic Glint Shimmer */}
-                <motion.div 
+                <motion.div
                     className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[inherit]"
                     style={{
                         background: useTransform(
                             [glintX, glintY],
-                            ([latestX, latestY]) => 
+                            ([latestX, latestY]) =>
                                 `radial-gradient(circle at ${latestX}px ${latestY}px, rgba(255,255,255,0.08) 0%, transparent 60%)`
                         )
                     }}
@@ -111,11 +111,11 @@ const About = () => {
         <section id="about" ref={containerRef} className="py-24 relative overflow-hidden min-h-screen flex items-center perspective-container" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}>
 
             {/* Floating Background Geometry */}
-            <motion.div 
+            <motion.div
                 style={{ y, rotate }}
                 className="absolute top-1/4 -right-20 w-80 h-80 rounded-[3rem] border-2 border-blue-500/10 rotate-12 -z-10 blur-[1px]"
             />
-            <motion.div 
+            <motion.div
                 style={{ y: useTransform(scrollYProgress, [0, 1], [-100, 100]), rotate: useTransform(scrollYProgress, [0, 1], [0, -45]) }}
                 className="absolute bottom-1/4 -left-20 w-64 h-64 rounded-full border-2 border-purple-500/10 -z-10 blur-[2px]"
             />
@@ -235,7 +235,7 @@ const About = () => {
                         <h4 className="font-black text-3xl md:text-4xl mb-3 tracking-tighter" style={{ color: 'var(--text-primary)' }}>Ready to collaborate?</h4>
                         <p className="text-xs md:text-sm font-black tracking-[0.3em] uppercase opacity-40 text-blue-400">Open for new opportunities</p>
                     </div>
-                    
+
                     <div className="flex flex-wrap gap-6 justify-center">
                         {[
                             { icon: SiGithub, color: "#fff", link: "https://github.com/abdulhaque2005", label: "GitHub" },

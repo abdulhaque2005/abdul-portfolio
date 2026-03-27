@@ -70,7 +70,7 @@ const TiltCard = ({ children, onClick }) => {
         const yPct = (e.clientY - rect.top) / height - 0.5;
         x.set(xPct);
         y.set(yPct);
-        
+
         // Update pixel values for glint
         mouseXPos.set(e.clientX - rect.left);
         mouseYPos.set(e.clientY - rect.top);
@@ -96,12 +96,12 @@ const TiltCard = ({ children, onClick }) => {
             whileHover={{ scale: 1.03 }}
         >
             {/* Dynamic Glint Shimmer */}
-            <motion.div 
+            <motion.div
                 className="absolute inset-0 z-20 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
                     background: useTransform(
                         [glintX, glintY],
-                        ([latestX, latestY]) => 
+                        ([latestX, latestY]) =>
                             `radial-gradient(circle at ${latestX}px ${latestY}px, rgba(255,255,255,0.15) 0%, transparent 60%)`
                     )
                 }}

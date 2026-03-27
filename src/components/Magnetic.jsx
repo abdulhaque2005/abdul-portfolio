@@ -18,7 +18,7 @@ export default function Magnetic({ children, className = "", strength = 0.5 }) {
     };
 
     const { x, y } = position;
-    
+
     // Disable on touch devices/mobile to save calculations
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     if (isMobile) return <div className={className}>{children}</div>;

@@ -128,12 +128,12 @@ const TiltCard = ({ children, className }) => {
         >
             <div style={{ transform: "translateZ(50px)" }} className="relative h-full">
                 {/* Dynamic Glint Shimmer */}
-                <motion.div 
+                <motion.div
                     className="absolute inset-0 z-30 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[inherit]"
                     style={{
                         background: useTransform(
                             [glintX, glintY],
-                            ([latestX, latestY]) => 
+                            ([latestX, latestY]) =>
                                 `radial-gradient(circle at ${latestX}px ${latestY}px, rgba(255,255,255,0.1) 0%, transparent 60%)`
                         )
                     }}
@@ -258,7 +258,7 @@ const Education = () => {
                             className={`flex flex-col md:${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'} items-center justify-center gap-8 md:gap-24 relative w-full`}
                         >
                             {/* Animated Timeline Point */}
-                            <motion.div 
+                            <motion.div
                                 initial={{ scale: 0, opacity: 0 }}
                                 whileInView={{ scale: 1, opacity: 1 }}
                                 viewport={{ once: true, margin: "-100px" }}
@@ -287,7 +287,7 @@ const Education = () => {
                                         }}
                                     >
                                         <div className={`absolute inset-0 rounded-[2rem] bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-[0.08] transition-opacity duration-700`} />
-                                        
+
                                         {/* Premium Badge for 'Current' status */}
                                         {item.current && (
                                             <div className="absolute top-6 right-8">
@@ -351,7 +351,7 @@ const Education = () => {
                             </div>
 
                             <div className="hidden md:flex flex-col w-1/2 items-center justify-center pointer-events-none">
-                                <motion.div 
+                                <motion.div
                                     initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
                                     whileInView={{ opacity: 0.6, x: 0 }}
                                     viewport={{ once: true }}

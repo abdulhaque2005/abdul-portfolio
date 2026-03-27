@@ -131,19 +131,19 @@ async function callGemini(messages) {
                     lastError = 'rate_limit';
                     continue; // Try next model, or if models exhausted, next key
                 }
-                
+
                 if (res.status === 400 || res.status === 403) {
                     authFail = true;
                     lastError = 'auth';
                     // Don't break completely, maybe just this key is bad. Try next key.
-                    break; 
+                    break;
                 }
 
                 if (!res.ok) {
                     const errData = await res.json().catch(() => ({}));
                     console.error(`Gemini API Error (${model} with key ${apiKey.substring(0, 5)}...):`, errData);
                     lastError = 'api_error';
-                    continue; 
+                    continue;
                 }
 
                 const data = await res.json();
@@ -166,34 +166,34 @@ async function callGemini(messages) {
         return getLocalFallbackResponse(messages[messages.length - 1].text);
     }
     if (authFail) return '⚠️ API Key is invalid or restricted. Please check your Gemini API key.';
-    
+
     return '😅 Oops, something went wrong with the AI API. Please try again in a moment!';
 }
 
 // ─── Local Fallback Logic (When API is rate-limited) ─────────────────────────
 function getLocalFallbackResponse(userText) {
     const text = userText.toLowerCase();
-    
+
     if (text.includes('hi') || text.includes('hello') || text.includes('hey') || text.includes('namaste') || text.includes('haal')) {
         return "👋 Hey! I'm AH Assistant. The AI servers are slightly busy right now due to high traffic, but I can still tell you about Abdul's **Skills**, **Projects**, **Education**, or **Contact info**! What would you like to know?";
     }
-    
+
     if (text.includes('skill') || text.includes('tech') || text.includes('stack')) {
         return "💻 **Abdul's Core Skills:**\n- **Logic Core:** C, C++ (Algorithms & Optimization)\n- **Frontend:** React.js, HTML5, CSS3, Tailwind CSS, Framer Motion\n- **Backend:** Node.js, Express.js\n- **Database:** MongoDB\n- **Tools:** Git, GitHub, Vercel, Postman\n\nHe is a MERN Stack Enthusiast built on strong C/C++ logic! 🚀";
     }
-    
+
     if (text.includes('project') || text.includes('work') || text.includes('build')) {
         return "🚀 **Key Projects:**\n1. **StockPilot**: Full-stack MERN trading dashboard inspired by Zerodha.\n2. **VectorMinds**: AI-powered currency arbitration platform for freelancers.\n3. **Clones**: High-fidelity clones of Razer, Ethena, and Mealawe.\n\nYou can see them live in the Projects section above!";
     }
-    
+
     if (text.includes('education') || text.includes('study') || text.includes('college') || text.includes('degree')) {
         return "📚 **Education:**\n- **B.E. (Computer Science)** — Swaminarayan University (2025 - Present) | CGPA: 9.00\n- **Intermediate (+2 Science)** — Score: 85%\n- **Matriculation (10th)** — Score: 73%\n\nCurrently specializing in System Architecture.";
     }
-    
+
     if (text.includes('contact') || text.includes('email') || text.includes('phone') || text.includes('hire') || text.includes('reach')) {
         return "📬 **Contact Info:**\n- **Email:** abdulhaque4171@gmail.com\n- **Phone:** +91 7870929584\n- **LinkedIn:** [Abdul Haque](https://www.linkedin.com/in/abdul-haque-a08150398)\n- **GitHub:** [abdulhaque2005](https://github.com/abdulhaque2005)\n\nFeel free to reach out for collaborations! ⚡";
     }
-    
+
     if (text.includes('resume') || text.includes('cv')) {
         return "📄 You can download Abdul's Resume by clicking the **Download Resume** button in the Hero section at the top of the page!";
     }
@@ -232,12 +232,12 @@ const AHLogo = ({ size = 28, style = {} }) => (
         position: 'relative',
         ...style
     }}>
-        <span style={{ 
-            fontSize: size * 0.4, 
-            fontWeight: 900, 
-            color: '#fff', 
-            fontFamily: 'Space Grotesk, sans-serif', 
-            letterSpacing: '-0.5px', 
+        <span style={{
+            fontSize: size * 0.4,
+            fontWeight: 900,
+            color: '#fff',
+            fontFamily: 'Space Grotesk, sans-serif',
+            letterSpacing: '-0.5px',
             lineHeight: 1,
             textShadow: '0 2px 4px rgba(0,0,0,0.5)'
         }}>AH</span>
@@ -246,6 +246,22 @@ const AHLogo = ({ size = 28, style = {} }) => (
 
 // ─── Quick Replies ────────────────────────────────────────────────────────────
 const QUICK_REPLIES = ['About Abdul', 'Skills', 'Projects', 'Contact', 'Education'];
+
+const MessageBubble = React.memo(({ msg, isDark }) => (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
+        style={{ display: 'flex', justifyContent: msg.from === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}>
+        {msg.from === 'bot' && <AHLogo size={26} />}
+        <div style={{
+            maxWidth: '78%', padding: '10px 13px',
+            borderRadius: msg.from === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+            background: msg.from === 'user' ? 'linear-gradient(135deg,#00bfff,#7c3aed)' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'),
+            color: msg.from === 'user' ? '#fff' : (isDark ? '#d1d5db' : '#333'),
+            fontSize: '0.82rem', lineHeight: 1.65, fontWeight: msg.from === 'user' ? 600 : 500,
+            border: msg.from === 'bot' ? (isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.08)') : 'none',
+        }}
+            dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
+    </motion.div>
+));
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const ChatBot = ({ theme = 'dark' }) => {
@@ -353,10 +369,11 @@ const ChatBot = ({ theme = 'dark' }) => {
                             width: 'min(380px, calc(100vw - 32px))', maxHeight: 'min(600px, calc(100vh - 120px))',
                             borderRadius: 20, overflow: 'hidden',
                             display: 'flex', flexDirection: 'column',
-                            background: isDark ? 'rgba(6,8,13,0.97)' : 'rgba(255,255,255,0.97)',
+                            background: isDark ? '#06080d' : '#f8fafc',
                             border: isDark ? '1px solid rgba(0,255,204,0.2)' : '1px solid rgba(0,255,204,0.5)',
                             boxShadow: isDark ? '0 0 40px rgba(0,255,204,0.1), 0 20px 60px rgba(0,0,0,0.7)' : '0 0 40px rgba(0,255,204,0.2), 0 20px 40px rgba(0,0,0,0.15)',
-                            backdropFilter: 'blur(20px)',
+                            transform: 'translateZ(0)',
+                            willChange: 'transform, opacity',
                         }}
                     >
                         {/* Header */}
@@ -383,19 +400,7 @@ const ChatBot = ({ theme = 'dark' }) => {
                         {/* Messages */}
                         <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 12, scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,255,204,0.15) transparent' }}>
                             {messages.map(msg => (
-                                <motion.div key={msg.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
-                                    style={{ display: 'flex', justifyContent: msg.from === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}>
-                                    {msg.from === 'bot' && <AHLogo size={26} />}
-                                    <div style={{
-                                        maxWidth: '78%', padding: '10px 13px',
-                                        borderRadius: msg.from === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                                        background: msg.from === 'user' ? 'linear-gradient(135deg,#00bfff,#7c3aed)' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'),
-                                        color: msg.from === 'user' ? '#fff' : (isDark ? '#d1d5db' : '#333'),
-                                        fontSize: '0.82rem', lineHeight: 1.65, fontWeight: msg.from === 'user' ? 600 : 500,
-                                        border: msg.from === 'bot' ? (isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.08)') : 'none',
-                                    }}
-                                        dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
-                                </motion.div>
+                                <MessageBubble key={msg.id} msg={msg} isDark={isDark} />
                             ))}
 
                             <AnimatePresence>

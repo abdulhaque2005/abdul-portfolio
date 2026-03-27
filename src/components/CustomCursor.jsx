@@ -6,9 +6,11 @@ const CustomCursor = () => {
     const [isHovering, setIsHovering] = useState(false);
 
     // Track mouse position
-    const mouse = useRef({ x: 0, y: 0 });
+    const mouse = useRef({ x: -100, y: -100 });
     // Track ring position for smooth follow
-    const ring = useRef({ x: 0, y: 0 });
+    const ring = useRef({ x: -100, y: -100 });
+    // Keep a continuous ref of hovering for the render loop
+    const hoverRef = useRef(false);
 
     useEffect(() => {
         // Only run on desktop
@@ -17,24 +19,30 @@ const CustomCursor = () => {
         const handleMouseMove = (e) => {
             mouse.current = { x: e.clientX, y: e.clientY };
 
-            // Update dot instantly
+            // Update dot instantly natively to prevent React overwrites
             if (dotRef.current) {
-                dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+                const scale = hoverRef.current ? 1.5 : 1;
+                dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%) scale(${scale})`;
             }
         };
 
         const handleMouseOver = (e) => {
-            if (
-                e.target.tagName === 'BUTTON' ||
-                e.target.tagName === 'A' ||
+            const isClickable = !!(
                 e.target.closest('button') ||
                 e.target.closest('a') ||
-                e.target.classList.contains('cursor-pointer') ||
-                window.getComputedStyle(e.target).cursor === 'pointer'
-            ) {
-                setIsHovering(true);
-            } else {
-                setIsHovering(false);
+                e.target.closest('.cursor-pointer') ||
+                e.target.tagName === 'INPUT' ||
+                e.target.tagName === 'TEXTAREA'
+            );
+            
+            if (hoverRef.current !== isClickable) {
+                hoverRef.current = isClickable;
+                setIsHovering(isClickable);
+                // Also update the dot transform immediately so the scale feels responsive
+                if (dotRef.current) {
+                    const scale = isClickable ? 1.5 : 1;
+                    dotRef.current.style.transform = `translate3d(${mouse.current.x}px, ${mouse.current.y}px, 0) translate(-50%, -50%) scale(${scale})`;
+                }
             }
         };
 
@@ -54,7 +62,7 @@ const CustomCursor = () => {
 
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseover', handleMouseOver);
-        
+
         // Start animation loop
         render();
 
@@ -70,13 +78,14 @@ const CustomCursor = () => {
             {/* Ring */}
             <div
                 ref={ringRef}
-                className="fixed top-0 left-0 z-[9998] pointer-events-none rounded-full border-2 transition-all duration-200 ease-out"
+                className="fixed top-0 left-0 z-[99999] pointer-events-none rounded-full border-2 ease-out"
                 style={{
                     width: isHovering ? '55px' : '36px',
                     height: isHovering ? '55px' : '36px',
                     backgroundColor: isHovering ? "rgba(0, 255, 204, 0.15)" : "transparent",
                     borderColor: isHovering ? "rgba(0, 255, 204, 0.9)" : "rgba(124, 58, 237, 0.6)",
                     boxShadow: isHovering ? "0 0 20px rgba(0, 255, 204, 0.4)" : "0 0 10px rgba(124, 58, 237, 0.2)",
+                    transition: 'width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s, box-shadow 0.2s',
                     willChange: 'transform, width, height',
                 }}
             />
@@ -84,13 +93,13 @@ const CustomCursor = () => {
             {/* Dot */}
             <div
                 ref={dotRef}
-                className="fixed top-0 left-0 z-[9999] pointer-events-none rounded-full transition-all duration-200 ease-out"
+                className="fixed top-0 left-0 z-[99999] pointer-events-none rounded-full ease-out"
                 style={{
                     width: '10px',
                     height: '10px',
                     backgroundColor: isHovering ? "#7c3aed" : "#00ffcc",
-                    transform: isHovering ? 'scale(1.5)' : 'scale(1)',
                     boxShadow: isHovering ? "0 0 10px #7c3aed" : "0 0 10px #00ffcc",
+                    transition: 'background-color 0.2s, box-shadow 0.2s',
                     willChange: 'transform, background-color',
                 }}
             />
