@@ -202,44 +202,51 @@ function getLocalFallbackResponse(userText) {
 }
 
 // ─── Format Message (Markdown → HTML) ─────────────────────────────────────────
-function formatMessage(text) {
+function formatMessage(text, isDark) {
     let f = text;
+    
+    const codeBg = isDark ? 'rgba(0,0,0,0.5)' : '#f1f5f9';
+    const codeBorder = isDark ? 'rgba(0,255,204,0.15)' : '#e2e8f0';
+    const codeColor = isDark ? '#a5f3fc' : '#0ea5e9';
+    const inlineBg = isDark ? 'rgba(0,255,204,0.12)' : '#e0f2fe';
+    const inlineColor = isDark ? '#00ffcc' : '#0284c7';
+    const linkColor = isDark ? '#00ffcc' : '#0284c7';
+
     // Code blocks
-    f = f.replace(/```[\w]*\n?([\s\S]*?)```/g, '<pre style="background:rgba(0,0,0,0.4);border:1px solid rgba(0,255,204,0.15);border-radius:8px;padding:10px;font-family:monospace;font-size:0.78rem;overflow-x:auto;color:#a5f3fc;margin:6px 0;line-height:1.5;">$1</pre>');
+    f = f.replace(/```[\w]*\n?([\s\S]*?)```/g, `<pre style="background:${codeBg};border:1px solid ${codeBorder};border-radius:8px;padding:12px;font-family:monospace;font-size:0.8rem;overflow-x:auto;color:${codeColor};margin:8px 0;line-height:1.6;box-shadow:inset 0 2px 4px rgba(0,0,0,0.05);">$1</pre>`);
     // Inline code
-    f = f.replace(/`([^`]+)`/g, '<code style="background:rgba(0,255,204,0.1);padding:1px 5px;border-radius:4px;font-family:monospace;font-size:0.9em;color:#00ffcc;">$1</code>');
+    f = f.replace(/`([^`]+)`/g, `<code style="background:${inlineBg};padding:2px 6px;border-radius:6px;font-family:monospace;font-size:0.85em;color:${inlineColor}; font-weight: 500;">$1</code>`);
     // Bold
     f = f.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     // Italic
     f = f.replace(/\*(.*?)\*/g, '<em>$1</em>');
     // Links
-    f = f.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener" style="color:#00ffcc;text-decoration:underline;">$1</a>');
+    f = f.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, `<a href="$2" target="_blank" rel="noopener" style="color:${linkColor};text-decoration:none;font-weight:600;border-bottom:1px solid ${linkColor};padding-bottom:1px;">$1</a>`);
     // Bare URLs
-    f = f.replace(/(?<!\"|>)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener" style="color:#00ffcc;text-decoration:underline;">$1</a>');
+    f = f.replace(/(?<!\"|>)(https?:\/\/[^\s<]+)/g, `<a href="$1" target="_blank" rel="noopener" style="color:${linkColor};text-decoration:none;border-bottom:1px solid ${linkColor};">$1</a>`);
     // Line breaks
     f = f.replace(/\n/g, '<br/>');
     return f;
 }
 
 // ─── AH Logo ─────────────────────────────────────────────────────────────────
-const AHLogo = ({ size = 28, style = {} }) => (
+const AHLogo = ({ size = 28, isDark = true, style = {} }) => (
     <div style={{
         width: size, height: size, borderRadius: '50%',
-        background: 'linear-gradient(135deg, #06b6d4, #7c3aed)', /* Cyan to Purple */
+        background: isDark ? 'linear-gradient(135deg, #06b6d4, #7c3aed)' : 'linear-gradient(135deg, #0284c7, #4f46e5)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         flexShrink: 0,
-        boxShadow: '0 0 10px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.4)',
+        boxShadow: isDark ? '0 0 12px rgba(6, 182, 212, 0.4)' : '0 4px 10px rgba(2, 132, 199, 0.3)',
         position: 'relative',
         ...style
     }}>
         <span style={{
             fontSize: size * 0.4,
-            fontWeight: 900,
+            fontWeight: 800,
             color: '#fff',
-            fontFamily: 'Space Grotesk, sans-serif',
+            fontFamily: 'Outfit, sans-serif',
             letterSpacing: '-0.5px',
             lineHeight: 1,
-            textShadow: '0 2px 4px rgba(0,0,0,0.5)'
         }}>AH</span>
     </div>
 );
@@ -247,21 +254,30 @@ const AHLogo = ({ size = 28, style = {} }) => (
 // ─── Quick Replies ────────────────────────────────────────────────────────────
 const QUICK_REPLIES = ['About Abdul', 'Skills', 'Projects', 'Contact', 'Education'];
 
-const MessageBubble = React.memo(({ msg, isDark }) => (
-    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
-        style={{ display: 'flex', justifyContent: msg.from === 'user' ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 8 }}>
-        {msg.from === 'bot' && <AHLogo size={26} />}
-        <div style={{
-            maxWidth: '78%', padding: '10px 13px',
-            borderRadius: msg.from === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-            background: msg.from === 'user' ? 'linear-gradient(135deg,#00bfff,#7c3aed)' : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'),
-            color: msg.from === 'user' ? '#fff' : (isDark ? '#d1d5db' : '#333'),
-            fontSize: '0.82rem', lineHeight: 1.65, fontWeight: msg.from === 'user' ? 600 : 500,
-            border: msg.from === 'bot' ? (isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.08)') : 'none',
-        }}
-            dangerouslySetInnerHTML={{ __html: formatMessage(msg.text) }} />
-    </motion.div>
-));
+const MessageBubble = React.memo(({ msg, isDark }) => {
+    const isUser = msg.from === 'user';
+    
+    return (
+        <motion.div initial={{ opacity: 0, y: 15, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: 0.3, type: "spring", stiffness: 250, damping: 20 }}
+            style={{ display: 'flex', justifyContent: isUser ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: 10 }}>
+            {!isUser && <AHLogo size={30} isDark={isDark} style={{ marginBottom: 4 }} />}
+            <div style={{
+                maxWidth: '82%', padding: '12px 16px',
+                borderRadius: isUser ? '20px 20px 4px 20px' : '20px 20px 20px 4px',
+                background: isUser 
+                    ? (isDark ? 'linear-gradient(135deg, #00bfff, #7c3aed)' : 'linear-gradient(135deg, #0284c7, #4f46e5)')
+                    : (isDark ? 'rgba(30, 36, 48, 0.85)' : '#ffffff'),
+                color: isUser ? '#ffffff' : (isDark ? '#e2e8f0' : '#334155'),
+                fontSize: '0.88rem', lineHeight: 1.6, fontWeight: isUser ? 500 : 400,
+                border: isUser ? 'none' : (isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)'),
+                boxShadow: isUser 
+                    ? (isDark ? '0 4px 15px rgba(124,58,237,0.2)' : '0 4px 15px rgba(79,70,229,0.25)')
+                    : (isDark ? '0 4px 15px rgba(0,0,0,0.2)' : '0 2px 10px rgba(0,0,0,0.04)'),
+            }}
+                dangerouslySetInnerHTML={{ __html: formatMessage(msg.text, isDark) }} />
+        </motion.div>
+    );
+});
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const ChatBot = ({ theme = 'dark' }) => {
@@ -279,7 +295,6 @@ const ChatBot = ({ theme = 'dark' }) => {
     const inputRef = useRef(null);
 
     useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages, typing]);
-    useEffect(() => { if (open) setTimeout(() => inputRef.current?.focus(), 300); }, [open]);
 
     const sendMessage = async (text) => {
         const userText = (text || input).trim();
@@ -296,7 +311,7 @@ const ChatBot = ({ theme = 'dark' }) => {
         try {
             const reply = await callGemini(newHistory);
 
-            // Update conversation history (keep last 20 messages for context window)
+            // Update conversation history
             const updatedHistory = [...newHistory, { role: 'model', text: reply }];
             if (updatedHistory.length > 20) {
                 setConversationHistory(updatedHistory.slice(-20));
@@ -332,24 +347,28 @@ const ChatBot = ({ theme = 'dark' }) => {
                 onClick={() => setOpen(o => !o)}
                 style={{
                     position: 'fixed', bottom: 'clamp(20px, 4vh, 28px)', right: 'clamp(16px, 4vw, 28px)', zIndex: 9999,
-                    width: 'clamp(50px, 12vw, 62px)', height: 'clamp(50px, 12vw, 62px)', borderRadius: '50%',
-                    border: isDark ? '2px solid rgba(0,255,204,0.4)' : '2px solid rgba(20,184,166,0.5)',
+                    width: 'clamp(56px, 12vw, 64px)', height: 'clamp(56px, 12vw, 64px)', borderRadius: '50%',
+                    border: isDark ? '2px solid rgba(0,255,204,0.3)' : '2px solid rgba(2,132,199,0.2)',
                     cursor: 'pointer',
-                    background: isDark ? 'linear-gradient(135deg, #06080d, #0f1a2e)' : 'linear-gradient(135deg, #f0fdfa, #ccfbf1)',
+                    background: isDark ? 'linear-gradient(135deg, #06080d, #111a2e)' : 'linear-gradient(135deg, #ffffff, #f8fafc)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 0 0 0 rgba(0,255,204,0.4)',
+                    boxShadow: isDark ? '0 10px 25px rgba(0,0,0,0.5)' : '0 10px 25px rgba(0,0,0,0.1)',
                 }}
-                animate={{ boxShadow: open ? '0 0 0 4px rgba(0,255,204,0.25)' : ['0 0 0 0px rgba(0,255,204,0.5)', '0 0 0 14px rgba(0,255,204,0)', '0 0 0 0px rgba(0,255,204,0)'] }}
-                transition={{ duration: 1.8, repeat: open ? 0 : Infinity }}
-                whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.93 }}
+                animate={{ 
+                    boxShadow: open 
+                        ? (isDark ? '0 0 0 4px rgba(0,255,204,0.15)' : '0 0 0 4px rgba(2,132,199,0.15)') 
+                        : (isDark ? ['0 0 0 0px rgba(0,255,204,0.4)', '0 0 0 15px rgba(0,255,204,0)', '0 0 0 0px rgba(0,255,204,0)'] : ['0 0 0 0px rgba(2,132,199,0.3)', '0 0 0 15px rgba(2,132,199,0)', '0 0 0 0px rgba(2,132,199,0)']) 
+                }}
+                transition={{ duration: 2, repeat: open ? 0 : Infinity }}
+                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
             >
                 <AnimatePresence mode="wait">
                     {open
                         ? <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                            <ChevronDown size={26} color="#00ffcc" strokeWidth={2.5} />
+                            <ChevronDown size={28} color={isDark ? "#00ffcc" : "#0284c7"} strokeWidth={2.5} />
                         </motion.span>
                         : <motion.span key="logo" initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.5, opacity: 0 }} transition={{ duration: 0.2 }}>
-                            <Sparkles size={22} color="#00ffcc" />
+                            <Sparkles size={24} color={isDark ? "#00ffcc" : "#0284c7"} />
                         </motion.span>
                     }
                 </AnimatePresence>
@@ -360,89 +379,136 @@ const ChatBot = ({ theme = 'dark' }) => {
                 {open && (
                     <motion.div
                         key="chatwindow"
-                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 40, scale: 0.95, transformOrigin: 'bottom right' }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 30, scale: 0.95 }}
-                        transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                        exit={{ opacity: 0, y: 40, scale: 0.95 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                         style={{
-                            position: 'fixed', bottom: 'clamp(85px, 14vh, 104px)', right: 'clamp(16px, 4vw, 28px)', zIndex: 9998,
-                            width: 'min(380px, calc(100vw - 32px))', maxHeight: 'min(600px, calc(100vh - 120px))',
-                            borderRadius: 20, overflow: 'hidden',
+                            position: 'fixed', bottom: 'clamp(95px, 15vh, 115px)', right: 'clamp(16px, 4vw, 28px)', zIndex: 9998,
+                            width: 'min(400px, calc(100vw - 32px))', maxHeight: 'min(650px, calc(100vh - 120px))',
+                            borderRadius: '24px', overflow: 'hidden',
                             display: 'flex', flexDirection: 'column',
                             background: isDark ? '#06080d' : '#f8fafc',
-                            border: isDark ? '1px solid rgba(0,255,204,0.2)' : '1px solid rgba(0,255,204,0.5)',
-                            boxShadow: isDark ? '0 0 40px rgba(0,255,204,0.1), 0 20px 60px rgba(0,0,0,0.7)' : '0 0 40px rgba(0,255,204,0.2), 0 20px 40px rgba(0,0,0,0.15)',
+                            border: isDark ? '1px solid rgba(0,255,204,0.15)' : '1px solid rgba(0,0,0,0.08)',
+                            boxShadow: isDark 
+                                ? '0 0 40px rgba(0,255,204,0.05), 0 20px 60px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)' 
+                                : '0 20px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1)',
                             transform: 'translateZ(0)',
                             willChange: 'transform, opacity',
                         }}
                     >
                         {/* Header */}
-                        <div style={{ padding: '14px 16px', background: isDark ? 'linear-gradient(135deg,rgba(0,255,204,0.1),rgba(124,58,237,0.1))' : 'linear-gradient(135deg,rgba(0,255,204,0.3),rgba(124,58,237,0.15))', borderBottom: isDark ? '1px solid rgba(0,255,204,0.12)' : '1px solid rgba(0,255,204,0.3)', display: 'flex', alignItems: 'center', gap: 12 }}>
-                            <AHLogo size={40} />
+                        <div style={{ 
+                            padding: '18px 20px', 
+                            background: isDark ? 'linear-gradient(to right, rgba(6,8,13,1), rgba(15,23,42,1))' : '#ffffff', 
+                            borderBottom: isDark ? '1px solid rgba(0,255,204,0.1)' : '1px solid rgba(0,0,0,0.06)', 
+                            display: 'flex', alignItems: 'center', gap: 14,
+                            boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.4)' : 'none',
+                            zIndex: 10
+                        }}>
+                            <AHLogo size={44} isDark={isDark} />
                             <div style={{ flex: 1 }}>
-                                <div style={{ fontWeight: 700, color: isDark ? '#fff' : '#111', fontSize: '0.95rem', fontFamily: 'Space Grotesk,sans-serif', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                <div style={{ fontWeight: 700, color: isDark ? '#ffffff' : '#0f172a', fontSize: '1.05rem', fontFamily: 'Outfit, sans-serif', display: 'flex', alignItems: 'center', gap: 8, letterSpacing: '0.2px' }}>
                                     AH Assistant
-                                    <span style={{ fontSize: '0.55rem', padding: '1px 6px', borderRadius: 20, background: 'linear-gradient(135deg,#00ffcc,#7c3aed)', color: '#000', fontWeight: 800, letterSpacing: '0.5px' }}>AI</span>
+                                    <span style={{ fontSize: '0.6rem', padding: '2px 8px', borderRadius: 20, background: isDark ? 'rgba(0,255,204,0.15)' : 'rgba(2,132,199,0.1)', color: isDark ? '#00ffcc' : '#0284c7', fontWeight: 800, letterSpacing: '0.5px', border: isDark ? '1px solid rgba(0,255,204,0.3)' : '1px solid rgba(2,132,199,0.2)' }}>AI</span>
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 6px #4ade80', display: 'inline-block' }} />
-                                    <span style={{ fontSize: '0.71rem', color: '#6b7f96' }}>Powered by Gemini AI</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 8px #10b981', display: 'inline-block' }} />
+                                    <span style={{ fontSize: '0.75rem', color: isDark ? '#94a3b8' : '#64748b', fontWeight: 500 }}>Powered by Gemini</span>
                                 </div>
                             </div>
-                            <button onClick={resetChat} title="Reset chat" style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7f96', padding: 4, marginRight: 4 }}>
-                                <RotateCcw size={16} />
+                            <button onClick={resetChat} title="Reset chat" style={{ background: 'none', border: 'none', cursor: 'pointer', color: isDark ? '#64748b' : '#94a3b8', padding: 6, transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = isDark ? '#fff' : '#0f172a'} onMouseLeave={e => e.target.style.color = isDark ? '#64748b' : '#94a3b8'}>
+                                <RotateCcw size={18} />
                             </button>
-                            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7f96', padding: 4 }}>
-                                <X size={18} />
+                            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: isDark ? '#64748b' : '#94a3b8', padding: 6, transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = isDark ? '#fff' : '#0f172a'} onMouseLeave={e => e.target.style.color = isDark ? '#64748b' : '#94a3b8'}>
+                                <X size={20} />
                             </button>
                         </div>
 
-                        {/* Messages */}
-                        <div style={{ flex: 1, overflowY: 'auto', padding: '14px 12px', display: 'flex', flexDirection: 'column', gap: 12, scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,255,204,0.15) transparent' }}>
+                        {/* Messages Area */}
+                        <div style={{ 
+                            flex: 1, overflowY: 'auto', padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 16, 
+                            scrollbarWidth: 'thin', scrollbarColor: isDark ? 'rgba(0,255,204,0.15) transparent' : 'rgba(0,0,0,0.1) transparent',
+                            background: isDark ? 'transparent' : '#f8fafc'
+                        }}>
                             {messages.map(msg => (
                                 <MessageBubble key={msg.id} msg={msg} isDark={isDark} />
                             ))}
 
                             <AnimatePresence>
                                 {typing && (
-                                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                        <AHLogo size={26} />
-                                        <div style={{ padding: '10px 14px', borderRadius: '18px 18px 18px 4px', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)', border: isDark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(0,0,0,0.08)', display: 'flex', gap: 5, alignItems: 'center' }}>
+                                    <motion.div initial={{ opacity: 0, y: 10, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                        <AHLogo size={30} isDark={isDark} />
+                                        <div style={{ padding: '14px 18px', borderRadius: '20px 20px 20px 4px', background: isDark ? 'rgba(30, 36, 48, 0.85)' : '#ffffff', border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0,0,0,0.06)', display: 'flex', gap: 6, alignItems: 'center', boxShadow: isDark ? '0 4px 15px rgba(0,0,0,0.2)' : '0 2px 10px rgba(0,0,0,0.04)' }}>
                                             {[0, 1, 2].map(i => (
-                                                <motion.span key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: '#00ffcc', display: 'block' }}
-                                                    animate={{ y: [0, -5, 0] }} transition={{ duration: 0.7, repeat: Infinity, delay: i * 0.15 }} />
+                                                <motion.span key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: isDark ? '#00ffcc' : '#0284c7', display: 'block' }}
+                                                    animate={{ y: [0, -6, 0], opacity: [0.5, 1, 0.5] }} transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }} />
                                             ))}
                                         </div>
                                     </motion.div>
                                 )}
                             </AnimatePresence>
-                            <div ref={bottomRef} />
+                            <div ref={bottomRef} style={{ height: 1 }} />
                         </div>
 
-                        {/* Quick Replies */}
-                        <div style={{ padding: '8px 12px', display: 'flex', flexWrap: 'wrap', gap: 6, borderTop: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid rgba(0,0,0,0.06)' }}>
-                            {QUICK_REPLIES.map(qr => (
-                                <button key={qr} onClick={() => sendMessage(qr)}
-                                    style={{ padding: '4px 11px', borderRadius: 20, border: '1px solid rgba(0,255,204,0.28)', background: 'rgba(0,255,204,0.06)', color: '#00ffcc', fontSize: '0.71rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.18s' }}
-                                    onMouseEnter={e => { e.target.style.background = 'rgba(0,255,204,0.18)'; e.target.style.borderColor = '#00ffcc'; }}
-                                    onMouseLeave={e => { e.target.style.background = 'rgba(0,255,204,0.06)'; e.target.style.borderColor = 'rgba(0,255,204,0.28)'; }}
-                                >{qr}</button>
-                            ))}
-                        </div>
+                        {/* Input & Quick Replies Area */}
+                        <div style={{ 
+                            background: isDark ? '#06080d' : '#ffffff', 
+                            borderTop: isDark ? '1px solid rgba(0,255,204,0.1)' : '1px solid rgba(0,0,0,0.06)',
+                            paddingTop: '12px'
+                        }}>
+                            {/* Quick Replies */}
+                            <div style={{ padding: '0 16px 12px', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                                {QUICK_REPLIES.map(qr => (
+                                    <motion.button key={qr} onClick={() => sendMessage(qr)}
+                                        whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                                        style={{ 
+                                            padding: '6px 14px', borderRadius: 20, 
+                                            border: isDark ? '1px solid rgba(0,255,204,0.2)' : '1px solid rgba(2,132,199,0.2)', 
+                                            background: isDark ? 'rgba(0,255,204,0.05)' : 'rgba(2,132,199,0.05)', 
+                                            color: isDark ? '#00ffcc' : '#0284c7', 
+                                            fontSize: '0.75rem', fontWeight: 600, cursor: 'pointer' 
+                                        }}
+                                    >{qr}</motion.button>
+                                ))}
+                            </div>
 
-                        {/* Input */}
-                        <div style={{ padding: '10px 12px', borderTop: isDark ? '1px solid rgba(0,255,204,0.1)' : '1px solid rgba(0,255,204,0.3)', display: 'flex', gap: 10, alignItems: 'center' }}>
-                            <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
-                                placeholder="Ask anything in Hindi or English..."
-                                disabled={typing}
-                                style={{ flex: 1, padding: '10px 14px', borderRadius: 12, background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)', border: isDark ? '1px solid rgba(0,255,204,0.18)' : '1px solid rgba(0,255,204,0.4)', color: isDark ? '#eef2f7' : '#111', fontSize: '1rem', outline: 'none', fontFamily: 'inherit', transition: 'border-color 0.2s', fontWeight: isDark ? 400 : 500, opacity: typing ? 0.5 : 1 }}
-                                onFocus={e => e.target.style.borderColor = 'rgba(0,255,204,0.8)'}
-                                onBlur={e => e.target.style.borderColor = isDark ? 'rgba(0,255,204,0.18)' : 'rgba(0,255,204,0.4)'} />
-                            <motion.button onClick={() => sendMessage()} whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.93 }}
-                                disabled={typing}
-                                style={{ width: 40, height: 40, borderRadius: 12, border: 'none', background: typing ? 'rgba(0,255,204,0.3)' : 'linear-gradient(135deg,#00ffcc,#7c3aed)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: typing ? 'not-allowed' : 'pointer', flexShrink: 0 }}>
-                                <Send size={16} color="#000" strokeWidth={2.5} />
-                            </motion.button>
+                            {/* Input Field Area */}
+                            <div style={{ padding: '0 16px 16px', display: 'flex', gap: 10, alignItems: 'center' }}>
+                                <div style={{ 
+                                    flex: 1, display: 'flex', alignItems: 'center',
+                                    padding: '6px 6px 6px 16px', borderRadius: 100, 
+                                    background: isDark ? 'rgba(255,255,255,0.04)' : '#f1f5f9', 
+                                    border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid transparent', 
+                                    transition: 'all 0.3s ease',
+                                    boxShadow: isDark ? 'inset 0 2px 4px rgba(0,0,0,0.2)' : 'inset 0 2px 4px rgba(0,0,0,0.02)'
+                                }}>
+                                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+                                        placeholder="Ask anything..."
+                                        disabled={typing}
+                                        style={{ 
+                                            flex: 1, background: 'transparent', border: 'none', 
+                                            color: isDark ? '#f8fafc' : '#0f172a', 
+                                            fontSize: '0.95rem', outline: 'none', fontFamily: 'inherit',
+                                            fontWeight: 500, opacity: typing ? 0.5 : 1 
+                                        }}
+                                    />
+                                    <motion.button onClick={() => sendMessage()} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                                        disabled={typing || !input.trim()}
+                                        style={{ 
+                                            width: 36, height: 36, borderRadius: '50%', border: 'none', 
+                                            background: (typing || !input.trim()) 
+                                                ? (isDark ? 'rgba(255,255,255,0.1)' : '#cbd5e1') 
+                                                : (isDark ? '#00ffcc' : '#0284c7'), 
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                                            cursor: (typing || !input.trim()) ? 'default' : 'pointer', flexShrink: 0,
+                                            boxShadow: (!typing && input.trim()) ? (isDark ? '0 0 15px rgba(0,255,204,0.4)' : '0 2px 8px rgba(2,132,199,0.4)') : 'none',
+                                            transition: 'background-color 0.3s'
+                                        }}>
+                                        <Send size={16} color={(!typing && input.trim()) ? (isDark ? '#000' : '#fff') : (isDark ? '#94a3b8' : '#fff')} style={{ marginLeft: 2 }} strokeWidth={2.5} />
+                                    </motion.button>
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 )}

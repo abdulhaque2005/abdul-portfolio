@@ -21,7 +21,7 @@ const NavBar = ({ theme, toggleTheme }) => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
 
-            const sections = ['about', 'skills', 'projects', 'certificates', 'education', 'contact'];
+            const sections = ['about', 'skills', 'projects', 'hackathons', 'certificates', 'education', 'contact'];
             const scrollPosition = window.scrollY + 200;
 
             for (const section of sections) {
@@ -111,7 +111,7 @@ const NavBar = ({ theme, toggleTheme }) => {
                     style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
 
                     <div className="flex items-center px-1 gap-1 relative">
-                        {['About', 'Skills', 'Projects', 'Certificates', 'Education', 'Contact'].map((item) => {
+                        {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item) => {
                             const sectionId = item.toLowerCase();
                             const isActive = activeSection === sectionId;
                             return (
@@ -183,7 +183,7 @@ const NavBar = ({ theme, toggleTheme }) => {
                         style={{ backgroundColor: 'var(--bg-color)', borderColor: 'var(--border-color)' }}
                     >
                         <div className="p-6 flex flex-col gap-3">
-                            {['About', 'Skills', 'Projects', 'Certificates', 'Education', 'Contact'].map((item, index) => {
+                            {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item, index) => {
                                 const sectionId = item.toLowerCase();
                                 const isActive = activeSection === sectionId;
                                 return (

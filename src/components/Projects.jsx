@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Play } from 'lucide-react';
 
 const projects = [
     {
@@ -9,15 +9,8 @@ const projects = [
         tags: ["TypeScript", "React", "Node.js", "MongoDB"],
         link: "https://stockpilot-abdul7.vercel.app/login",
         github: "https://github.com/abdulhaque2005/CoreInventory-oddo-x-indus",
-        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=1000"
-    },
-    {
-        title: "VectorMinds",
-        desc: "AI-powered currency arbitration platform for freelancers with real-time exchange rates, analytics, AI forecasts, and a financial simulator.",
-        tags: ["React", "Vite", "AI", "API"],
-        link: "https://vector-minds.vercel.app/",
-        github: "https://github.com/abdulhaque2005/vector-minds",
-        image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=1000"
+        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=1000",
+        video: "https://www.youtube.com/watch?v=IFp38bsxLcI"
     },
     {
         title: "Mealawe Clone",
@@ -25,7 +18,8 @@ const projects = [
         tags: ["HTML", "CSS", "Responsive"],
         link: "https://mealawe-9b7udy2ko-abdul7.vercel.app/",
         github: "https://github.com/abdulhaque2005/mealawe_clone",
-        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1000"
+        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1000",
+        video: "https://www.youtube.com/watch?v=BaKgBGVlPvQ"
     },
     {
         title: "Razer Website Clone",
@@ -33,7 +27,16 @@ const projects = [
         tags: ["HTML", "CSS", "UI Clone"],
         link: "https://razer-website-1avbtm69x-abdul7.vercel.app/",
         github: "https://github.com/abdulhaque2005/razer_clone",
-        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000"
+        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000",
+        video: "https://www.youtube.com/watch?v=DdsQ0rFgJVE"
+    },
+    {
+        title: "Freelancers",
+        desc: "AI-powered currency arbitration platform for freelancers with real-time exchange rates, analytics, AI forecasts, and a financial simulator.",
+        tags: ["React", "Vite", "AI", "API"],
+        link: "https://vector-minds.vercel.app/",
+        github: "https://github.com/abdulhaque2005/vector-minds",
+        image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=1000"
     },
     {
         title: "Ethena Clone",
@@ -42,6 +45,14 @@ const projects = [
         link: "https://ethena-clone1-cmxl224lm-abdul7.vercel.app/",
         github: "https://github.com/abdulhaque2005/React_project",
         image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJAB7lC4utCQB0VrWcK829zdM8KZWOL5MKvQ&s"
+    },
+    {
+        title: "Movie Explorer",
+        desc: "A dynamic movie discovery app with search, trending movies, and detailed info powered by TMDB API.",
+        tags: ["React", "API", "CSS", "JS"],
+        link: "https://movie-explorer012.netlify.app/",
+        github: "https://github.com/abdulhaque2005/movie-explorer",
+        image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=1000"
     },
     {
         title: "Calculator App",
@@ -206,6 +217,7 @@ const Projects = () => {
                                                 alt={project.title}
                                                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                             />
+
                                             {/* Mobile Indicator */}
                                             <div className="absolute bottom-4 left-4 z-20 sm:hidden">
                                                 <div className="flex gap-2">
@@ -228,16 +240,16 @@ const Projects = () => {
                                                 {project.desc}
                                             </p>
 
-                                            <div className="mt-auto grid grid-cols-2 gap-3 relative z-30">
+                                            <div className={`mt-auto grid ${project.video ? 'grid-cols-3' : 'grid-cols-2'} gap-2.5 relative z-30`}>
                                                 <a
                                                     href={project.link}
                                                     target="_blank"
                                                     rel="noreferrer"
                                                     onClick={(e) => e.stopPropagation()}
-                                                    className="flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:text-white font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]"
+                                                    className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:text-white font-bold text-[11px] tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-[1.03]"
                                                     style={{ color: 'var(--accent-primary)' }}
                                                 >
-                                                    <Monitor size={14} className="group-hover:animate-pulse" /> LIVE
+                                                    <Monitor size={13} /> LIVE
                                                 </a>
                                                 {project.github ? (
                                                     <a
@@ -245,15 +257,27 @@ const Projects = () => {
                                                         target="_blank"
                                                         rel="noreferrer"
                                                         onClick={(e) => e.stopPropagation()}
-                                                        className="flex items-center justify-center gap-2 py-3 rounded-xl border hover:bg-white hover:text-black font-bold text-xs tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                                                        className="flex items-center justify-center gap-1.5 py-3 rounded-xl border hover:bg-white hover:text-black font-bold text-[11px] tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:scale-[1.03]"
                                                         style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}
                                                     >
-                                                        <Github size={14} /> CODE
+                                                        <Github size={13} /> CODE
                                                     </a>
                                                 ) : (
-                                                    <div className="flex items-center justify-center gap-2 py-3 rounded-xl border opacity-40 text-xs font-bold cursor-not-allowed" style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
+                                                    <div className="flex items-center justify-center gap-1.5 py-3 rounded-xl border opacity-40 text-[11px] font-bold cursor-not-allowed" style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
                                                         PRIVATE
                                                     </div>
+                                                )}
+                                                {project.video && (
+                                                    <a
+                                                        href={project.video}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                        className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-gradient-to-r from-red-600/20 to-red-500/20 hover:from-red-600 hover:to-red-500 border border-red-500/30 hover:text-white font-bold text-[11px] tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:scale-[1.03]"
+                                                        style={{ color: '#ef4444' }}
+                                                    >
+                                                        <Play size={13} fill="currentColor" /> DEMO
+                                                    </a>
                                                 )}
                                             </div>
                                         </div>
@@ -484,6 +508,16 @@ const Projects = () => {
                                 </div>
 
                                 <div className="mt-auto space-y-3">
+                                    {selectedProject.video && (
+                                        <a
+                                            href={selectedProject.video}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="w-full py-3 bg-gradient-to-r from-red-600 to-red-500 hover:from-red-500 hover:to-red-400 text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:shadow-red-500/30"
+                                        >
+                                            <Play size={18} fill="white" /> Watch Demo Video
+                                        </a>
+                                    )}
                                     <a
                                         href={selectedProject.link}
                                         target="_blank"

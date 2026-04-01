@@ -14,6 +14,7 @@ import Education from './components/Education';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
 import Certificates from './components/Certificates';
+import Hackathons from './components/Hackathons';
 import Contact from './components/Contact';
 import CustomCursor from './components/CustomCursor';
 import Preloader from './components/Preloader';
@@ -72,6 +73,7 @@ function App() {
                             <About />
                             <Skills />
                             <Projects />
+                            <Hackathons />
                             <Certificates />
                             <Education />
                             <Contact />
@@ -93,7 +95,7 @@ function App() {
                                     <div>
                                         <h4 className="text-lg font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Quick Links</h4>
                                         <ul className="space-y-3">
-                                            {['About', 'Skills', 'Projects', 'Certificates', 'Education', 'Contact'].map((item) => (
+                                            {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item) => (
                                                 <li key={item}>
                                                     <button
                                                         onClick={() => document.getElementById(item.toLowerCase()).scrollIntoView({ behavior: 'smooth' })}

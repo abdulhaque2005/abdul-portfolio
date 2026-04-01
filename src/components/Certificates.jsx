@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ExternalLink, X, Eye, Award, Calendar, CheckCircle, Search } from 'lucide-react';
+import { ExternalLink, X, Eye, Award, Calendar, CheckCircle, Search, ChevronDown, ChevronUp } from 'lucide-react';
 import certReact from '../assets/cert-react.jpg';
 import certPython from '../assets/cert-python.png';
 
@@ -31,6 +31,18 @@ const certificates = [
     },
     {
         id: 3,
+        title: "Introduction to C",
+        issuer: "Sololearn",
+        date: "27 Mar 2026",
+        desc: "Completed comprehensive C programming course covering theoretical and practical understanding of the C language, including pointers, memory management, and data structures.",
+        image: "/cert-c.png",
+        link: "#",
+        showVerify: false,
+        tags: ["C Language", "Programming"],
+        color: "from-violet-500 to-purple-500"
+    },
+    {
+        id: 4,
         title: "Python Interview Ready",
         issuer: "Simplilearn",
         date: "3 Feb 2026",
@@ -113,6 +125,9 @@ const TiltCard = ({ children, onClick }) => {
 
 const Certificates = () => {
     const [selectedCert, setSelectedCert] = useState(null);
+    const [showAll, setShowAll] = useState(false);
+
+    const visibleCerts = showAll ? certificates : certificates.slice(0, 3);
 
     return (
         <section id="certificates" className="py-24 relative overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
@@ -141,8 +156,17 @@ const Certificates = () => {
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto px-4">
-                    {certificates.map((cert) => (
-                        <div key={cert.id} className="h-full">
+                    <AnimatePresence mode="popLayout">
+                        {visibleCerts.map((cert) => (
+                            <motion.div
+                                key={cert.id}
+                                layout
+                                initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.5 }}
+                                className="h-full"
+                            >
                             <TiltCard onClick={() => setSelectedCert(cert)}>
                                 <div
                                     className="relative h-full flex flex-col rounded-3xl border overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 group"
@@ -204,9 +228,42 @@ const Certificates = () => {
                                     </div>
                                 </div>
                             </TiltCard>
-                        </div>
-                    ))}
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </div>
+
+                {certificates.length > 3 && (
+                    <div className="flex justify-center mt-10">
+                        <motion.button
+                            onClick={() => setShowAll(!showAll)}
+                            whileHover={{ scale: 1.04 }}
+                            whileTap={{ scale: 0.97 }}
+                            className="group relative flex items-center gap-3 px-10 py-4 rounded-full font-bold text-sm tracking-wider transition-all duration-500 overflow-hidden cursor-pointer"
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(59,130,246,0.15), rgba(139,92,246,0.15))',
+                                border: '1.5px solid rgba(99,102,241,0.3)',
+                                color: 'var(--text-primary)',
+                            }}
+                        >
+                            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+                            <span className="relative z-10 flex items-center gap-2">
+                                {showAll ? (
+                                    <>
+                                        <ChevronUp size={18} className="text-indigo-400" />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Show Less</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <ChevronDown size={18} className="text-indigo-400 animate-bounce" />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Show More</span>
+                                        <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-bold">{certificates.length - 3}+</span>
+                                    </>
+                                )}
+                            </span>
+                        </motion.button>
+                    </div>
+                )}
             </div>
 
             <AnimatePresence>
