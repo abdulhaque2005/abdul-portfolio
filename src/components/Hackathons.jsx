@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trophy, MapPin, Calendar, Clock, X, Eye, Zap, Sparkles, ArrowRight } from 'lucide-react';
+import { Trophy, MapPin, Calendar, Clock, X, Eye, Zap, Sparkles, ArrowRight, Github, ExternalLink, Code2 } from 'lucide-react';
 
 const hackathons = [
     {
@@ -11,8 +11,13 @@ const hackathons = [
         date: "March 2026",
         duration: "36 Hours",
         location: "Online",
-        desc: "Participated in Haxplore, the flagship hackathon of CodeFest'26 organized by Indian Institute of Technology, Banaras Hindu University (IIT-BHU). Competed against top engineering talent nationwide in building innovative tech solutions.",
+        projectName: "StockPilot",
+        projectDesc: "AI-powered Inventory Management System with Ultra-Premium HUD interface, cyberpunk aesthetics, and intelligent warehouse workflows.",
+        desc: "Participated in Haxplore, the flagship hackathon of CodeFest'26 organized by IIT-BHU. Built StockPilot — a next-gen AI-powered Inventory Management System with futuristic cyberpunk HUD interface, real-time analytics, and smart operations engine.",
         image: "/cert-haxplore.png",
+        liveUrl: "https://stockpilot-abdul7.vercel.app/login",
+        githubUrl: "https://github.com/abdulhaque2005/Stock_Pilot1",
+        tech: ["Next.js 15", "TypeScript", "Supabase", "Tailwind CSS", "Zustand", "Framer Motion"],
         tags: ["Hackathon", "IIT-BHU", "CodeFest"],
         color: "from-blue-500 to-cyan-400",
         accent: "#3b82f6",
@@ -26,8 +31,13 @@ const hackathons = [
         date: "March 2026",
         duration: "30 Hours",
         location: "Online",
-        desc: "Participated in Doppelganger, a collaborative 30-hour build sprint hosted on OpenPools where teams transformed their Professional DNA into real-world solutions. Showcased creativity and willingness to build impactful products.",
+        projectName: "Vector Minds",
+        projectDesc: "A collaborative platform built during the Doppelganger sprint, transforming Professional DNA into real-world solutions with React and modern web technologies.",
+        desc: "Participated in Doppelganger, a 30-hour build sprint on OpenPools. Built Vector Minds — a collaborative platform showcasing creativity and building impactful products with modern React ecosystem.",
         image: "/cert-doppelganger.png",
+        liveUrl: "https://vector-minds.vercel.app/",
+        githubUrl: "https://github.com/abdulhaque2005/vector-minds",
+        tech: ["React", "Vite", "JavaScript", "Tailwind CSS", "Node.js"],
         tags: ["Build Sprint", "OpenPools", "30hrs"],
         color: "from-purple-600 to-pink-500",
         accent: "#a855f7",
@@ -37,6 +47,11 @@ const hackathons = [
 
 const Hackathons = () => {
     const [selectedHack, setSelectedHack] = useState(null);
+
+    const handleLinkClick = (e, url) => {
+        e.stopPropagation();
+        window.open(url, '_blank', 'noopener,noreferrer');
+    };
 
     return (
         <section id="hackathons" className="py-24 relative overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)' }}>
@@ -96,7 +111,7 @@ const Hackathons = () => {
                                         whileInView={{ scale: 1, opacity: 1 }}
                                         className="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold flex items-center gap-2 shadow-2xl shadow-purple-500/30"
                                     >
-                                        <Eye size={18} /> VIEW CERTIFICATE
+                                        <Eye size={18} /> VIEW DETAILS
                                     </motion.span>
                                 </div>
 
@@ -123,12 +138,54 @@ const Hackathons = () => {
                                     ))}
                                 </div>
 
-                                <h3 className="text-xl font-bold mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300" style={{ color: 'var(--text-primary)' }}>
+                                <h3 className="text-xl font-bold mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:to-pink-400 transition-all duration-300" style={{ color: 'var(--text-primary)' }}>
                                     {hack.title}
                                 </h3>
-                                <p className="text-sm mb-5 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+
+                                {/* Project Name Badge */}
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-bold" style={{ background: `${hack.accent}20`, color: hack.accent }}>
+                                        <Code2 size={12} /> {hack.projectName}
+                                    </span>
+                                </div>
+
+                                <p className="text-sm mb-4 line-clamp-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                                     {hack.desc}
                                 </p>
+
+                                {/* Tech Stack Pills */}
+                                <div className="flex flex-wrap gap-1.5 mb-4">
+                                    {hack.tech.slice(0, 4).map((t, i) => (
+                                        <span key={i} className="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider"
+                                            style={{ background: 'var(--bg-color)', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}>
+                                            {t}
+                                        </span>
+                                    ))}
+                                    {hack.tech.length > 4 && (
+                                        <span className="px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider"
+                                            style={{ color: hack.accent }}>
+                                            +{hack.tech.length - 4} more
+                                        </span>
+                                    )}
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex items-center gap-2 mb-4">
+                                    <button
+                                        onClick={(e) => handleLinkClick(e, hack.liveUrl)}
+                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                        style={{ background: `linear-gradient(135deg, ${hack.accent}, ${hack.accent}cc)`, boxShadow: `0 4px 15px ${hack.glow}` }}
+                                    >
+                                        <ExternalLink size={13} /> Live Demo
+                                    </button>
+                                    <button
+                                        onClick={(e) => handleLinkClick(e, hack.githubUrl)}
+                                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold border transition-all duration-300 hover:scale-105"
+                                        style={{ borderColor: 'var(--border-color)', color: 'var(--text-primary)', backgroundColor: 'var(--bg-color)' }}
+                                    >
+                                        <Github size={13} /> GitHub
+                                    </button>
+                                </div>
 
                                 <div className="flex items-center justify-between mt-auto pt-4 border-t" style={{ borderColor: 'var(--border-color)' }}>
                                     <div className="flex items-center gap-4 text-xs" style={{ color: 'var(--text-secondary)' }}>
@@ -143,7 +200,7 @@ const Hackathons = () => {
                                         className="flex items-center gap-1 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                                         style={{ color: hack.accent }}
                                     >
-                                        View <ArrowRight size={12} />
+                                        Details <ArrowRight size={12} />
                                     </motion.span>
                                 </div>
                             </div>
@@ -172,11 +229,13 @@ const Hackathons = () => {
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.85, y: 40 }}
                             transition={{ type: "spring", damping: 20, stiffness: 250, mass: 0.8 }}
-                            className="relative z-10 w-full max-w-5xl rounded-3xl overflow-hidden mt-20 md:mt-24"
+                            className="relative z-10 w-full max-w-5xl rounded-3xl overflow-hidden mt-10 md:mt-14"
                             onClick={(e) => e.stopPropagation()}
+                            style={{ backgroundColor: '#0a0a0a' }}
                         >
                             <div className={`absolute inset-0 bg-gradient-to-br ${selectedHack.color} opacity-5`} />
 
+                            {/* Certificate Image */}
                             <div className="flex items-center justify-center p-2 sm:p-4 relative">
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
@@ -187,7 +246,7 @@ const Hackathons = () => {
                                     <img
                                         src={selectedHack.image}
                                         alt={selectedHack.title}
-                                        className="w-full h-auto max-h-[70vh] object-contain p-2 md:p-4"
+                                        className="w-full h-auto max-h-[50vh] object-contain p-2 md:p-4"
                                     />
                                     <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 pointer-events-none" />
                                     
@@ -203,6 +262,54 @@ const Hackathons = () => {
                                     </motion.button>
                                 </motion.div>
                             </div>
+
+                            {/* Project Details Section */}
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.25, duration: 0.5 }}
+                                className="px-6 pb-6 relative"
+                            >
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                    <div>
+                                        <h3 className="text-xl md:text-2xl font-bold text-white mb-1">{selectedHack.title}</h3>
+                                        <p className="text-sm text-white/50 flex items-center gap-2">
+                                            <Code2 size={14} style={{ color: selectedHack.accent }} />
+                                            Project: <span className="font-bold" style={{ color: selectedHack.accent }}>{selectedHack.projectName}</span>
+                                        </p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <a
+                                            href={selectedHack.liveUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                            style={{ background: `linear-gradient(135deg, ${selectedHack.accent}, ${selectedHack.accent}cc)`, boxShadow: `0 4px 15px ${selectedHack.glow}` }}
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <ExternalLink size={14} /> Live Demo
+                                        </a>
+                                        <a
+                                            href={selectedHack.githubUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold border border-white/20 text-white/80 hover:text-white hover:bg-white/10 transition-all duration-300 hover:scale-105"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <Github size={14} /> Source Code
+                                        </a>
+                                    </div>
+                                </div>
+
+                                {/* Tech Stack in modal */}
+                                <div className="flex flex-wrap gap-2 mt-4">
+                                    {selectedHack.tech.map((t, i) => (
+                                        <span key={i} className="px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider border border-white/10 text-white/60 bg-white/5">
+                                            {t}
+                                        </span>
+                                    ))}
+                                </div>
+                            </motion.div>
                         </motion.div>
                     </motion.div>
                 )}

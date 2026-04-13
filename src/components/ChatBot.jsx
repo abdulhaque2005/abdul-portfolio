@@ -66,8 +66,7 @@ const SYSTEM_PROMPT = `You are **AH Assistant** — the personal AI assistant em
 8. When sharing project links, always include them as clickable links.
 9. If someone asks "who made you" or "who built you" — say Abdul Haque built this entire portfolio and the AI assistant within it.
 10. Be enthusiastic about Abdul's achievements — he's a talented developer!
-11. NEVER make up information about Abdul that isn't in the context above.
-12. For resume/CV download — tell them to click the "Download Resume" button on the Hero section of the portfolio.`;
+11. NEVER make up information about Abdul that isn't in the context above.`;
 
 async function callGemini(messages) {
     const apiKeysString = import.meta.env.VITE_GEMINI_API_KEY;
@@ -194,9 +193,6 @@ function getLocalFallbackResponse(userText) {
         return "📬 **Contact Info:**\n- **Email:** abdulhaque4171@gmail.com\n- **Phone:** +91 7870929584\n- **LinkedIn:** [Abdul Haque](https://www.linkedin.com/in/abdul-haque-a08150398)\n- **GitHub:** [abdulhaque2005](https://github.com/abdulhaque2005)\n\nFeel free to reach out for collaborations! ⚡";
     }
 
-    if (text.includes('resume') || text.includes('cv')) {
-        return "📄 You can download Abdul's Resume by clicking the **Download Resume** button in the Hero section at the top of the page!";
-    }
 
     return "🤖 **Notice:** The AI servers are currently hitting free-tier rate limits (too many requests!).\n\nWhile we wait for the servers to cool down, I can still tell you about Abdul's:\n- **Skills**\n- **Projects**\n- **Education**\n- **Contact Info**\n\nJust tap a quick reply or ask about these topics!";
 }

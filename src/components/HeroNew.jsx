@@ -19,42 +19,7 @@ const styles = {
 
 const HeroNew = ({ theme = 'dark' }) => {
 
-    const downloadResume = () => {
-        const link = document.createElement('a');
-        link.href = '/resume.pdf';
-        link.download = 'Abdul_Haque_Resume.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
-
     const isDark = theme === 'dark';
-
-    const resumeBtnStyle = {
-        position: 'relative',
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '10px',
-        padding: '12px 24px',
-        borderRadius: '999px',
-        fontWeight: '700',
-        fontSize: '0.95rem',
-        minWidth: '170px',
-        height: '52px',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        border: isDark ? 'none' : '2px solid rgba(0,255,204,0.7)',
-        background: isDark
-            ? 'linear-gradient(135deg, #06080d 0%, #0f1520 100%)'
-            : 'linear-gradient(135deg, #f0fffe 0%, #e0fbf7 100%)',
-        color: '#00bb99',
-        boxShadow: isDark
-            ? '0 0 0 2px rgba(0,255,204,0.5), 0 0 20px rgba(0,255,204,0.15)'
-            : '0 0 0 2px rgba(0,187,153,0.4), 0 4px 20px rgba(0,187,153,0.15)',
-        transition: 'all 0.3s ease',
-        letterSpacing: '0.5px',
-        overflow: 'hidden',
-    };
 
     const contactBtnStyle = {
         position: 'relative',
@@ -216,49 +181,7 @@ const HeroNew = ({ theme = 'dark' }) => {
                             </motion.button>
                         </Magnetic>
 
-                        <Magnetic>
-                            <motion.button
-                                onClick={downloadResume}
-                                style={resumeBtnStyle}
-                                whileHover={{
-                                    scale: 1.06,
-                                    boxShadow: '0 0 0 2px rgba(0,255,204,0.9), 0 0 30px rgba(0,255,204,0.35), 0 0 80px rgba(168,85,247,0.25)',
-                                    color: '#fff',
-                                }}
-                                whileTap={{ scale: 0.97 }}
-                            >
-                                <motion.span
-                                    className="hidden md:block"
-                                    style={{
-                                        position: 'absolute',
-                                        inset: 0,
-                                        background: 'linear-gradient(105deg, transparent 40%, rgba(0,255,204,0.15) 50%, transparent 60%)',
-                                        backgroundSize: '200% 100%',
-                                    }}
-                                    animate={{ backgroundPosition: ['200% 0', '-200% 0'] }}
-                                    transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-                                />
-                                <motion.span
-                                    className="hidden md:block"
-                                    style={{
-                                        position: 'absolute',
-                                        inset: '-2px',
-                                        borderRadius: '999px',
-                                        border: '2px solid rgba(0,255,204,0.4)',
-                                    }}
-                                    animate={{ opacity: [1, 0], scale: [1, 1.12] }}
-                                    transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
-                                />
-                                <motion.span
-                                    animate={{ y: [0, 3, 0] }}
-                                    transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
-                                    style={{ display: 'flex', zIndex: 1 }}
-                                >
-                                    <Download size={20} strokeWidth={2.5} />
-                                </motion.span>
-                                <span style={{ position: 'relative', zIndex: 1 }}>Download Resume</span>
-                            </motion.button>
-                        </Magnetic>
+
                     </motion.div>
                 </div>
 
