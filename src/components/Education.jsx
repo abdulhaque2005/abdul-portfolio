@@ -266,7 +266,10 @@ const Education = () => {
                             >
                                 <div className="relative">
                                     <div className={`w-10 h-10 rounded-full border-2 border-${item.color}-500/50 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.4)] backdrop-blur-md`} style={{ backgroundColor: 'var(--bg-color)' }}>
-                                        <div className={`w-3.5 h-3.5 rounded-full bg-${item.color}-500 shadow-[0_0_15px_${item.themeHex}]`} />
+                                        <div 
+                                            className={`w-3.5 h-3.5 rounded-full bg-${item.color}-500`} 
+                                            style={{ boxShadow: `0 0 15px ${item.themeHex}` }}
+                                        />
                                     </div>
                                     {/* Pulsing Outer Glow */}
                                     <div className={`absolute -inset-2 rounded-full bg-${item.color}-500/20 blur-md animate-ping`} />

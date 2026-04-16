@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Play } from 'lucide-react';
+import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Play, Zap } from 'lucide-react';
 
 const projects = [
     {
