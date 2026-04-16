@@ -7,6 +7,42 @@ import certPython from '../assets/cert-python.png';
 const certificates = [
     {
         id: 1,
+        title: "Web Development",
+        issuer: "Sololearn",
+        date: "Recent",
+        desc: "Demonstrated proficiency in core web technologies including HTML, CSS, and Javascript.",
+        image: "/Web_certi.png",
+        link: "#",
+        showVerify: false,
+        tags: ["Web Dev", "Frontend"],
+        color: "from-blue-500 to-cyan-500"
+    },
+    {
+        id: 2,
+        title: "C++ Programming",
+        issuer: "Sololearn",
+        date: "Recent",
+        desc: "Comprehensive understanding of C++ concepts, problem solving, and data structures.",
+        image: "/C++ certi.png",
+        link: "#",
+        showVerify: false,
+        tags: ["C++", "Programming"],
+        color: "from-purple-500 to-pink-500"
+    },
+    {
+        id: 3,
+        title: "JavaScript Intermediate",
+        issuer: "HackerRank",
+        date: "Recent",
+        desc: "Advanced JavaScript concepts and problem-solving skills.",
+        image: "/imt_js.png",
+        link: "#",
+        showVerify: false,
+        tags: ["JavaScript", "Advanced"],
+        color: "from-yellow-400 to-orange-500"
+    },
+    {
+        id: 4,
         title: "HTML, CSS & JavaScript",
         issuer: "HRCalcy",
         date: "29 Dec 2025",
@@ -18,7 +54,7 @@ const certificates = [
         color: "from-orange-500 to-amber-500"
     },
     {
-        id: 2,
+        id: 5,
         title: "ReactJS for Beginners",
         issuer: "Simplilearn",
         date: "3 Feb 2026",
@@ -30,7 +66,7 @@ const certificates = [
         color: "from-blue-400 to-cyan-400"
     },
     {
-        id: 3,
+        id: 6,
         title: "Introduction to C",
         issuer: "Sololearn",
         date: "27 Mar 2026",
@@ -42,7 +78,7 @@ const certificates = [
         color: "from-violet-500 to-purple-500"
     },
     {
-        id: 4,
+        id: 7,
         title: "Python Interview Ready",
         issuer: "Simplilearn",
         date: "3 Feb 2026",
@@ -52,6 +88,18 @@ const certificates = [
         showVerify: true,
         tags: ["Python", "DSA"],
         color: "from-emerald-400 to-green-500"
+    },
+    {
+        id: 8,
+        title: "Introduction to JavaScript",
+        issuer: "Sololearn",
+        date: "Recent",
+        desc: "Foundational knowledge and basics of JavaScript.",
+        image: "/intro_js.png",
+        link: "#",
+        showVerify: false,
+        tags: ["JavaScript", "Basics"],
+        color: "from-yellow-300 to-yellow-500"
     }
 ];
 
