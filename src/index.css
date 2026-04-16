@@ -49,6 +49,10 @@
 }
 
 html,
+body, * {
+  cursor: none;
+}
+html,
 body {
   background-color: var(--bg-color);
   color: var(--text-primary);
@@ -57,16 +61,10 @@ body {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
   transition: background-color 0.3s ease, color 0.3s ease;
-  cursor: none;
 }
 
-/* Custom Cursor for interactive elements */
-a,
-button,
-input,
-textarea,
-select,
-[role="button"] {
+/* Hide cursor on interactive elements as well */
+a, button, input, textarea, select, [role="button"] {
   cursor: none !important;
 }
 

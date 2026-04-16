@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Magnetic from './Magnetic';
-
 
 const styles = {
     navFixed: "fixed top-0 left-0 w-full z-[999] transition-all duration-500",
@@ -16,37 +16,63 @@ const NavBar = ({ theme, toggleTheme }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [activeSection, setActiveSection] = useState('about');
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        // Force the highlight based on the URL immediately 
+        const routeId = location.pathname === '/' ? 'about' : location.pathname.substring(1);
+        setActiveSection(routeId);
+
+        // Pause scroll spy for 1s to allow smooth scrolling to finish
+        let isProgrammaticScroll = true;
+        const timeout = setTimeout(() => {
+            isProgrammaticScroll = false;
+        }, 1000);
+
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
 
-            const sections = ['about', 'skills', 'projects', 'hackathons', 'certificates', 'education', 'contact'];
-            const scrollPosition = window.scrollY + 200;
+            if (isProgrammaticScroll) return; // Prevent scroll spy from overriding during travel
 
-            for (const section of sections) {
+            const sections = ['about', 'skills', 'projects', 'hackathons', 'certificates', 'education', 'contact'];
+            let current = 'about';
+
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i];
                 const element = document.getElementById(section);
                 if (element) {
-                    const offsetTop = element.offsetTop;
-                    const offsetBottom = offsetTop + element.offsetHeight;
-
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-                        setActiveSection(section);
+                    if (element.getBoundingClientRect().top <= 200) {
+                        current = section;
                         break;
                     }
                 }
             }
+            setActiveSection(current);
         };
+
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearTimeout(timeout);
+        };
+    }, [location.pathname]);
 
     const scrollToSection = (id) => {
         setIsOpen(false);
-        setActiveSection(id);
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+        if (location.pathname !== '/') {
+            navigate('/');
+            setTimeout(() => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        } else {
+            const element = document.getElementById(id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
         }
     };
 
@@ -62,7 +88,14 @@ const NavBar = ({ theme, toggleTheme }) => {
 
                 <div
                     className="cursor-pointer z-50 shrink-0"
-                    onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }); setIsOpen(false); }}
+                    onClick={() => { 
+                        if (location.pathname === '/') {
+                            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                        } else {
+                            navigate('/');
+                        }
+                        setIsOpen(false); 
+                    }}
                 >
                     <Magnetic strength={0.2}>
                         <div className={styles.logoWrapper}>
@@ -115,9 +148,15 @@ const NavBar = ({ theme, toggleTheme }) => {
                             const sectionId = item.toLowerCase();
                             const isActive = activeSection === sectionId;
                             return (
-                                <button
+                                <Link
                                     key={item}
-                                    onClick={() => scrollToSection(sectionId)}
+                                    to={sectionId === 'about' ? '/' : `/${sectionId}`}
+                                    onClick={(e) => {
+                                        if (sectionId === 'about' && location.pathname === '/') {
+                                            e.preventDefault();
+                                            scrollToSection('about');
+                                        }
+                                    }}
                                     className="relative px-5 py-2.5 text-sm font-semibold transition-all duration-300 rounded-full font-[Plus_Jakarta_Sans] tracking-wide"
                                     style={{ color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)' }}
                                 >
@@ -129,7 +168,7 @@ const NavBar = ({ theme, toggleTheme }) => {
                                         />
                                     )}
                                     <span className="relative z-10 hover:text-[var(--accent-primary)] transition-colors">{item}</span>
-                                </button>
+                                </Link>
                             );
                         })}
                     </div>
@@ -184,26 +223,29 @@ const NavBar = ({ theme, toggleTheme }) => {
                     >
                         <div className="p-6 flex flex-col gap-3">
                             {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item, index) => {
-                                const sectionId = item.toLowerCase();
-                                const isActive = activeSection === sectionId;
-                                return (
-                                    <motion.button
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: index * 0.1 }}
-                                        key={item}
-                                        onClick={() => scrollToSection(sectionId)}
-                                        className="text-left py-4 px-6 rounded-2xl transition-all border font-[Outfit] text-xl font-bold flex items-center justify-between hover:bg-[var(--border-color)]"
-                                        style={{
-                                            backgroundColor: isActive ? (theme === 'light' ? 'rgba(59,130,246,0.05)' : 'rgba(59,130,246,0.1)') : 'transparent',
-                                            borderColor: isActive ? 'rgba(59,130,246,0.3)' : 'transparent',
-                                            color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)'
-                                        }}
-                                    >
-                                        {item}
-                                        {isActive && <motion.div layoutId="mobile-indicator" className="w-2 h-2 rounded-full bg-[var(--accent-primary)]" />}
-                                    </motion.button>
-                                );
+                                 const sectionId = item.toLowerCase();
+                                 const isActive = activeSection === sectionId;
+                                 return (
+                                     <Link
+                                         key={item}
+                                         to={sectionId === 'about' ? '/' : `/${sectionId}`}
+                                         onClick={() => {
+                                             setIsOpen(false);
+                                             if (sectionId === 'about' && location.pathname === '/') {
+                                                 scrollToSection('about');
+                                             }
+                                         }}
+                                         className="text-left py-4 px-6 rounded-2xl transition-all border font-[Outfit] text-xl font-bold flex items-center justify-between hover:bg-[var(--border-color)]"
+                                         style={{
+                                             backgroundColor: isActive ? (theme === 'light' ? 'rgba(59,130,246,0.05)' : 'rgba(59,130,246,0.1)') : 'transparent',
+                                             borderColor: isActive ? 'rgba(59,130,246,0.3)' : 'transparent',
+                                             color: isActive ? 'var(--accent-primary)' : 'var(--text-secondary)'
+                                         }}
+                                     >
+                                         {item}
+                                         {isActive && <motion.div layoutId="mobile-indicator" className="w-2 h-2 rounded-full bg-[var(--accent-primary)]" />}
+                                     </Link>
+                                 );
                             })}
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
