@@ -321,13 +321,17 @@ const Projects = () => {
                     </div>
                 )}
 
-                <div className="mb-10 text-center border-t pt-20" style={{ borderColor: 'var(--border-color)' }}>
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-green-500/5 border-green-500/20 text-green-500 text-xs font-bold tracking-widest uppercase">
-                        <Gamepad2 size={14} /> Entertainment
+                <div className="mb-20 text-center relative">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-[100px] -z-10 animate-pulse"></div>
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-emerald-500/10 border-emerald-500/30 text-emerald-400 text-xs font-black tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                        <Gamepad2 size={14} className="animate-spin-slow" /> Arcade Engine
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Fun</span> Games
+                    <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter" style={{ color: 'var(--text-primary)' }}>
+                        Gaming <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-500 drop-shadow-sm">HUB</span>
                     </h2>
+                    <p className="max-w-xl mx-auto text-sm md:text-base opacity-60 leading-relaxed font-medium tracking-wide">
+                        Bored? Try these mini-games built with logic & passion.
+                    </p>
                 </div>
 
                 <div className="relative w-full max-w-4xl mx-auto h-[450px] md:h-[500px] flex items-center justify-center perspective-1000 mb-20">
@@ -406,24 +410,32 @@ const Projects = () => {
                                         {effectiveIdx === 0 && (
                                             <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 via-emerald-500/10 to-transparent opacity-60 animate-pulse pointer-events-none z-0" />
                                         )}
-                                        <div className="h-2/3 relative group overflow-hidden bg-black">
-                                            <div className="absolute inset-0 bg-gradient-to-t from-[var(--card-bg)] to-transparent z-10" />
+                                        {/* Card Top: Visuals */}
+                                        <div className="h-2/3 relative group overflow-hidden bg-black flex items-center justify-center">
+                                            {/* Reflective shine overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-20"></div>
+                                            
+                                            <div className="absolute inset-0 bg-gradient-to-t from-[rgba(15,23,42,1)] via-transparent to-transparent z-10" />
                                             <img
                                                 src={game.image}
                                                 alt={game.title}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-cover transform scale-110 group-hover:scale-125 transition-transform duration-1000 ease-out brightness-75 group-hover:brightness-100"
                                             />
-                                            {effectiveIdx === 0 && (
-                                                <div className="absolute top-4 right-4 z-20">
-                                                    <span className="px-3 py-1 text-[10px] font-bold bg-green-500 text-black rounded-full animate-pulse">PLAYABLE</span>
+                                            
+                                            {/* Center Status Badge */}
+                                            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 flex justify-center pointer-events-none">
+                                                <div className={`px-6 py-2 rounded-full border backdrop-blur-xl scale-75 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 font-black tracking-widest text-xs
+                                                    ${effectiveIdx === 0 ? 'bg-emerald-500/20 border-emerald-400 text-emerald-400' : 'bg-white/10 border-white/20 text-white'}`}>
+                                                    {effectiveIdx === 0 ? 'READY TO PLAY' : 'SELECT GAME'}
                                                 </div>
-                                            )}
+                                            </div>
                                         </div>
 
-                                        <div className="h-1/3 p-6 flex flex-col justify-between relative z-20 transition-colors duration-300" style={{ backgroundColor: 'var(--card-bg)' }}>
-                                            <div>
-                                                <h3 className="text-xl font-bold mb-1 truncate" style={{ color: 'var(--text-primary)' }}>{game.title}</h3>
-                                                <p className="text-xs line-clamp-2" style={{ color: 'var(--text-secondary)' }}>{game.desc}</p>
+                                        {/* Card Bottom: Content */}
+                                        <div className="h-1/3 p-6 flex flex-col justify-between relative z-20 transition-all duration-300" style={{ backgroundColor: 'rgba(15,23,42,1)' }}>
+                                            <div className="transform group-hover:-translate-y-1 transition-transform">
+                                                <h3 className="text-xl md:text-2xl font-black mb-1 truncate text-white uppercase tracking-tight">{game.title}</h3>
+                                                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest line-clamp-1">{game.desc}</p>
                                             </div>
 
                                             {effectiveIdx === 0 ? (
@@ -431,17 +443,17 @@ const Projects = () => {
                                                     href={game.link}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(34, 197, 94, 0.6)" }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                    className="mt-2 w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-green-500 text-black font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2 relative overflow-hidden group/play"
+                                                    whileHover={{ scale: 1.03, boxShadow: "0 0 30px rgba(52, 211, 153, 0.4)" }}
+                                                    whileTap={{ scale: 0.96 }}
+                                                    className="mt-3 w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-black font-black text-xs transition-all shadow-xl flex items-center justify-center gap-2 relative overflow-hidden group/play shadow-emerald-500/20"
                                                 >
-                                                    <span className="absolute inset-0 bg-white/20 translate-y-full group-hover/play:translate-y-0 transition-transform duration-300 transform skew-y-12"></span>
-                                                    <Gamepad2 size={16} className="relative z-10" /> <span className="relative z-10">PLAY NOW</span>
+                                                    <span className="absolute inset-0 bg-white/30 translate-x-[-100%] group-hover/play:translate-x-[100%] transition-transform duration-1000 transform skew-x-[-30deg]"></span>
+                                                    <Zap size={16} fill="currentColor" className="relative z-10" /> <span className="relative z-10">START ENGINE</span>
                                                 </motion.a>
                                             ) : (
-                                                <button className="mt-2 w-full py-3 rounded-xl border text-slate-500 font-bold text-sm cursor-not-allowed" style={{ borderColor: 'var(--border-color)' }}>
-                                                    Select to Play
-                                                </button>
+                                                <div className="mt-3 w-full py-3.5 rounded-xl border border-white/5 text-slate-700 font-black text-[10px] tracking-widest text-center uppercase">
+                                                    Locked
+                                                </div>
                                             )}
                                         </div>
                                     </motion.div>
