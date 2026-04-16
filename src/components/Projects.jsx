@@ -4,12 +4,20 @@ import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, 
 
 const projects = [
     {
+        title: "AgriSaar",
+        desc: "AI-driven comprehensive farming platform featuring smart crop recommendations, real-time market and weather updates, WhatsApp alerts, and AI-powered speech synthesis.",
+        tags: ["React", "Node.js", "AI", "MERN"],
+        link: "https://agrisaar-project.vercel.app/",
+        github: "https://github.com/abdulhaque2005/AgriSaar",
+        image: "/agrisaar.png"
+    },
+    {
         title: "StockPilot",
         desc: "A full-stack MERN trading dashboard inspired by Zerodha, featuring real-time watchlists, portfolio management, and secure authentication.",
         tags: ["TypeScript", "React", "Node.js", "MongoDB"],
         link: "https://stockpilot-abdul7.vercel.app/login",
         github: "https://github.com/abdulhaque2005/CoreInventory-oddo-x-indus",
-        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=1000",
+        image: "/stockPilot.png",
         video: "https://www.youtube.com/watch?v=IFp38bsxLcI"
     },
     {
@@ -18,7 +26,7 @@ const projects = [
         tags: ["HTML", "CSS", "Responsive"],
         link: "https://mealawe-9b7udy2ko-abdul7.vercel.app/",
         github: "https://github.com/abdulhaque2005/mealawe_clone",
-        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1000",
+        image: "/mealawe.png",
         video: "https://www.youtube.com/watch?v=BaKgBGVlPvQ"
     },
     {
@@ -27,7 +35,7 @@ const projects = [
         tags: ["HTML", "CSS", "UI Clone"],
         link: "https://razer-website-1avbtm69x-abdul7.vercel.app/",
         github: "https://github.com/abdulhaque2005/razer_clone",
-        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=1000",
+        image: "/razer.png",
         video: "https://www.youtube.com/watch?v=DdsQ0rFgJVE"
     },
     {
@@ -36,7 +44,7 @@ const projects = [
         tags: ["React", "Vite", "AI", "API"],
         link: "https://vector-minds.vercel.app/",
         github: "https://github.com/abdulhaque2005/vector-minds",
-        image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&q=80&w=1000"
+        image: "/freelance.png"
     },
     {
         title: "Ethena Clone",
@@ -44,7 +52,7 @@ const projects = [
         tags: ["HTML", "CSS", "Animation"],
         link: "https://ethena-clone1-cmxl224lm-abdul7.vercel.app/",
         github: "https://github.com/abdulhaque2005/React_project",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJAB7lC4utCQB0VrWcK829zdM8KZWOL5MKvQ&s"
+        image: "/ethena.png"
     },
     {
         title: "Movie Explorer",
@@ -52,7 +60,7 @@ const projects = [
         tags: ["React", "API", "CSS", "JS"],
         link: "https://movie-explorer012.netlify.app/",
         github: "https://github.com/abdulhaque2005/movie-explorer",
-        image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=1000"
+        image: "/movieExplore.png"
     },
     {
         title: "Calculator App",
@@ -150,7 +158,7 @@ const Projects = () => {
 
     return (
         <section id="projects" className="py-24 relative overflow-hidden transition-colors duration-300" style={{ backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}>
-            <div className="w-full max-w-7xl mx-auto px-4 min-[400px]:px-6 relative z-10">
+            <div className="w-full max-w-[1400px] mx-auto px-4 lg:px-10 relative z-10">
 
                 <div className="mb-20 text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-blue-500/5 border-blue-500/20 text-blue-500 text-xs font-bold tracking-widest uppercase">
@@ -163,7 +171,7 @@ const Projects = () => {
 
                 <motion.div
                     layout
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10 max-w-7xl mx-auto"
+                    className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-14 mb-16 w-full mx-auto"
                 >
                     <AnimatePresence mode="popLayout">
                         {visibleProjects.map((project, index) => (
@@ -183,109 +191,88 @@ const Projects = () => {
                                 key={project.title}
                                 whileTap={{ scale: 0.97 }}
                                 onClick={() => setSelectedProject(project)}
-                                className="group relative h-[420px] md:h-[400px] w-full cursor-pointer perspective-1000 rounded-3xl z-10 transition-all duration-700 hover:-translate-y-3 hover:shadow-[0_25px_50px_-12px_rgba(59,130,246,0.3)] transform-gpu"
+                                className="group relative w-full h-[400px] md:h-[450px] cursor-pointer rounded-3xl z-10 overflow-hidden transform-gpu flex flex-col justify-end shadow-lg transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.4)]"
+                                style={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--subtle-border)' }}
                             >
-                                {/* Animated Gradient Border on Hover */}
-                                <div className="absolute -inset-[2px] rounded-3xl bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500 opacity-0 group-hover:opacity-40 blur-sm transition-opacity duration-700 -z-20"></div>
-                                <div className="absolute inset-0 rounded-3xl bg-[var(--card-bg)] z-[-15] shadow-inner"></div>
-
-                                {/* Inner Card Container for clipping */}
-                                <div className="h-full w-full rounded-3xl overflow-hidden border relative flex flex-col backdrop-blur-xl" style={{ borderColor: 'var(--subtle-border)', backgroundColor: 'var(--card-inner-bg)' }}>
-                                    {/* ── Desktop/Tablet Interactive Door ── */}
-                                    <div className="absolute inset-0 z-20 hidden sm:flex transition-all duration-700 ease-out group-hover:opacity-0 group-hover:pointer-events-none transform-style-3d">
-                                        <div className="h-full w-1/2 backdrop-blur-2xl rounded-l-3xl flex items-center justify-end overflow-hidden transition-transform duration-700 group-hover:-translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderRight: '1px solid var(--subtle-border)' }}>
-                                            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-                                            <span className="mr-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>View</span>
-                                        </div>
-                                        <div className="h-full w-1/2 backdrop-blur-2xl rounded-r-3xl flex items-center justify-start overflow-hidden transition-transform duration-700 group-hover:translate-x-full relative" style={{ backgroundColor: 'var(--door-bg)', borderLeft: '1px solid var(--subtle-border)' }}>
-                                            <div className="absolute inset-0 bg-gradient-to-bl from-white/10 to-transparent"></div>
-                                            <span className="ml-2 text-3xl md:text-4xl font-black uppercase tracking-tighter" style={{ color: 'var(--door-text)', textShadow: '0 0 10px rgba(128,128,128,0.1)' }}>Detail</span>
-                                        </div>
-
-                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 md:w-16 md:h-16 rounded-full border-4 border-emerald-500/30 bg-black/80 backdrop-blur-md flex items-center justify-center z-30 transition-all duration-300 group-hover:scale-110 shadow-[0_0_20px_rgba(16,185,129,0.5)]">
-                                            <div className="absolute inset-0 rounded-full animate-ping bg-emerald-500/20"></div>
-                                            <ArrowUpRight className="text-emerald-400 group-hover:rotate-45 transition-transform duration-500" size={28} md:size={32} strokeWidth={3} />
-                                        </div>
+                                {/* Background Image covering the whole card */}
+                                <div className="absolute inset-0 z-0 overflow-hidden bg-black/20">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-10 opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
+                                    <img
+                                        src={project.image}
+                                        alt={project.title}
+                                        className="w-full h-full object-cover transform group-hover:scale-110 group-hover:rotate-1 transition-transform duration-[800ms] ease-[cubic-bezier(0.2,0.8,0.2,1)]"
+                                    />
+                                </div>
+                                
+                                {/* Top Floating Tags */}
+                                <div className="absolute top-6 left-6 right-6 z-20 flex justify-between items-center pointer-events-none">
+                                    <div className="flex flex-wrap gap-2">
+                                        {project.tags.slice(0, 3).map((tag, i) => (
+                                            <span key={tag} className="px-3 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest bg-black/30 backdrop-blur-md text-white/90 rounded-full border border-white/20 shadow-lg group-hover:bg-blue-600/70 group-hover:border-blue-400 group-hover:-translate-y-1 transition-all duration-500" style={{ transitionDelay: `${i * 50}ms` }}>
+                                                {tag}
+                                            </span>
+                                        ))}
                                     </div>
-
-                                    {/* ── Main Card Content ── */}
-                                    <div className="h-full w-full rounded-3xl overflow-hidden border bg-[var(--card-bg)] shadow-2xl relative flex flex-col" style={{ borderColor: 'var(--subtle-border)' }}>
-                                        <div className="h-52 md:h-48 overflow-hidden relative">
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10" />
-                                            <img
-                                                src={project.image}
-                                                alt={project.title}
-                                                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                            />
-
-                                            {/* Mobile Indicator */}
-                                            <div className="absolute bottom-4 left-4 z-20 sm:hidden">
-                                                <div className="flex gap-2">
-                                                    {project.tags.slice(0, 2).map(tag => (
-                                                        <span key={tag} className="text-[10px] font-bold px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30 backdrop-blur-md">
-                                                            {tag}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="p-6 flex flex-col flex-1 relative z-10 group-hover:-translate-y-2 transition-transform duration-500">
-                                            <div className="flex justify-between items-start mb-3">
-                                                <h3 className="text-2xl font-bold transition-colors duration-500" style={{ color: 'var(--text-primary)' }}>
-                                                    {project.title}
-                                                </h3>
-                                            </div>
-                                            <p className="text-[14px] opacity-70 mb-5 line-clamp-3 leading-relaxed transition-opacity duration-500 group-hover:opacity-100" style={{ color: 'var(--text-secondary)' }}>
-                                                {project.desc}
-                                            </p>
-
-                                            <div className={`mt-auto grid ${project.video ? 'grid-cols-3' : 'grid-cols-2'} gap-2.5 relative z-30`}>
-                                                <a
-                                                    href={project.link}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                    className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-blue-600/20 hover:bg-blue-600 border border-blue-500/30 hover:text-white font-bold text-[11px] tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-[1.03]"
-                                                    style={{ color: 'var(--accent-primary)' }}
-                                                >
-                                                    <Monitor size={13} /> LIVE
-                                                </a>
-                                                {project.github ? (
-                                                    <a
-                                                        href={project.github}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        className="flex items-center justify-center gap-1.5 py-3 rounded-xl border hover:bg-white hover:text-black font-bold text-[11px] tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:scale-[1.03]"
-                                                        style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}
-                                                    >
-                                                        <Github size={13} /> CODE
-                                                    </a>
-                                                ) : (
-                                                    <div className="flex items-center justify-center gap-1.5 py-3 rounded-xl border opacity-40 text-[11px] font-bold cursor-not-allowed" style={{ borderColor: 'var(--subtle-border)', color: 'var(--text-secondary)' }}>
-                                                        PRIVATE
-                                                    </div>
-                                                )}
-                                                {project.video && (
-                                                    <a
-                                                        href={project.video}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                        className="flex items-center justify-center gap-1.5 py-3 rounded-xl bg-gradient-to-r from-red-600/20 to-red-500/20 hover:from-red-600 hover:to-red-500 border border-red-500/30 hover:text-white font-bold text-[11px] tracking-wider transition-all duration-300 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] hover:scale-[1.03]"
-                                                        style={{ color: '#ef4444' }}
-                                                    >
-                                                        <Play size={13} fill="currentColor" /> DEMO
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
+                                    <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100 transition-all duration-500 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+                                        <ArrowUpRight size={24} strokeWidth={2.5} className="group-hover:rotate-45 transition-transform duration-500" />
                                     </div>
                                 </div>
 
-                                {/* Ambient Glow Aura */}
-                                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500 -z-10"></div>
+                                {/* Content Overlay - Slides up on hover */}
+                                <div className="relative z-20 p-5 md:p-7 w-full flex flex-col justify-end transform transition-transform duration-[600ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] translate-y-[55%] sm:translate-y-[50%] group-hover:translate-y-0">
+                                    
+                                    <div className="mb-3 transform group-hover:-translate-y-1 transition-transform duration-[600ms]">
+                                        <h3 className="text-2xl md:text-3xl font-black tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-cyan-300 transition-all duration-500 drop-shadow-lg">
+                                            {project.title}
+                                        </h3>
+                                    </div>
+
+                                    {/* Glassmorphism Panel that comes fully into view */}
+                                    <div className="bg-black/50 backdrop-blur-3xl border border-white/10 rounded-2xl p-5 md:p-6 opacity-0 group-hover:opacity-100 transition-all duration-[600ms] delay-75 shadow-2xl">
+                                        <p className="text-sm md:text-[15px] opacity-80 text-white line-clamp-2 md:line-clamp-3 leading-relaxed mb-5">
+                                            {project.desc}
+                                        </p>
+
+                                        {/* Action Buttons */}
+                                        <div className={`grid ${project.video ? 'grid-cols-3' : 'grid-cols-2'} gap-3`}>
+                                            <a
+                                                href={project.link}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="flex flex-col sm:flex-row items-center justify-center gap-2 py-3 md:py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] sm:text-xs tracking-wider transition-all duration-300 shadow-[0_5px_15px_rgba(37,99,235,0.4)] hover:scale-[1.03]"
+                                            >
+                                                <Monitor size={16} /> LIVE
+                                            </a>
+                                            {project.github ? (
+                                                <a
+                                                    href={project.github}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="flex flex-col sm:flex-row items-center justify-center gap-2 py-3 md:py-3.5 rounded-xl bg-white/10 hover:bg-white text-white hover:text-black font-black text-[10px] sm:text-xs tracking-wider transition-all duration-300 border border-white/20 hover:scale-[1.03]"
+                                                >
+                                                    <Github size={16} /> CODE
+                                                </a>
+                                            ) : (
+                                                <div className="flex flex-col sm:flex-row items-center justify-center gap-2 py-3 md:py-3.5 rounded-xl bg-white/5 text-white/40 font-black text-[10px] sm:text-xs tracking-wider border border-white/5 cursor-not-allowed">
+                                                    PRIVATE
+                                                </div>
+                                            )}
+                                            {project.video && (
+                                                <a
+                                                    href={project.video}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    onClick={(e) => e.stopPropagation()}
+                                                    className="flex flex-col sm:flex-row items-center justify-center gap-2 py-3 md:py-3.5 rounded-xl bg-red-500/20 hover:bg-red-500 border border-red-500/30 text-red-300 hover:text-white font-black text-[10px] sm:text-xs tracking-wider transition-all duration-300 hover:shadow-[0_5px_15px_rgba(239,68,68,0.3)] hover:scale-[1.03]"
+                                                >
+                                                    <Play size={16} fill="currentColor" /> DEMO
+                                                </a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>

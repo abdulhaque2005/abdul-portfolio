@@ -181,6 +181,40 @@ const HeroNew = ({ theme = 'dark' }) => {
                             </motion.button>
                         </Magnetic>
 
+                        <Magnetic>
+                            <motion.a
+                                href="/resume.pdf"
+                                download="Abdul_Haque_Resume.pdf"
+                                className="group relative px-6 md:px-8 py-3.5 w-full sm:w-auto min-w-[170px] rounded-full font-bold text-[0.95rem] overflow-hidden transition-all duration-300 flex flex-row items-center justify-center gap-2"
+                                style={{
+                                    border: isDark ? '2px solid rgba(59,130,246,0.5)' : '2px solid rgba(59,130,246,0.5)',
+                                    background: isDark
+                                        ? 'linear-gradient(135deg, rgba(30,58,138,0.2) 0%, rgba(15,23,42,0.4) 100%)'
+                                        : 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)',
+                                    color: isDark ? '#60a5fa' : '#2563eb',
+                                    boxShadow: isDark
+                                        ? '0 0 0 2px rgba(59,130,246,0.3), 0 0 20px rgba(59,130,246,0.1)'
+                                        : '0 0 0 2px rgba(59,130,246,0.3), 0 4px 20px rgba(59,130,246,0.15)',
+                                }}
+                                whileHover={{
+                                    scale: 1.06,
+                                    boxShadow: isDark 
+                                        ? '0 0 0 2px rgba(59,130,246,0.95), 0 0 30px rgba(59,130,246,0.4), 0 0 80px rgba(59,130,246,0.25)'
+                                        : '0 0 0 2px rgba(59,130,246,0.95), 0 0 30px rgba(59,130,246,0.4)',
+                                    color: isDark ? '#fff' : '#1d4ed8',
+                                }}
+                                whileTap={{ scale: 0.97 }}
+                            >
+                                <motion.span
+                                    animate={{ y: [0, -3, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                                    style={{ display: 'flex', zIndex: 1 }}
+                                >
+                                    <Download size={20} strokeWidth={2.5} />
+                                </motion.span>
+                                <span style={{ position: 'relative', zIndex: 1 }}>Download CV</span>
+                            </motion.a>
+                        </Magnetic>
 
                     </motion.div>
                 </div>
