@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Play, Zap } from 'lucide-react';
+import { ArrowUpRight, X, Github, Monitor, Gamepad2, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Play, Zap, Figma } from 'lucide-react';
 
 const projects = [
     {
@@ -328,7 +328,51 @@ const Projects = () => {
                     </div>
                 )}
 
-                <div className="mb-20 text-center relative">
+                {/* --- Figma Design Section --- */}
+                <div className="mb-16 mt-32 text-center relative">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-purple-500/10 rounded-full blur-[100px] -z-10 animate-pulse"></div>
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-purple-500/10 border-purple-500/30 text-purple-400 text-xs font-black tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                        <Figma size={14} className="animate-pulse" /> UI/UX Design
+                    </div>
+                    <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tighter" style={{ color: 'var(--text-primary)' }}>
+                        Premium <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-fuchsia-400 to-pink-500 drop-shadow-sm">Prototypes</span>
+                    </h2>
+                    <p className="max-w-xl mx-auto text-sm md:text-base opacity-60 leading-relaxed font-medium tracking-wide">
+                        Crafting pixel-perfect cinematic experiences and modern interfaces before writing a single line of code.
+                    </p>
+                </div>
+
+                <div className="max-w-4xl mx-auto mb-32 relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+                    <div className="relative rounded-3xl overflow-hidden border border-white/10" style={{ backgroundColor: 'var(--card-bg)' }}>
+                        <div className="relative aspect-video w-full overflow-hidden">
+                            <img src="/streamvibe.png" alt="StreamVibe Figma Design" className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700 ease-in-out" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90"></div>
+                            
+                            <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full z-10 transition-transform duration-500 transform translate-y-2 group-hover:translate-y-0">
+                                <div className="flex flex-wrap items-center gap-2 mb-4">
+                                    <span className="px-3 py-1 text-[10px] uppercase tracking-wider font-extrabold bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full backdrop-blur-md">Figma</span>
+                                    <span className="px-3 py-1 text-[10px] uppercase tracking-wider font-extrabold bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded-full backdrop-blur-md">UI/UX</span>
+                                    <span className="px-3 py-1 text-[10px] uppercase tracking-wider font-extrabold bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full backdrop-blur-md">Web Design</span>
+                                </div>
+                                <h3 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight">StreamVibe Platform</h3>
+                                <p className="text-white/70 text-sm md:text-base max-w-2xl font-medium mb-8 leading-relaxed">
+                                    A premium dark-themed movie streaming platform UI. Features cinematic hero sections, interactive movie carousels, IMDB ratings, and a sleek modern navigation system.
+                                </p>
+                                <a 
+                                    href="https://www.figma.com/proto/qr5DiegZeQnRjJwMYILjd5/Untitled?page-id=13%3A2&node-id=13-2964&viewport=423%2C196%2C0.08&t=bG9CARoM924xOyox-1&scaling=min-zoom&content-scaling=fixed" 
+                                    target="_blank" 
+                                    rel="noreferrer"
+                                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-black font-black text-sm uppercase tracking-wider rounded-xl hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95 duration-300"
+                                >
+                                    <Figma size={18} /> View Interactive Prototype
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mb-20 text-center relative pt-16">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-[100px] -z-10 animate-pulse"></div>
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border mb-6 bg-emerald-500/10 border-emerald-500/30 text-emerald-400 text-xs font-black tracking-[0.2em] uppercase shadow-[0_0_15px_rgba(16,185,129,0.2)]">
                         <Gamepad2 size={14} className="animate-spin-slow" /> Arcade Engine
