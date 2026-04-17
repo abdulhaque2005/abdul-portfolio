@@ -1,5 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// Pre-compute random star positions to prevent infinite re-renders
+const STAR_DATA = Array.from({ length: 15 }, () => ({
+    width: Math.random() * 2 + 'px',
+    height: Math.random() * 2 + 'px',
+    top: Math.random() * 100 + '%',
+    left: Math.random() * 100 + '%',
+    duration: Math.random() * 3 + 2,
+}));
 
 const Preloader = () => {
     return (
@@ -20,18 +29,18 @@ const Preloader = () => {
                         transition={{ duration: 10, repeat: Infinity, repeatType: "mirror" }}
                     />
                     <div className="hidden md:block">
-                        {[...Array(15)].map((_, i) => (
+                        {STAR_DATA.map((star, i) => (
                             <motion.div
                                 key={i}
                                 className="absolute bg-white rounded-full"
                                 style={{
-                                    width: Math.random() * 2 + 'px',
-                                    height: Math.random() * 2 + 'px',
-                                    top: Math.random() * 100 + '%',
-                                    left: Math.random() * 100 + '%',
+                                    width: star.width,
+                                    height: star.height,
+                                    top: star.top,
+                                    left: star.left,
                                 }}
                                 animate={{ opacity: [0, 0.8, 0] }}
-                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity }}
+                                transition={{ duration: star.duration, repeat: Infinity }}
                             />
                         ))}
                     </div>

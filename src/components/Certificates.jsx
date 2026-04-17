@@ -11,33 +11,33 @@ const certificates = [
         issuer: "Sololearn",
         date: "Recent",
         desc: "Demonstrated proficiency in core web technologies including HTML, CSS, and Javascript.",
-        image: "/Web_certi.png",
-        link: "#",
-        showVerify: false,
+        image: "https://api2.sololearn.com/v2/certificates/CC-HTX1LJ2F/image/png",
+        link: "https://www.sololearn.com/certificates/CC-HTX1LJ2F",
+        showVerify: true,
         tags: ["Web Dev", "Frontend"],
         color: "from-blue-500 to-cyan-500"
     },
     {
         id: 2,
-        title: "C++ Programming",
+        title: "Introduction to C++",
         issuer: "Sololearn",
         date: "Recent",
         desc: "Comprehensive understanding of C++ concepts, problem solving, and data structures.",
-        image: "/C++ certi.png",
-        link: "#",
-        showVerify: false,
+        image: "https://api2.sololearn.com/v2/certificates/CC-QK3UVBNL/image/png",
+        link: "https://www.sololearn.com/certificates/CC-QK3UVBNL",
+        showVerify: true,
         tags: ["C++", "Programming"],
         color: "from-purple-500 to-pink-500"
     },
     {
         id: 3,
         title: "JavaScript Intermediate",
-        issuer: "HackerRank",
+        issuer: "Sololearn",
         date: "Recent",
         desc: "Advanced JavaScript concepts and problem-solving skills.",
-        image: "/imt_js.png",
-        link: "#",
-        showVerify: false,
+        image: "https://api2.sololearn.com/v2/certificates/CC-VPD50OUG/image/png",
+        link: "https://www.sololearn.com/certificates/CC-VPD50OUG",
+        showVerify: true,
         tags: ["JavaScript", "Advanced"],
         color: "from-yellow-400 to-orange-500"
     },
@@ -95,9 +95,9 @@ const certificates = [
         issuer: "Sololearn",
         date: "Recent",
         desc: "Foundational knowledge and basics of JavaScript.",
-        image: "/intro_js.png",
-        link: "#",
-        showVerify: false,
+        image: "https://api2.sololearn.com/v2/certificates/CC-J5KPVFGF/image/png",
+        link: "https://www.sololearn.com/certificates/CC-J5KPVFGF",
+        showVerify: true,
         tags: ["JavaScript", "Basics"],
         color: "from-yellow-300 to-yellow-500"
     }
@@ -215,67 +215,67 @@ const Certificates = () => {
                                 transition={{ duration: 0.5 }}
                                 className="h-full"
                             >
-                            <TiltCard onClick={() => setSelectedCert(cert)}>
-                                <div
-                                    className="relative h-full flex flex-col rounded-3xl border overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 group"
-                                    style={{
-                                        backgroundColor: 'var(--card-bg)',
-                                        borderColor: 'var(--border-color)',
-                                        transform: "translateZ(20px)"
-                                    }}
-                                >
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${cert.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                                <TiltCard onClick={() => setSelectedCert(cert)}>
+                                    <div
+                                        className="relative h-full flex flex-col rounded-3xl border overflow-hidden transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/20 group"
+                                        style={{
+                                            backgroundColor: 'var(--card-bg)',
+                                            borderColor: 'var(--border-color)',
+                                            transform: "translateZ(20px)"
+                                        }}
+                                    >
+                                        <div className={`absolute inset-0 bg-gradient-to-br ${cert.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
 
-                                    <div className="relative aspect-[16/10] overflow-hidden border-b bg-white/5" style={{ borderColor: 'var(--border-color)' }}>
-                                        <div className={`absolute inset-0 bg-gradient-to-br ${cert.color} opacity-10 mix-blend-overlay z-0`} />
+                                        <div className="relative aspect-[16/10] overflow-hidden border-b bg-white/5" style={{ borderColor: 'var(--border-color)' }}>
+                                            <div className={`absolute inset-0 bg-gradient-to-br ${cert.color} opacity-10 mix-blend-overlay z-0`} />
 
-                                        <motion.img
-                                            src={cert.image}
-                                            alt={cert.title}
-                                            className="w-full h-full object-contain p-8 transform transition-transform duration-500 group-hover:scale-105"
-                                        />
+                                            <motion.img
+                                                src={cert.image}
+                                                alt={cert.title}
+                                                className="w-full h-full object-contain p-8 transform transition-transform duration-500 group-hover:scale-105"
+                                            />
 
-                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-10">
-                                            <span className="px-8 py-3 rounded-full bg-blue-600/90 text-white font-black flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border border-blue-400/30">
-                                                <Eye size={20} /> VIEW DETAILS
-                                            </span>
-                                        </div>
-
-                                        <div className="absolute top-4 right-4 z-20">
-                                            <span className="px-3 py-1.5 rounded-full text-[10px] font-black tracking-tighter bg-white/90 text-black shadow-lg flex items-center gap-1.5 backdrop-blur-md">
-                                                <CheckCircle size={12} className="text-emerald-500 animate-pulse" /> {cert.issuer}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="p-8 flex flex-col flex-grow relative z-10">
-                                        <div className="flex gap-2 mb-4 flex-wrap">
-                                            {cert.tags.map((tag, i) => (
-                                                <span key={i} className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border bg-white/5"
-                                                    style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
-                                                    {tag}
+                                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm z-10">
+                                                <span className="px-8 py-3 rounded-full bg-blue-600/90 text-white font-black flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-[0_0_20px_rgba(37,99,235,0.4)] border border-blue-400/30">
+                                                    <Eye size={20} /> VIEW DETAILS
                                                 </span>
-                                            ))}
+                                            </div>
+
+                                            <div className="absolute top-4 right-4 z-20">
+                                                <span className="px-3 py-1.5 rounded-full text-[10px] font-black tracking-tighter bg-white/90 text-black shadow-lg flex items-center gap-1.5 backdrop-blur-md">
+                                                    <CheckCircle size={12} className="text-emerald-500 animate-pulse" /> {cert.issuer}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <h3 className="text-2xl font-bold mb-3 leading-tight group-hover:text-blue-500 transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
-                                            {cert.title}
-                                        </h3>
-
-                                        <p className="text-sm leading-relaxed mb-6 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
-                                            {cert.desc}
-                                        </p>
-
-                                        <div className="mt-auto flex items-center justify-between pt-5 border-t" style={{ borderColor: 'var(--border-color)' }}>
-                                            <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                                                <Calendar size={16} />
-                                                {cert.date}
+                                        <div className="p-8 flex flex-col flex-grow relative z-10">
+                                            <div className="flex gap-2 mb-4 flex-wrap">
+                                                {cert.tags.map((tag, i) => (
+                                                    <span key={i} className="px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border bg-white/5"
+                                                        style={{ borderColor: 'var(--border-color)', color: 'var(--text-secondary)' }}>
+                                                        {tag}
+                                                    </span>
+                                                ))}
                                             </div>
-                                            <CheckCircle size={18} className="text-emerald-500/40 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300" />
+
+                                            <h3 className="text-2xl font-bold mb-3 leading-tight group-hover:text-blue-500 transition-colors duration-300" style={{ color: 'var(--text-primary)' }}>
+                                                {cert.title}
+                                            </h3>
+
+                                            <p className="text-sm leading-relaxed mb-6 line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+                                                {cert.desc}
+                                            </p>
+
+                                            <div className="mt-auto flex items-center justify-between pt-5 border-t" style={{ borderColor: 'var(--border-color)' }}>
+                                                <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
+                                                    <Calendar size={16} />
+                                                    {cert.date}
+                                                </div>
+                                                <CheckCircle size={18} className="text-emerald-500/40 group-hover:text-emerald-400 group-hover:scale-110 transition-all duration-300" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </TiltCard>
+                                </TiltCard>
                             </motion.div>
                         ))}
                     </AnimatePresence>
@@ -386,6 +386,18 @@ const Certificates = () => {
                                             <span>{selectedCert.date}</span>
                                         </div>
                                     </div>
+                                    {selectedCert.link && selectedCert.link !== "#" && (
+                                        <motion.a
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.95 }}
+                                            href={selectedCert.link}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="px-4 py-2 rounded-lg bg-blue-600 text-white text-xs font-bold flex items-center gap-2 hover:bg-blue-500 transition-colors"
+                                        >
+                                            <ExternalLink size={14} /> VERIFY CERTIFICATE
+                                        </motion.a>
+                                    )}
                                 </div>
                             </motion.div>
                         </motion.div>

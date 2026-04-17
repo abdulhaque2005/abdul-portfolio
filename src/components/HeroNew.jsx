@@ -183,8 +183,9 @@ const HeroNew = ({ theme = 'dark' }) => {
 
                         <Magnetic>
                             <motion.a
-                                href="/resume.pdf"
-                                download="Abdul_Haque_Resume.pdf"
+                                href="https://drive.google.com/file/d/1PSr59K39Gtj2BExGvbqPmBEc45RWSPfZ/view?usp=sharing"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="group relative px-6 md:px-8 py-3.5 w-full sm:w-auto min-w-[170px] rounded-full font-bold text-[0.95rem] overflow-hidden transition-all duration-300 flex flex-row items-center justify-center gap-2"
                                 style={{
                                     border: isDark ? '2px solid rgba(59,130,246,0.5)' : '2px solid rgba(59,130,246,0.5)',

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
 
 const styles = {
@@ -47,8 +47,12 @@ const CodeProfile = () => {
     const [activeTab, setActiveTab] = useState('profile.tsx');
     const [isCopied, setIsCopied] = useState(false);
     const { scrollY } = useScroll();
-
     const [charIndex, setCharIndex] = useState(0);
+
+    // Pre-calculate highlighted lines once to save CPU
+    const highlightedCodeLines = useMemo(() => {
+        return FULL_CODE.split('\n').map(line => getHighlightedText(line));
+    }, []);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(FULL_CODE);
@@ -83,8 +87,19 @@ const CodeProfile = () => {
         return () => clearTimeout(timeout);
     }, [charIndex, isVisible]);
 
-    const displayedText = FULL_CODE.substring(0, Math.max(0, charIndex));
-    const lines = displayedText.split('\n');
+    // Calculate which lines and how much of each line to show
+    const currentLines = useMemo(() => {
+        const textSoFar = FULL_CODE.substring(0, charIndex);
+        const linesNames = textSoFar.split('\n');
+        return linesNames.map((lineText, i) => {
+            // If it's a fully typed line, use the pre-highlighted version
+            if (i < linesNames.length - 1) {
+                return highlightedCodeLines[i];
+            }
+            // If it's the current line, highlight just its typed part
+            return getHighlightedText(lineText);
+        });
+    }, [charIndex, highlightedCodeLines]);
 
     return (
         <AnimatePresence>
@@ -100,7 +115,6 @@ const CodeProfile = () => {
                     <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur-2xl opacity-20 animate-pulse hidden md:block"></div>
 
                     <div className={styles.window}>
-                        {/* Terminal ToolBar */}
                         <div className={styles.header}>
                             <div className="flex gap-2">
                                 <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-[0_0_8px_rgba(255,95,86,0.3)]"></div>
@@ -108,7 +122,6 @@ const CodeProfile = () => {
                                 <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-[0_0_8px_rgba(39,201,63,0.3)]"></div>
                             </div>
 
-                            {/* Tabs */}
                             <div className="flex-1 flex px-4 ml-4">
                                 <button
                                     onClick={() => setActiveTab('profile.tsx')}
@@ -135,13 +148,13 @@ const CodeProfile = () => {
 
                         <div className="p-6 overflow-hidden h-[340px] md:h-[380px] bg-[#0d1117]/80 backdrop-blur-sm">
                             <div className="font-mono text-xs md:text-sm leading-relaxed text-[#c9d1d9] select-text">
-                                {lines.map((line, i) => (
+                                {currentLines.map((lineHtml, i) => (
                                     <div className="flex group/line hover:bg-white/5 transition-colors duration-200" key={i}>
                                         <span className={`${styles.lineNum} group-hover/line:text-gray-400 transition-colors`}>{i + 1}</span>
                                         <span
                                             className="whitespace-pre flex-1"
                                             dangerouslySetInnerHTML={{
-                                                __html: getHighlightedText(line) + (i === lines.length - 1 ? '<span class="animate-[pulse_1s_infinite] border-r-2 border-blue-500 ml-[1px]"></span>' : '')
+                                                __html: lineHtml + (i === currentLines.length - 1 ? '<span class="animate-[pulse_1s_infinite] border-r-2 border-blue-500 ml-[1px]"></span>' : '')
                                             }}
                                         />
                                     </div>
@@ -156,3 +169,4 @@ const CodeProfile = () => {
 };
 
 export default CodeProfile;
+

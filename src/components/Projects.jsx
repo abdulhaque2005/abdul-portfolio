@@ -152,6 +152,13 @@ const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
     const [currAngle, setCurrAngle] = useState(0);
     const [showAll, setShowAll] = useState(false);
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768);
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const visibleProjects = showAll ? projects : projects.slice(0, 6);
 
@@ -388,7 +395,7 @@ const Projects = () => {
                                         initial={false}
                                         animate={{
                                             x,
-                                            scale: effectiveIdx === 0 ? (window.innerWidth < 768 ? 1 : 1.05) : 0.85,
+                                            scale: effectiveIdx === 0 ? (isMobile ? 1 : 1.05) : 0.85,
                                             zIndex,
                                             opacity,
                                             rotateY,
