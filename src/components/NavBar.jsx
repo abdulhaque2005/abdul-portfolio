@@ -35,7 +35,7 @@ const NavBar = ({ theme, toggleTheme }) => {
 
             if (isProgrammaticScroll) return; // Prevent scroll spy from overriding during travel
 
-            const sections = ['about', 'skills', 'projects', 'hackathons', 'certificates', 'education', 'contact'];
+            const sections = ['about', 'skills', 'resume', 'projects', 'hackathons', 'certificates', 'education', 'contact'];
             let current = 'about';
 
             for (let i = sections.length - 1; i >= 0; i--) {
@@ -144,7 +144,7 @@ const NavBar = ({ theme, toggleTheme }) => {
                     style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
 
                     <div className="flex items-center px-1 gap-1 relative">
-                        {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item) => {
+                        {['About', 'Skills', 'Resume', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item) => {
                             const sectionId = item.toLowerCase();
                             const isActive = activeSection === sectionId;
                             return (
@@ -222,7 +222,7 @@ const NavBar = ({ theme, toggleTheme }) => {
                         style={{ backgroundColor: 'var(--bg-color)', borderColor: 'var(--border-color)' }}
                     >
                         <div className="p-6 flex flex-col gap-3">
-                            {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item, index) => {
+                            {['About', 'Skills', 'Resume', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item, index) => {
                                  const sectionId = item.toLowerCase();
                                  const isActive = activeSection === sectionId;
                                  return (

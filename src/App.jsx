@@ -12,6 +12,7 @@ import HeroNew from './components/HeroNew';
 import About from './components/About';
 import Education from './components/Education';
 import Skills from './components/Skills';
+import Resume from './components/Resume';
 import Projects from './components/Projects';
 import Certificates from './components/Certificates';
 import Hackathons from './components/Hackathons';
@@ -27,6 +28,7 @@ const Home = ({ theme }) => (
         <HeroNew theme={theme} />
         <About />
         <Skills />
+        <Resume />
         <Projects />
         <Hackathons />
         <Certificates />
@@ -39,6 +41,7 @@ const seoData = {
     '/': { title: 'Abdul Haque | Full Stack Developer & UI/UX Expert', desc: 'Welcome to the portfolio of Abdul Haque. Explore my versatile projects, skills, and hackathon achievements in web development.' },
     '/about': { title: 'About the Developer | Full Stack Engineering Journey', desc: 'Learn more about my professional journey, transitioning from foundational coding concepts to architecting scalable, modern web applications.' },
     '/skills': { title: 'Expert C++, React & JavaScript Developer | Technical Skills', desc: 'Comprehensive technical skills profile featuring advanced proficiency in C++, JavaScript, React, Node.js, and modern UI/UX design tools.' },
+    '/resume': { title: 'Professional Resume | Abdul Haque Full Stack Developer', desc: 'View and download the professional resume of Abdul Haque, showcasing skills, education, certifications, and project experience.' },
     '/projects': { title: 'Innovative Web Applications & Full Stack Showcase', desc: 'Browse through a curated selection of full-stack projects, showcasing responsive frontend designs and robust backend engineering.' },
     '/hackathons': { title: 'Award-Winning Hackathon Solutions & Prototypes', desc: 'Discover high-impact hackathon projects and innovative prototype solutions built under extreme time constraints.' },
     '/certificates': { title: 'Verified Professional Certifications in C++, JavaScript & Web Dev', desc: 'Explore my validated credentials, including comprehensive certifications from HackerRank and Sololearn in C++, JavaScript, and Core Web Technologies.' },
@@ -135,6 +138,7 @@ function App() {
                                     <Route path="/" element={<Home theme={theme} />} />
                                     <Route path="/about" element={<Home theme={theme} />} />
                                     <Route path="/skills" element={<Home theme={theme} />} />
+                                    <Route path="/resume" element={<Home theme={theme} />} />
                                     <Route path="/projects" element={<Home theme={theme} />} />
                                     <Route path="/hackathons" element={<Home theme={theme} />} />
                                     <Route path="/certificates" element={<Home theme={theme} />} />
@@ -160,7 +164,7 @@ function App() {
                                     <div>
                                         <h4 className="text-lg font-bold mb-6" style={{ color: 'var(--text-primary)' }}>Quick Links</h4>
                                         <ul className="space-y-3">
-                                            {['About', 'Skills', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item) => (
+                                            {['About', 'Skills', 'Resume', 'Projects', 'Hackathons', 'Certificates', 'Education', 'Contact'].map((item) => (
                                                 <li key={item}>
                                                     <Link
                                                         to={item.toLowerCase() === 'about' ? '/' : `/${item.toLowerCase()}`}
