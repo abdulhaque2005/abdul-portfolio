@@ -341,6 +341,7 @@ const ChatBot = ({ theme = 'dark' }) => {
         <>
             {/* ── Floating Button ── */}
             <motion.button
+                aria-label={open ? "Close AI Assistant" : "Open AI Assistant"}
                 onClick={() => setOpen(o => !o)}
                 style={{
                     position: 'fixed', bottom: 'clamp(20px, 4vh, 28px)', right: 'clamp(16px, 4vw, 28px)', zIndex: 9999,
@@ -414,10 +415,10 @@ const ChatBot = ({ theme = 'dark' }) => {
                                     <span style={{ fontSize: '0.75rem', color: isDark ? '#94a3b8' : '#64748b', fontWeight: 500 }}>Powered by Gemini</span>
                                 </div>
                             </div>
-                            <button onClick={resetChat} title="Reset chat" style={{ background: 'none', border: 'none', cursor: 'pointer', color: isDark ? '#64748b' : '#94a3b8', padding: 6, transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = isDark ? '#fff' : '#0f172a'} onMouseLeave={e => e.target.style.color = isDark ? '#64748b' : '#94a3b8'}>
+                            <button aria-label="Reset chat logs" onClick={resetChat} title="Reset chat" style={{ background: 'none', border: 'none', cursor: 'pointer', color: isDark ? '#64748b' : '#94a3b8', padding: 6, transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = isDark ? '#fff' : '#0f172a'} onMouseLeave={e => e.target.style.color = isDark ? '#64748b' : '#94a3b8'}>
                                 <RotateCcw size={18} />
                             </button>
-                            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: isDark ? '#64748b' : '#94a3b8', padding: 6, transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = isDark ? '#fff' : '#0f172a'} onMouseLeave={e => e.target.style.color = isDark ? '#64748b' : '#94a3b8'}>
+                            <button aria-label="Close chat window" onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: isDark ? '#64748b' : '#94a3b8', padding: 6, transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = isDark ? '#fff' : '#0f172a'} onMouseLeave={e => e.target.style.color = isDark ? '#64748b' : '#94a3b8'}>
                                 <X size={20} />
                             </button>
                         </div>
@@ -480,7 +481,7 @@ const ChatBot = ({ theme = 'dark' }) => {
                                     transition: 'all 0.3s ease',
                                     boxShadow: isDark ? 'inset 0 2px 4px rgba(0,0,0,0.2)' : 'inset 0 2px 4px rgba(0,0,0,0.02)'
                                 }}>
-                                    <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
+                                    <input ref={inputRef} aria-label="Type your message" value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
                                         placeholder="Ask anything..."
                                         disabled={typing}
                                         style={{ 
@@ -490,7 +491,7 @@ const ChatBot = ({ theme = 'dark' }) => {
                                             fontWeight: 500, opacity: typing ? 0.5 : 1 
                                         }}
                                     />
-                                    <motion.button onClick={() => sendMessage()} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+                                    <motion.button aria-label="Send message" onClick={() => sendMessage()} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                                         disabled={typing || !input.trim()}
                                         style={{ 
                                             width: 36, height: 36, borderRadius: '50%', border: 'none', 
