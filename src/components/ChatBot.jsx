@@ -94,7 +94,7 @@ async function callGemini(messages) {
         });
     }
 
-    const models = ['gemini-2.5-flash', 'gemini-2.0-flash'];
+    const models = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash-lite-001', 'gemini-2.0-flash'];
     let lastError = null;
     let authFail = false;
 
