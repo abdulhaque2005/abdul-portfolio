@@ -29,14 +29,16 @@ const SYSTEM_PROMPT = `You are **AH Assistant** — the personal AI assistant em
 
 ## PROJECTS (with live links)
 1. **StreamVibe** — A premium dark-themed movie streaming platform UI designed in Figma, featuring cinematic hero sections, interactive movie carousels, IMDB ratings, and a sleek navigation system inspired by Netflix and Disney+. [Figma, UI/UX, Prototype, Design] → https://www.figma.com/proto/qr5DiegZeQnRjJwMYILjd5/Untitled
-2. **StockPilot** — Full-stack MERN trading dashboard inspired by Zerodha with real-time watchlists, portfolio management, and secure authentication. [TypeScript, React, Node.js, MongoDB] → https://stockpilot-abdul7.vercel.app/login
-3. **VectorMinds** — AI-powered currency arbitration platform for freelancers with real-time exchange rates, analytics, AI forecasts, and a financial simulator. [React, Vite, AI, API] → https://vector-minds.vercel.app/
-4. **Mealawe Clone** — Functional clone of the Mealawe food platform with user-friendly navigation and responsive design. [HTML, CSS] → https://mealawe-9b7udy2ko-abdul7.vercel.app/
-5. **Razer Website Clone** — High-fidelity clone of the Razer gaming website with dark mode aesthetics. [HTML, CSS] → https://razer-website-1avbtm69x-abdul7.vercel.app/
-6. **Ethena Clone** — Pixel-perfect recreation of Ethena platform with modern UI/UX and smooth transitions. [HTML, CSS, Animation] → https://ethena-clone1-cmxl224lm-abdul7.vercel.app/
-7. **Calculator App** — Sleek functional calculator. [React, CSS, JS] → https://calculator-abdul7.vercel.app/
-8. **Todo Master** — Efficient task management application. [React, CSS, JS] → https://todoapp-project-p85bq6j4n-abdul7.vercel.app/
-9. **Currency Converter** — Real-time currency exchange rate calculator. [HTML, CSS, JS, API] → https://convertrate23.netlify.app/convert_currn/currency/
+2. **Flight Booking UI** — A highly interactive flight booking UI/UX prototype in Figma featuring an end-to-end user flow from flight search to seat selection and checkout. [Figma, UI/UX, App Design] → https://www.figma.com/proto/5rG3z7Qj6ozOMFbUswTPmB/Untitled?node-id=7-1448
+3. **Jollo Delivery App** — A premium, full-scale food delivery application prototype in Figma with engaging onboarding, dynamic browsing, interactive carts, and seamless checkout flows. [Figma, UI/UX, Design] → https://www.figma.com/proto/YdzumJt9YVmVzsVxQgGr3E/Untitled
+4. **StockPilot** — Full-stack MERN trading dashboard inspired by Zerodha with real-time watchlists, portfolio management, and secure authentication. [TypeScript, React, Node.js, MongoDB] → https://stockpilot-abdul7.vercel.app/login
+5. **VectorMinds** — AI-powered currency arbitration platform for freelancers with real-time exchange rates, analytics, AI forecasts, and a financial simulator. [React, Vite, AI, API] → https://vector-minds.vercel.app/
+6. **Mealawe Clone** — Functional clone of the Mealawe food platform with user-friendly navigation and responsive design. [HTML, CSS] → https://mealawe-9b7udy2ko-abdul7.vercel.app/
+7. **Razer Website Clone** — High-fidelity clone of the Razer gaming website with dark mode aesthetics. [HTML, CSS] → https://razer-website-1avbtm69x-abdul7.vercel.app/
+8. **Ethena Clone** — Pixel-perfect recreation of Ethena platform with modern UI/UX and smooth transitions. [HTML, CSS, Animation] → https://ethena-clone1-cmxl224lm-abdul7.vercel.app/
+9. **Calculator App** — Sleek functional calculator. [React, CSS, JS] → https://calculator-abdul7.vercel.app/
+10. **Todo Master** — Efficient task management application. [React, CSS, JS] → https://todoapp-project-p85bq6j4n-abdul7.vercel.app/
+11. **Currency Converter** — Real-time currency exchange rate calculator. [HTML, CSS, JS, API] → https://convertrate23.netlify.app/convert_currn/currency/
 
 ## GAMES (with live links)
 1. **Typing Master** — Speed typing test game → https://typing-test-abdul7.vercel.app/

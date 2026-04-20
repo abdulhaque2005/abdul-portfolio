@@ -88,6 +88,30 @@ const projects = [
     }
 ];
 
+const prototypes = [
+    {
+        title: "StreamVibe",
+        desc: "A premium dark-themed movie streaming platform UI designed in Figma, featuring cinematic hero sections, interactive movie carousels, and Netflix-inspired aesthetics.",
+        tags: ["Figma", "UI/UX", "Prototype"],
+        link: "https://www.figma.com/proto/qr5DiegZeQnRjJwMYILjd5/Untitled?page-id=13%3A2&node-id=13-2964&viewport=423%2C196%2C0.08&t=bG9CARoM924xOyox-1&scaling=min-zoom&content-scaling=fixed",
+        image: "/streamvibe.png"
+    },
+    {
+        title: "Flight Booking UI",
+        desc: "A highly interactive flight booking UI/UX prototype in Figma featuring an end-to-end user flow from flight search to seat selection and checkout.",
+        tags: ["Figma", "UI/UX", "App Design"],
+        link: "https://www.figma.com/proto/5rG3z7Qj6ozOMFbUswTPmB/Untitled?node-id=7-1448",
+        image: "/flight.png"
+    },
+    {
+        title: "Jollo Delivery App",
+        desc: "A premium, full-scale food delivery application prototype in Figma with engaging onboarding, dynamic browsing, interactive carts, and seamless checkout flows.",
+        tags: ["Figma", "UI/UX", "Design"],
+        link: "https://www.figma.com/proto/YdzumJt9YVmVzsVxQgGr3E/Untitled",
+        image: "/Jollo.png"
+    }
+];
+
 const games = [
     {
         title: "Typing Master",
@@ -342,34 +366,45 @@ const Projects = () => {
                     </p>
                 </div>
 
-                <div className="max-w-4xl mx-auto mb-32 relative group">
-                    <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                    <div className="relative rounded-3xl overflow-hidden border border-white/10" style={{ backgroundColor: 'var(--card-bg)' }}>
-                        <div className="relative aspect-video w-full overflow-hidden">
-                            <img src="/streamvibe.png" alt="StreamVibe Figma Design" className="w-full h-full object-cover object-top transform group-hover:scale-105 transition-transform duration-700 ease-in-out" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90"></div>
-                            
-                            <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full z-10 transition-transform duration-500 transform translate-y-2 group-hover:translate-y-0">
-                                <div className="flex flex-wrap items-center gap-2 mb-4">
-                                    <span className="px-3 py-1 text-[10px] uppercase tracking-wider font-extrabold bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-full backdrop-blur-md">Figma</span>
-                                    <span className="px-3 py-1 text-[10px] uppercase tracking-wider font-extrabold bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded-full backdrop-blur-md">UI/UX</span>
-                                    <span className="px-3 py-1 text-[10px] uppercase tracking-wider font-extrabold bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full backdrop-blur-md">Web Design</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-32 px-4">
+                    {prototypes.map((proto, index) => (
+                        <div key={index} className="relative group h-full">
+                            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                            <div className="relative h-full rounded-3xl overflow-hidden border border-white/10 flex flex-col" style={{ backgroundColor: 'var(--card-bg)' }}>
+                                <div className="relative aspect-video overflow-hidden">
+                                    <img src={proto.image} alt={proto.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-in-out" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                                    <div className="absolute top-4 right-4">
+                                        <div className="p-2 bg-black/50 backdrop-blur-md rounded-lg border border-white/10 text-white">
+                                            <Figma size={16} />
+                                        </div>
+                                    </div>
                                 </div>
-                                <h3 className="text-3xl md:text-4xl font-black text-white mb-3 tracking-tight">StreamVibe Platform</h3>
-                                <p className="text-white/70 text-sm md:text-base max-w-2xl font-medium mb-8 leading-relaxed">
-                                    A premium dark-themed movie streaming platform UI. Features cinematic hero sections, interactive movie carousels, IMDB ratings, and a sleek modern navigation system.
-                                </p>
-                                <a 
-                                    href="https://www.figma.com/proto/qr5DiegZeQnRjJwMYILjd5/Untitled?page-id=13%3A2&node-id=13-2964&viewport=423%2C196%2C0.08&t=bG9CARoM924xOyox-1&scaling=min-zoom&content-scaling=fixed" 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-white text-black font-black text-sm uppercase tracking-wider rounded-xl hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95 duration-300"
-                                >
-                                    <Figma size={18} /> View Interactive Prototype
-                                </a>
+                                
+                                <div className="p-6 flex flex-col flex-grow">
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {proto.tags.map(tag => (
+                                            <span key={tag} className="px-2 py-0.5 text-[9px] uppercase tracking-widest font-black bg-purple-500/10 text-purple-400 border border-purple-500/20 rounded-md">
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <h3 className="text-xl font-black text-white mb-2 tracking-tight uppercase">{proto.title}</h3>
+                                    <p className="text-white/50 text-xs md:text-sm font-medium mb-6 leading-relaxed flex-grow">
+                                        {proto.desc}
+                                    </p>
+                                    <a 
+                                        href={proto.link} 
+                                        target="_blank" 
+                                        rel="noreferrer"
+                                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-white text-black font-black text-[11px] uppercase tracking-wider rounded-xl hover:bg-purple-500 hover:text-white transition-all shadow-lg active:scale-95 duration-300"
+                                    >
+                                        <Play size={14} fill="currentColor" /> Live Prototype
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ))}
                 </div>
 
                 <div className="mb-20 text-center relative pt-16">
